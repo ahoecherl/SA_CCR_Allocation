@@ -1,0 +1,17 @@
+AssetClass,Subclass,Supervisory factor,Correlation,Supervisory option volatility
+Interest rate,,0.005,,0.5
+Foreign exchange,,0.04,,0.15
+Credit,AAA,0.0038,0.5,1
+Credit,AA,0.0038,0.5,1
+Credit,A,0.0042,0.5,1
+Credit,BBB,0.0054,0.5,1
+Credit,BB,0.0106,0.5,1
+Credit,B,0.016,0.5,1
+Credit,CCC,0.06,0.5,1
+Equity,Single name,0.32,0.5,1.2
+Equity,Index,0.2,0.8,0.75
+Commodity,Electricity,0.4,0.4,1.5
+Commodity,Oil/Gas,0.18,0.4,0.7
+Commodity,Metals,0.18,0.4,0.7
+Commodity,Agricultural,0.18,0.4,0.7
+Commodity,Other,0.18,0.4,0.7
