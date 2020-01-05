@@ -1,4 +1,4 @@
-from Enums import Currency, TradeType, TradeDirection, AssetClass
+from Enums import Currency, TradeType, TradeDirection, AssetClass, MaturityBucket
 from instruments.Trade import Trade
 
 
@@ -24,3 +24,11 @@ class InterestRateTrade(Trade):
             t=t,
             e=e
         )
+
+    def get_maturity_bucket(self):
+        if self.m <= 1:
+            return MaturityBucket.ONE
+        elif 1 < self.m <= 5:
+            return MaturityBucket.TWO
+        elif 5 < self.m:
+            return MaturityBucket.THREE
