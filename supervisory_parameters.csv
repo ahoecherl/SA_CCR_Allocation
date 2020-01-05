@@ -1,4 +1,4 @@
-AssetClass,Subclass,Supervisory factor,Correlation,Supervisory option volatility
+AssetClass,SubClass,Supervisory factor,Correlation,SupervisoryOptionVolatility
 Interest rate,,0.005,,0.5
 Foreign exchange,,0.04,,0.15
 Credit,AAA,0.0038,0.5,1
