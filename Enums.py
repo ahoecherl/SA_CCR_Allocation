@@ -64,3 +64,13 @@ class Currency(Enum):
     GBP = 'GBP'
     CHF = 'CHF'
     JPY = 'JPY'
+
+class Stock(Enum):
+    ADS = 'Adidas'
+    DBK = 'Deutsche Bank'
+
+class CurrencyPair(Enum):
+    EURUSD = 'EUR / USD'
+    USDBRL = 'USD / BRL'
+    USDCLP = 'USD / CLP'
+    GBPUSD = 'GBP / USD'
