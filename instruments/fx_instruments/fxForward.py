@@ -1,5 +1,6 @@
 from Enums import CurrencyPair, TradeDirection, AssetClass, TradeType
 from instruments.Trade import Trade
+from pricer.fxForwardPricer import FxForwardPricer
 
 
 class FxForward(Trade):
@@ -24,3 +25,6 @@ class FxForward(Trade):
             e = m,
             notional = notional
         )
+
+    def get_pricer(self):
+        return FxForwardPricer

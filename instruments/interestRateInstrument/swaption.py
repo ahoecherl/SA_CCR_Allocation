@@ -1,6 +1,7 @@
 from Enums import TradeDirection, TradeType
 from instruments.interestRateInstrument.interestRateSwap import InterestRateSwap
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
+from pricer.swaptionPricer import SwaptionPricer
 
 
 class Swaption(InterestRateTrade):
@@ -27,3 +28,6 @@ class Swaption(InterestRateTrade):
             tradeType=tradeType,
             tradeDirection=tradeDirection
         )
+
+    def get_pricer(self):
+        return SwaptionPricer

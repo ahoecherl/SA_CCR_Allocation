@@ -1,5 +1,6 @@
 from Enums import TradeType, TradeDirection, AssetClass, Stock
 from instruments.Trade import Trade
+from pricer.equityForwardPricer import EquityForwardPricer
 
 
 class EquityForward(Trade):
@@ -31,3 +32,6 @@ class EquityForward(Trade):
             t=m,
             notional=notional
         )
+
+    def get_pricer(self):
+        return EquityForwardPricer
