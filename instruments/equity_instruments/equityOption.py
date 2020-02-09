@@ -1,13 +1,19 @@
+from QuantLib import *
+
 from Enums import TradeType, TradeDirection, AssetClass, Stock
 from instruments.Trade import Trade
 from pricer.equityOptionPricer import EquityOptionPricer
+from marketdata.EquityVolatility import EquityVolatilty
+from marketdata.EquitySpot import EquitySpot
+from marketdata.InterestRateCurves import ois_curve_handle
+from marketdata import init_marketdata
+from marketdata.util import today
 
 
 class EquityOption(Trade):
 
     def __init__(self,
                  notional: float,
-                 S: float,
                  K: float,
                  m: float,
                  tradeType: TradeType = TradeType.CALL,
@@ -23,7 +29,6 @@ class EquityOption(Trade):
         :param tradeType: Can be TradeType.CALL or TradeType.PUT
         :param tradeDirection: Can be TradeDirection.LONG or TradeDirection.SHORT
         """
-        self.S = S
         self.K = K
         self.underlying = underlying
         super(EquityOption, self).__init__(
@@ -34,6 +39,22 @@ class EquityOption(Trade):
             t=m,
             notional=notional
         )
+        vol_handle = EquityVolatilty.__getattr__(self.underlying.name).value
+        spot_handle = EquitySpot.__getattr__(self.underlying.name).value
+        black_scholes_process = BlackScholesProcess(spot_handle, ois_curve_handle, vol_handle)
+        engine = AnalyticEuropeanEngine(black_scholes_process)
+        if tradeType == TradeType.CALL:
+            option_type = Option.Call
+        else:
+            option_type = Option.Put
+        payoff = PlainVanillaPayoff(option_type, K)
+        maturity_date = today + Period(m, Years)
+        exercise = EuropeanExercise(maturity_date)
+        self.ql_option = VanillaOption(payoff, exercise)
+        self.ql_option.setPricingEngine(engine)
 
-    def get_pricer(self):
-        return EquityOptionPricer
+    def get_price(self):
+        multiplier = self.notional
+        if self.tradeDirection == TradeDirection.SHORT:
+            multiplier = -1*multiplier
+        return multiplier * self.ql_option.NPV()

@@ -65,7 +65,7 @@ class CollateralAgreement():
                           indent=4)
 
     def get_C(self):
-        return self.vm
+        return self.vm + self.get_nica()
 
     def get_nica(self):
         return self.received_im - self.unsegregated_overcollateraliziation_posted + self.segregated_overcollateralization_received + self.unsegregated_overcollateralization_received
