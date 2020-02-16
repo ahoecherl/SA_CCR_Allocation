@@ -1,4 +1,4 @@
-from Enums import TradeDirection, TradeType
+from utilities.Enums import TradeDirection, TradeType
 from instruments.interestRateInstrument.interestRateSwap import InterestRateSwap
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
 from pricer.swaptionPricer import SwaptionPricer

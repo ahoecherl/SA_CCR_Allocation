@@ -1,4 +1,4 @@
-from Enums import Currency, TradeType, TradeDirection, AssetClass, MaturityBucket
+from utilities.Enums import Currency, TradeType, TradeDirection, AssetClass, MaturityBucket
 from instruments.Trade import Trade
 
 

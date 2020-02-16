@@ -2,9 +2,8 @@ from enum import Enum
 import QuantLib as ql
 from marketdata import util, interestRateIndex, InterestRateCurves
 
-from Enums import Currency, TradeDirection, TradeType, SwapDirection
+from utilities.Enums import Currency, TradeDirection, TradeType, SwapDirection
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
-from pricer.interestRateSwapPricer import InterestRateSwapPricer
 
 fixed_leg_daycount = util.day_count
 float_leg_daycount = util.day_count

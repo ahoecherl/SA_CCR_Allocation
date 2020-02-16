@@ -1,4 +1,4 @@
-from Enums import AssetClass, SubClass, TradeType, TradeDirection
+from utilities.Enums import AssetClass, SubClass, TradeType, TradeDirection
 
 
 class Trade:
