@@ -128,8 +128,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Pycharm
+# IDEs
 .idea
+.vscode
+
 Exploring Quantlib/Caps and floors.ipynb
 Exploring Quantlib/quantlibpythoncookbook_extras/a_glitch_in_forward_curves.ipynb
 Exploring Quantlib/quantlibpythoncookbook_extras/bond_with_credit_spread.ipynb
