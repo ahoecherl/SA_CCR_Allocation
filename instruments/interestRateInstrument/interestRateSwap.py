@@ -34,7 +34,7 @@ class InterestRateSwap(InterestRateTrade):
             ql_tradeDirection = ql.VanillaSwap.Payer
         if swapDirection == SwapDirection.RECEIVER:
             tradeDirection = TradeDirection.SHORT
-            ql.tradeDirection = ql.VanillaSwap.Receiver
+            ql_tradeDirection = ql.VanillaSwap.Receiver
         super(InterestRateSwap, self).__init__(
             notional=notional,
             currency=currency,
