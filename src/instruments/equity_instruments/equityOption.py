@@ -1,8 +1,7 @@
-from QuantLib import *
+import QuantLib as ql
 
-from Enums import TradeType, TradeDirection, AssetClass, Stock
+from utilities.Enums import TradeType, TradeDirection, AssetClass, Stock
 from instruments.Trade import Trade
-from pricer.equityOptionPricer import EquityOptionPricer
 from marketdata.EquityVolatility import EquityVolatilty
 from marketdata.EquitySpot import EquitySpot
 from marketdata.InterestRateCurves import ois_curve_handle
@@ -15,7 +14,7 @@ class EquityOption(Trade):
     def __init__(self,
                  notional: float,
                  K: float,
-                 m: float,
+                 mat_in_days: float,
                  tradeType: TradeType = TradeType.CALL,
                  tradeDirection: TradeDirection = TradeDirection.LONG,
                  underlying: Stock = Stock.ADS):
@@ -23,9 +22,8 @@ class EquityOption(Trade):
         Equity Option
 
         :param notional: Count of underlying shares
-        :param S: Underlying Price
         :param K: Strike
-        :param m: Time to maturity of the option (in years). Will be used for both, M and T of paragraph 155
+        :param mat_in_days: Time to maturity of the option (in days). Will be used for both, M and T of paragraph 155 after being multiplied bei 360
         :param tradeType: Can be TradeType.CALL or TradeType.PUT
         :param tradeDirection: Can be TradeDirection.LONG or TradeDirection.SHORT
         """
@@ -35,22 +33,23 @@ class EquityOption(Trade):
             assetClass=AssetClass.EQ,
             tradeType=tradeType,
             tradeDirection=tradeDirection,
-            m=m,
-            t=m,
+            m=mat_in_days*360,
+            t=mat_in_days*360,
             notional=notional
         )
         vol_handle = EquityVolatilty.__getattr__(self.underlying.name).value
         spot_handle = EquitySpot.__getattr__(self.underlying.name).value
-        black_scholes_process = BlackScholesProcess(spot_handle, ois_curve_handle, vol_handle)
-        engine = AnalyticEuropeanEngine(black_scholes_process)
-        if tradeType == TradeType.CALL:
-            option_type = Option.Call
+        self.S = spot_handle.value()
+        black_scholes_process = ql.BlackScholesProcess(spot_handle, ois_curve_handle, vol_handle)
+        engine = ql.AnalyticEuropeanEngine(black_scholes_process)
+        if tradeType.name == TradeType.CALL.name:
+            option_type = ql.Option.Call
         else:
-            option_type = Option.Put
-        payoff = PlainVanillaPayoff(option_type, K)
-        maturity_date = today + Period(m, Years)
-        exercise = EuropeanExercise(maturity_date)
-        self.ql_option = VanillaOption(payoff, exercise)
+            option_type = ql.Option.Put
+        payoff = ql.PlainVanillaPayoff(option_type, K)
+        maturity_date = today + ql.Period(mat_in_days, ql.Days)
+        exercise = ql.EuropeanExercise(maturity_date)
+        self.ql_option = ql.VanillaOption(payoff, exercise)
         self.ql_option.setPricingEngine(engine)
 
     def get_price(self):

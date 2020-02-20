@@ -7,7 +7,7 @@ def test_BSprice():
     asdf = 1
     asdf = 2
     asdf = 3
-    option = EquityOption(notional=1, K=40, m=1, tradeType=TradeType.CALL, tradeDirection=TradeDirection.LONG,
+    option = EquityOption(notional=1, K=40, mat_in_days=1, tradeType=TradeType.CALL, tradeDirection=TradeDirection.LONG,
                           underlying=Stock.ADS)
     print(option.get_price())
     asdf = 1

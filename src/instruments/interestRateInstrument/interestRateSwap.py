@@ -21,8 +21,8 @@ class InterestRateSwap(InterestRateTrade):
     def __init__(self,
                  notional: float,
                  currency: Currency,
-                 timeToSwapStart: float,
-                 timeToSwapEnd: float,
+                 timeToSwapStart_in_days: float,
+                 timeToSwapEnd_in_days: float,
                  swapDirection: SwapDirection,  # Payer is Long, Receiver is Short the underlying
                  fixed_rate: float = 0.025,
                  float_spread: float = 0.004
@@ -37,15 +37,15 @@ class InterestRateSwap(InterestRateTrade):
         super(InterestRateSwap, self).__init__(
             notional=notional,
             currency=currency,
-            s=timeToSwapStart,
-            m=timeToSwapEnd,
-            e=timeToSwapEnd,
+            s=timeToSwapStart_in_days/360,
+            m=timeToSwapEnd_in_days/360,
+            e=timeToSwapEnd_in_days/360,
             t=None,
             tradeDirection=tradeDirection,
             tradeType=TradeType.LINEAR
         )
-        settle_date = swap_calendar.advance(util.today, int(timeToSwapStart*365), ql.Days)
-        maturity_date = swap_calendar.advance(util.today, timeToSwapEnd, ql.Years)
+        settle_date = swap_calendar.advance(util.today, int(timeToSwapStart_in_days), ql.Days)
+        maturity_date = swap_calendar.advance(util.today, timeToSwapEnd_in_days, ql.Days)
         fixed_schedule = ql.Schedule(settle_date, maturity_date, fixed_leg_tenor, swap_calendar, business_day_convention, business_day_convention, date_generation, end_of_month)
         float_schedule = ql.Schedule(settle_date, maturity_date, float_leg_tenor, swap_calendar, business_day_convention, business_day_convention, date_generation, end_of_month)
         self.ql_swap = ql.VanillaSwap(ql_tradeDirection, notional, fixed_schedule, fixed_rate, fixed_leg_daycount, float_schedule, index, float_spread, float_leg_daycount)

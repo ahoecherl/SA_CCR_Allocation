@@ -1,7 +1,7 @@
 from enum import Enum
-from QuantLib import *
+import QuantLib as ql
 from marketdata.util import today, calendar, day_count
 
 class EquityVolatilty(Enum):
-    ADS = BlackVolTermStructureHandle(BlackConstantVol(today, calendar, QuoteHandle(SimpleQuote(0.2)), day_count))
-    DBK = BlackVolTermStructureHandle(BlackConstantVol(today, calendar, QuoteHandle(SimpleQuote(0.3)), day_count))
+    ADS = ql.BlackVolTermStructureHandle(ql.BlackConstantVol(today, calendar, ql.QuoteHandle(ql.SimpleQuote(0.2)), day_count))
+    DBK = ql.BlackVolTermStructureHandle(ql.BlackConstantVol(today, calendar, ql.QuoteHandle(ql.SimpleQuote(0.3)), day_count))

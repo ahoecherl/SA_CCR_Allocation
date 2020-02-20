@@ -1,14 +1,13 @@
 from utilities.Enums import TradeDirection, TradeType
 from instruments.interestRateInstrument.interestRateSwap import InterestRateSwap
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
-from pricer.swaptionPricer import SwaptionPricer
 
 
 class Swaption(InterestRateTrade):
 
     def __init__(self,
                  underlyingSwap: InterestRateSwap,
-                 optionMaturity: float,
+                 optionMaturity_in_days: float,
                  tradeDirection: TradeDirection,
                  strikeFixedRate: float,
                  forwardParFixedRate: float):
@@ -23,11 +22,8 @@ class Swaption(InterestRateTrade):
             currency=underlyingSwap.currency,
             s=underlyingSwap.s,
             m=underlyingSwap.e,  # assuming the Swaption is physically settled
-            t=optionMaturity,
+            t=optionMaturity_in_days/360,
             e=underlyingSwap.e,
             tradeType=tradeType,
             tradeDirection=tradeDirection
         )
-
-    def get_pricer(self):
-        return SwaptionPricer
