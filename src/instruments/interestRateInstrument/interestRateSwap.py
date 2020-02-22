@@ -1,6 +1,7 @@
 from enum import Enum
 import QuantLib as ql
-from marketdata import util, interestRateIndex, InterestRateCurves
+from marketdata import util, InterestRateCurves
+from marketdata.interestRateIndex import euribor_3M_index
 
 from utilities.Enums import Currency, TradeDirection, TradeType, SwapDirection
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
@@ -10,7 +11,6 @@ float_leg_daycount = util.day_count
 swap_calendar = util.calendar
 fixed_leg_tenor = ql.Period(6, ql.Months)
 float_leg_tenor = ql.Period(3, ql.Months)
-index = interestRateIndex.libor_3M_index
 business_day_convention = util.business_day_convention
 date_generation = ql.DateGeneration.Forward
 end_of_month = False
@@ -25,7 +25,8 @@ class InterestRateSwap(InterestRateTrade):
                  timeToSwapEnd_in_days: float,
                  swapDirection: SwapDirection,  # Payer is Long, Receiver is Short the underlying
                  fixed_rate: float = 0.025,
-                 float_spread: float = 0.004
+                 float_spread: float = 0.004,
+                 index = euribor_3M_index
                  ):
         self.swapDirection = swapDirection
         if swapDirection == SwapDirection.PAYER:
@@ -44,6 +45,7 @@ class InterestRateSwap(InterestRateTrade):
             tradeDirection=tradeDirection,
             tradeType=TradeType.LINEAR
         )
+        self.index = index
         settle_date = swap_calendar.advance(util.today, int(timeToSwapStart_in_days), ql.Days)
         maturity_date = swap_calendar.advance(util.today, timeToSwapEnd_in_days, ql.Days)
         fixed_schedule = ql.Schedule(settle_date, maturity_date, fixed_leg_tenor, swap_calendar, business_day_convention, business_day_convention, date_generation, end_of_month)
