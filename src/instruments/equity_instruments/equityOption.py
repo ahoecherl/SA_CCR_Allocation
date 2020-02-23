@@ -4,7 +4,7 @@ from utilities.Enums import TradeType, TradeDirection, AssetClass, Stock
 from instruments.Trade import Trade
 from marketdata.EquityVolatility import EquityVolatilty
 from marketdata.EquitySpot import EquitySpot
-from marketdata.InterestRateCurves import ois_curve_handle
+from marketdata.interestRateCurves import ois_curve_handle
 from marketdata import init_marketdata
 from marketdata.util import today
 

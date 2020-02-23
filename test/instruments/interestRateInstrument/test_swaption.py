@@ -10,3 +10,4 @@ def test_processSwaption():
                         optionMaturity_in_days=1 * 360,
                         tradeDirection=TradeDirection.SHORT,
                         strikeFixedRate=0.014)
+    print(swaption.get_price())

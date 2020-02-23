@@ -1,3 +1,5 @@
+from marketdata.interestRateCurves import InterestRateCurve
+from marketdata.swaptionVolatility import SwaptionVolatility
 from utilities.Enums import TradeDirection, TradeType
 from instruments.interestRateInstrument.interestRateSwap import InterestRateSwap
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
@@ -34,8 +36,12 @@ class Swaption(InterestRateTrade):
         exerciseDate = today + ql.Period(optionMaturity_in_days, ql.Days)
         exercise = ql.EuropeanExercise(exerciseDate)
         swaption = ql.Swaption(self.ql_underlying_swap, exercise)
-
-        real_surface_handle = ql.SwaptionVolatilityStructureHandle()
+        swaptionVol = SwaptionVolatility.__getattr__(self.underlying_swap.index.name).value
+        real_surface_handle = ql.SwaptionVolatilityStructureHandle(swaptionVol)
+        yts = InterestRateCurve.__getattr__(self.underlying_swap.index.name).value
+        real_surface_engine = ql.BlackSwaptionEngine(yts, real_surface_handle)
+        swaption.setPricingEngine(real_surface_engine)
+        self.ql_swaption=swaption
 
     def get_price(self):
-        pass
+        return self.ql_swaption.NPV()
