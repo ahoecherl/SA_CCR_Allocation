@@ -11,28 +11,42 @@ swapTenors = [ql.Period(1, ql.Months),
               ql.Period(2, ql.Months),
               ql.Period(3, ql.Months),
               ql.Period(20, ql.Years)]
-vols = [[ql.QuoteHandle(ql.SimpleQuote(0.2)),
-         ql.QuoteHandle(ql.SimpleQuote(0.2)),
-         ql.QuoteHandle(ql.SimpleQuote(0.2)),
-         ql.QuoteHandle(ql.SimpleQuote(0.2))],
-        [ql.QuoteHandle(ql.SimpleQuote(0.3)),
-         ql.QuoteHandle(ql.SimpleQuote(0.3)),
-         ql.QuoteHandle(ql.SimpleQuote(0.3)),
-         ql.QuoteHandle(ql.SimpleQuote(0.3))],
-        [ql.QuoteHandle(ql.SimpleQuote(0.4)),
-         ql.QuoteHandle(ql.SimpleQuote(0.4)),
-         ql.QuoteHandle(ql.SimpleQuote(0.4)),
-         ql.QuoteHandle(ql.SimpleQuote(0.4))],
-        [ql.QuoteHandle(ql.SimpleQuote(0.5)),
-         ql.QuoteHandle(ql.SimpleQuote(0.5)),
-         ql.QuoteHandle(ql.SimpleQuote(0.5)),
-         ql.QuoteHandle(ql.SimpleQuote(0.5))],
-        [ql.QuoteHandle(ql.SimpleQuote(0.6)),
-         ql.QuoteHandle(ql.SimpleQuote(0.6)),
-         ql.QuoteHandle(ql.SimpleQuote(0.6)),
-         ql.QuoteHandle(ql.SimpleQuote(0.6))],
+vols = [[ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1)],
+        [ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1)],
+        [ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1)],
+        [ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1)],
+        [ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1),
+         ql.SimpleQuote(0.1)],
         ]
 
+def createHandle(vols):
+    result = []
+    for row in vols:
+        nested = []
+        result.append(nested)
+        for cell in row:
+            nested.append(ql.QuoteHandle(cell))
+    return result
+
+def parallelshift(vols, bumpsize: float):
+    for row in vols:
+        for cell in row:
+            cell.setValue(cell.value()+bumpsize)
+
 class SwaptionVolatility(Enum):
-    EONIA =  ql.SwaptionVolatilityMatrix(calendar, business_day_convention, optionTenors, swapTenors, vols, day_count)
-    USDLIBOR3M = ql.SwaptionVolatilityMatrix(calendar, business_day_convention, optionTenors, swapTenors, vols, day_count)
+    EONIA = ql.SwaptionVolatilityMatrix(calendar, business_day_convention, optionTenors, swapTenors, createHandle(vols), day_count)
+    USDLIBOR3M = ql.SwaptionVolatilityMatrix(calendar, business_day_convention, optionTenors, swapTenors, createHandle(vols), day_count)

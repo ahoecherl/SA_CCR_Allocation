@@ -1,6 +1,6 @@
 import QuantLib as ql
 from pandas import DataFrame
-from Enums import Currency, SwapDirection
+from utilities.Enums import Currency, SwapDirection
 from instruments.interestRateInstrument.interestRateSwap import InterestRateSwap
 from marketdata import init_marketdata
 

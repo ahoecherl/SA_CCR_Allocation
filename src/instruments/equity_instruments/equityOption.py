@@ -7,6 +7,10 @@ from marketdata.EquitySpot import EquitySpot
 from marketdata.interestRateCurves import ois_curve_handle
 from marketdata import init_marketdata
 from marketdata.util import today
+from marketdata.EquityVolatility import Quotes as volatilityQuotes
+from marketdata.EquitySpot import Quotes as spotQuotes
+from marketdata.interestRateCurves import flat_ois_quote
+from utilities.FDCalc import fd_simple_quotes
 
 
 class EquityOption(Trade):
@@ -57,3 +61,18 @@ class EquityOption(Trade):
         if self.tradeDirection == TradeDirection.SHORT:
             multiplier = -1*multiplier
         return multiplier * self.ql_option.NPV()
+
+    def get_delta(self):
+        quote = spotQuotes[self.underlying.name]
+        delta = fd_simple_quotes([quote], self)
+        return delta
+
+    def get_vega(self):
+        quote = volatilityQuotes[self.underlying.name]
+        vega = fd_simple_quotes([quote], self)
+        return vega
+
+    def get_rho(self):
+        quote = flat_ois_quote
+        rho = fd_simple_quotes([quote], self)
+        return rho
