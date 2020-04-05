@@ -14,19 +14,18 @@ class Swaption(InterestRateTrade):
     def __init__(self,
                  underlyingSwap: InterestRateSwap,
                  optionMaturity_in_days: float,
-                 tradeDirection: TradeDirection,
-                 strikeFixedRate: float):
+                 tradeDirection: TradeDirection = TradeDirection.LONG):
         if underlyingSwap.tradeDirection == TradeDirection.LONG:
             tradeType = TradeType.CALL  # A swaption on a payer Swap is a Call Swaption as the call's value raises as the interest rate rises
         else:
             tradeType = TradeType.PUT  # Vice versa the above
-        self.K = strikeFixedRate
+        self.K = underlyingSwap.ql_swap.fixedRate()
         super(Swaption, self).__init__(
             notional=underlyingSwap.notional,
             currency=underlyingSwap.currency,
             s=underlyingSwap.s,
             m=underlyingSwap.e,  # assuming the Swaption is physically settled
-            t=optionMaturity_in_days/360,
+            t=optionMaturity_in_days / 360,
             e=underlyingSwap.e,
             tradeType=tradeType,
             tradeDirection=tradeDirection
@@ -43,7 +42,7 @@ class Swaption(InterestRateTrade):
         yts = InterestRateCurve.__getattr__(self.underlying_swap.index.name).value
         real_surface_engine = ql.BlackSwaptionEngine(yts, real_surface_handle)
         swaption.setPricingEngine(real_surface_engine)
-        self.ql_swaption=swaption
+        self.ql_swaption = swaption
 
     def get_price(self):
         return self.ql_swaption.NPV()

@@ -11,11 +11,7 @@ from instruments.interestRateInstrument.interestRateTrade import InterestRateTra
 
 fixed_leg_daycount = util.day_count
 float_leg_daycount = util.day_count
-swap_calendar = util.calendar
-fixed_leg_tenor = ql.Period(6, ql.Months)
-float_leg_tenor = ql.Period(3, ql.Months)
 business_day_convention = util.business_day_convention
-date_generation = ql.DateGeneration.Forward
 end_of_month = False
 pricing_engine = ql.DiscountingSwapEngine(interestRateCurves.ois_curve_handle)
 
@@ -29,10 +25,13 @@ class InterestRateSwap(InterestRateTrade):
                  currency: Currency = Currency.USD,
                  fixed_rate: float = None,
                  float_spread: float = 0,
-                 index = InterestRateIndex.USDLIBOR3M
+                 index= InterestRateIndex.USDLIBOR3M,
+                 calendar: ql.Calendar = ql.UnitedStates,
+                 fixed_leg_tenor: ql.Period = ql.Period(3, ql.Months),
+                 float_leg_tenor: ql.Period = ql.Period(3, ql.Months),
+                 date_generation: ql.DateGeneration = ql.DateGeneration.Forward
                  ):
         """
-
         :param notional:
         :param timeToSwapStart_in_days:
         :param timeToSwapEnd_in_days:
@@ -41,6 +40,8 @@ class InterestRateSwap(InterestRateTrade):
         :param fixed_rate: If not set explicitly the swap will be a par swap
         :param float_spread:
         :param index:
+        :param fixed_leg_tenor:
+        :param float_leg_tenor:
         """
         self.swapDirection = swapDirection
         if swapDirection == SwapDirection.PAYER:
@@ -60,13 +61,14 @@ class InterestRateSwap(InterestRateTrade):
             tradeType=TradeType.LINEAR
         )
         self.index = index
-        settle_date = swap_calendar.advance(util.today, int(timeToSwapStart_in_days), ql.Days)
-        maturity_date = swap_calendar.advance(util.today, timeToSwapEnd_in_days, ql.Days)
-        fixed_schedule = ql.Schedule(settle_date, maturity_date, fixed_leg_tenor, swap_calendar, business_day_convention, business_day_convention, date_generation, end_of_month)
-        float_schedule = ql.Schedule(settle_date, maturity_date, float_leg_tenor, swap_calendar, business_day_convention, business_day_convention, date_generation, end_of_month)
+        settle_date = calendar.advance(util.today, int(timeToSwapStart_in_days), ql.Days)
+        maturity_date = calendar.advance(util.today, timeToSwapEnd_in_days, ql.Days)
+        fixed_schedule = ql.Schedule(settle_date, maturity_date, fixed_leg_tenor, calendar, business_day_convention, business_day_convention, date_generation, end_of_month)
+        float_schedule = ql.Schedule(settle_date, maturity_date, float_leg_tenor, calendar, business_day_convention, business_day_convention, date_generation, end_of_month)
         if fixed_rate is None:
             dummy_rate = 0.02
             dummy_swap = ql.VanillaSwap(ql_tradeDirection, notional, fixed_schedule, dummy_rate, fixed_leg_daycount, float_schedule, index.value, float_spread, float_leg_daycount)
+            dummy_swap.setPricingEngine(pricing_engine)
             fixed_rate = dummy_swap.fairRate()
         self.ql_swap = ql.VanillaSwap(ql_tradeDirection, notional, fixed_schedule, fixed_rate, fixed_leg_daycount, float_schedule, index.value, float_spread, float_leg_daycount)
         self.ql_swap.setPricingEngine(pricing_engine)

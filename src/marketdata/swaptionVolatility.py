@@ -50,3 +50,4 @@ def parallelshift(vols, bumpsize: float):
 class SwaptionVolatility(Enum):
     EONIA = ql.SwaptionVolatilityMatrix(calendar, business_day_convention, optionTenors, swapTenors, createHandle(vols), day_count)
     USDLIBOR3M = ql.SwaptionVolatilityMatrix(calendar, business_day_convention, optionTenors, swapTenors, createHandle(vols), day_count)
+    EURIBOR3M = ql.SwaptionVolatilityMatrix(calendar, business_day_convention, optionTenors, swapTenors, createHandle(vols), day_count)

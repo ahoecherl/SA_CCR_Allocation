@@ -1,6 +1,8 @@
 from instruments.interestRateInstrument.interestRateSwap import InterestRateSwap
 from instruments.interestRateInstrument.swaption import Swaption
 from utilities.Enums import Currency, SwapDirection, TradeDirection
+import pytest
+from test.test_fixtures import *
 
 
 def test_processSwaption():
@@ -12,3 +14,10 @@ def test_processSwaption():
                         strikeFixedRate=0.014)
     print(swaption.get_price())
     print(swaption.get_delta())
+
+
+def test_swaption_delta_example(initialize_test, standard_swap, standard_swaption):
+    print(standard_swaption.get_price())
+    print(standard_swaption.get_delta())
+    print(standard_swap.get_price())
+    print(standard_swap.get_delta())

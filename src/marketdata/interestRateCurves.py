@@ -11,3 +11,4 @@ libor_curve_handle = ql.YieldTermStructureHandle(ql.FlatForward(today, flat_ois_
 class InterestRateCurve(Enum):
     USDLIBOR3M = libor_curve_handle
     EONIA = ois_curve_handle
+    EURIBOR3M = ois_curve_handle
