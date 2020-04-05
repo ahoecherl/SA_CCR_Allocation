@@ -51,3 +51,9 @@ class Swaption(InterestRateTrade):
         quote = flat_ois_quote
         delta = fd_simple_quotes([quote], self)
         return delta
+
+    def get_vega(self):
+        from marketdata.swaptionVolatility import vols
+        quotes = [item for sublist in vols for item in sublist]
+        vega = fd_simple_quotes(quotes, self)
+        return vega

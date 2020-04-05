@@ -26,7 +26,7 @@ class InterestRateSwap(InterestRateTrade):
                  fixed_rate: float = None,
                  float_spread: float = 0,
                  index= InterestRateIndex.USDLIBOR3M,
-                 calendar: ql.Calendar = ql.UnitedStates,
+                 calendar: ql.Calendar = ql.UnitedStates(),
                  fixed_leg_tenor: ql.Period = ql.Period(3, ql.Months),
                  float_leg_tenor: ql.Period = ql.Period(3, ql.Months),
                  date_generation: ql.DateGeneration = ql.DateGeneration.Forward
@@ -61,7 +61,7 @@ class InterestRateSwap(InterestRateTrade):
             tradeType=TradeType.LINEAR
         )
         self.index = index
-        settle_date = calendar.advance(util.today, int(timeToSwapStart_in_days), ql.Days)
+        settle_date = calendar.advance(util.today, timeToSwapStart_in_days, ql.Days)
         maturity_date = calendar.advance(util.today, timeToSwapEnd_in_days, ql.Days)
         fixed_schedule = ql.Schedule(settle_date, maturity_date, fixed_leg_tenor, calendar, business_day_convention, business_day_convention, date_generation, end_of_month)
         float_schedule = ql.Schedule(settle_date, maturity_date, float_leg_tenor, calendar, business_day_convention, business_day_convention, date_generation, end_of_month)

@@ -10,8 +10,7 @@ def test_processSwaption():
                                timeToSwapEnd_in_days=3 * 360, swapDirection=SwapDirection.PAYER)
     swaption = Swaption(underlyingSwap=fw_swap,
                         optionMaturity_in_days=1 * 360,
-                        tradeDirection=TradeDirection.SHORT,
-                        strikeFixedRate=0.014)
+                        tradeDirection=TradeDirection.SHORT)
     print(swaption.get_price())
     print(swaption.get_delta())
 
@@ -21,3 +20,6 @@ def test_swaption_delta_example(initialize_test, standard_swap, standard_swaptio
     print(standard_swaption.get_delta())
     print(standard_swap.get_price())
     print(standard_swap.get_delta())
+
+def test_swaption_vega(initialize_test, standard_swaption):
+    print(standard_swaption.get_vega())
