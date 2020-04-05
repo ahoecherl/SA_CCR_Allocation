@@ -11,3 +11,4 @@ def test_processSwaption():
                         tradeDirection=TradeDirection.SHORT,
                         strikeFixedRate=0.014)
     print(swaption.get_price())
+    print(swaption.get_delta())

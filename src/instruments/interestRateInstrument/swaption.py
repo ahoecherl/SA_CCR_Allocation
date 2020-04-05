@@ -1,10 +1,12 @@
 from marketdata.interestRateCurves import InterestRateCurve
+from marketdata.interestRateCurves import flat_ois_quote
 from marketdata.swaptionVolatility import SwaptionVolatility
 from utilities.Enums import TradeDirection, TradeType
 from instruments.interestRateInstrument.interestRateSwap import InterestRateSwap
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
 import QuantLib as ql
 from marketdata.init_marketdata import today
+from utilities.FDCalc import fd_simple_quotes
 
 
 class Swaption(InterestRateTrade):
@@ -45,3 +47,8 @@ class Swaption(InterestRateTrade):
 
     def get_price(self):
         return self.ql_swaption.NPV()
+
+    def get_delta(self):
+        quote = flat_ois_quote
+        delta = fd_simple_quotes([quote], self)
+        return delta

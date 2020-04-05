@@ -8,7 +8,7 @@ from marketdata.interestRateCurves import ois_curve_handle
 from marketdata import init_marketdata
 from marketdata.util import today
 from marketdata.EquityVolatility import Quotes as volatilityQuotes
-from marketdata.EquitySpot import Quotes as spotQuotes
+from marketdata.EquitySpot import Quotes as spotQuotest
 from marketdata.interestRateCurves import flat_ois_quote
 from utilities.FDCalc import fd_simple_quotes
 
@@ -17,22 +17,22 @@ class EquityOption(Trade):
 
     def __init__(self,
                  notional: float,
-                 K: float,
                  mat_in_days: float,
                  tradeType: TradeType = TradeType.CALL,
                  tradeDirection: TradeDirection = TradeDirection.LONG,
-                 underlying: Stock = Stock.ADS):
+                 underlying: Stock = Stock.ADS,
+                 K = None):
         """
         Equity Option
 
         :param notional: Count of underlying shares
-        :param K: Strike
         :param mat_in_days: Time to maturity of the option (in days). Will be used for both, M and T of paragraph 155 after being multiplied bei 360
         :param tradeType: Can be TradeType.CALL or TradeType.PUT
         :param tradeDirection: Can be TradeDirection.LONG or TradeDirection.SHORT
+        :param K: Strike of option is no strike is given it default to an at the money option
         """
-        self.K = K
         self.underlying = underlying
+        self.K = K if K != None else spotQuotest[self.underlying.name].value()  # no K is given it is the current Spot
         super(EquityOption, self).__init__(
             assetClass=AssetClass.EQ,
             tradeType=tradeType,
