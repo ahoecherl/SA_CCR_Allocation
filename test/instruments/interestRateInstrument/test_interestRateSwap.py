@@ -3,6 +3,7 @@ from pandas import DataFrame
 from utilities.Enums import Currency, SwapDirection
 from instruments.interestRateInstrument.interestRateSwap import InterestRateSwap
 from marketdata import init_marketdata
+from test.test_fixtures import *
 
 
 def test_SwapPrice():
@@ -23,4 +24,15 @@ def test_SwapPrice():
     swap.ql_swap.leg(0)
 
     print(swap.get_price())
+    asdf = 1
+
+
+
+
+def test_Changing_Delta(standard_swap):
+    from marketdata.interestRateCurves import flat_ois_quote
+    flat_ois_quote.setValue(0.02)
+    DV01_1 = standard_swap.get_delta()/10000
+    flat_ois_quote.setValue(0.05)
+    DV01_2 = standard_swap.get_delta()/10000
     asdf = 1
