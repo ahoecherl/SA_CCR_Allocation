@@ -2,7 +2,7 @@ from marketdata.interestRateCurves_old import InterestRateCurve
 from marketdata.interestRateCurves_old import flat_ois_quote
 from marketdata.swaptionVolatility import SwaptionVolatility
 from utilities.Enums import TradeDirection, TradeType
-from instruments.interestRateInstrument.interestRateSwap import InterestRateSwap
+from instruments.interestRateInstrument.interestRateSwap_old import InterestRateSwap
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
 import QuantLib as ql
 from marketdata.init_marketdata import today

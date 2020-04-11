@@ -1,49 +1,47 @@
-from enum import Enum
 import QuantLib as ql
-from marketdata import util, interestRateCurves_old
-from marketdata.interestRateIndex_old import euribor_3M_index
-from marketdata.interestRateIndex_old import InterestRateIndex
-from marketdata.interestRateCurves_old import flat_ois_quote
+from marketdata.interestRateCurves import InterestRateCurveQuotes, LiborCurve
+from marketdata.interestRateIndices import InterestRateIndex
+from utilities.Enums import SwapDirection, TradeDirection, TradeType
 from utilities.FDCalc import fd_simple_quotes
-
-from utilities.Enums import Currency, TradeDirection, TradeType, SwapDirection
+from utilities.timeUtilities import convert_period_to_days
+from instruments.interestRateInstrument.interestRateDerivativeConventions import InterestRateSwapConventions
+from marketdata.util import today
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
 
-fixed_leg_daycount = util.day_count
-float_leg_daycount = util.day_count
-business_day_convention = util.business_day_convention
-end_of_month = False
-pricing_engine = ql.DiscountingSwapEngine(interestRateCurves_old.ois_curve_handle)
 
 class InterestRateSwap(InterestRateTrade):
 
     def __init__(self,
-                 notional: float,
-                 timeToSwapStart_in_days: float,
-                 timeToSwapEnd_in_days: float,
-                 swapDirection: SwapDirection,    # Payer is Long, Receiver is Short the underlying
-                 currency: Currency = Currency.USD,
+                 notional,
+                 timeToSwapStart: ql.Period,
+                 timeToSwapEnd: ql.Period,
+                 swapDirection: SwapDirection,
+                 index: InterestRateIndex,
                  fixed_rate: float = None,
                  float_spread: float = 0,
-                 index= InterestRateIndex.USDLIBOR3M,
-                 calendar: ql.Calendar = ql.UnitedStates(),
-                 fixed_leg_tenor: ql.Period = ql.Period(3, ql.Months),
-                 float_leg_tenor: ql.Period = ql.Period(3, ql.Months),
-                 date_generation: ql.DateGeneration = ql.DateGeneration.Forward
                  ):
         """
+
         :param notional:
-        :param timeToSwapStart_in_days:
-        :param timeToSwapEnd_in_days:
-        :param swapDirection: Payer is Long, Receiver is Short the underlying
-        :param currency:
-        :param fixed_rate: If not set explicitly the swap will be a par swap
-        :param float_spread:
+        :param timeToSwapStart:
+        :param timeToSwapEnd:
+        :param swapDirection:
         :param index:
-        :param fixed_leg_tenor:
-        :param float_leg_tenor:
+        :param fixed_rate:
+        :param float_spread:
         """
-        self.swapDirection = swapDirection
+
+        currency = InterestRateSwapConventions[index.name].value['Currency']
+        calendar = InterestRateSwapConventions[index.name].value['Calendar']
+        dateRoll = InterestRateSwapConventions[index.name].value['DateRoll']
+        dateGeneration = InterestRateSwapConventions[index.name].value['DateGeneration']
+        endOfMonth = InterestRateSwapConventions[index.name].value['EndOfMonth']
+        fixedLegTenor = ql.Period(InterestRateSwapConventions[index.name].value['FixedFrequency'])
+        floatLegTenor = ql.Period(InterestRateSwapConventions[index.name].value['FloatFrequency'])
+        floatDayCount = InterestRateSwapConventions[index.name].value['FloatDayCount']
+        fixedDayCount = InterestRateSwapConventions[index.name].value['FixedDayCount']
+
+        self.swapDirection = swapDirection,
         if swapDirection == SwapDirection.PAYER:
             tradeDirection = TradeDirection.LONG
             ql_tradeDirection = ql.VanillaSwap.Payer
@@ -53,30 +51,45 @@ class InterestRateSwap(InterestRateTrade):
         super(InterestRateSwap, self).__init__(
             notional=notional,
             currency=currency,
-            s=timeToSwapStart_in_days/360,
-            m=timeToSwapEnd_in_days/360,
-            e=timeToSwapEnd_in_days/360,
+            s=convert_period_to_days(timeToSwapStart) / 360,
+            m=convert_period_to_days(timeToSwapEnd) / 360,
+            e=convert_period_to_days(timeToSwapEnd) / 360,
             t=None,
             tradeDirection=tradeDirection,
             tradeType=TradeType.LINEAR
         )
         self.index = index
-        settle_date = calendar.advance(util.today, timeToSwapStart_in_days, ql.Days)
-        maturity_date = calendar.advance(util.today, timeToSwapEnd_in_days, ql.Days)
-        fixed_schedule = ql.Schedule(settle_date, maturity_date, fixed_leg_tenor, calendar, business_day_convention, business_day_convention, date_generation, end_of_month)
-        float_schedule = ql.Schedule(settle_date, maturity_date, float_leg_tenor, calendar, business_day_convention, business_day_convention, date_generation, end_of_month)
+        settle_date = calendar.advance(today, timeToSwapStart, dateRoll, endOfMonth)
+        maturity_date = calendar.advance(today, timeToSwapEnd, dateRoll, endOfMonth)
+        fixed_schedule = ql.Schedule(settle_date, maturity_date, fixedLegTenor, calendar, dateRoll, dateRoll,
+                                     dateGeneration, endOfMonth)
+        float_schedule = ql.Schedule(settle_date, maturity_date, floatLegTenor, calendar, dateRoll, dateRoll,
+                                     dateGeneration, endOfMonth)
+
+        pricing_engine = ql.DiscountingSwapEngine(LiborCurve[index.name].value)
+
         if fixed_rate is None:
             dummy_rate = 0.02
-            dummy_swap = ql.VanillaSwap(ql_tradeDirection, notional, fixed_schedule, dummy_rate, fixed_leg_daycount, float_schedule, index.value, float_spread, float_leg_daycount)
+            dummy_swap = ql.VanillaSwap(ql_tradeDirection, notional, fixed_schedule, dummy_rate, fixedDayCount,
+                                        float_schedule, index.value, float_spread, floatDayCount)
             dummy_swap.setPricingEngine(pricing_engine)
             fixed_rate = dummy_swap.fairRate()
-        self.ql_swap = ql.VanillaSwap(ql_tradeDirection, notional, fixed_schedule, fixed_rate, fixed_leg_daycount, float_schedule, index.value, float_spread, float_leg_daycount)
-        self.ql_swap.setPricingEngine(pricing_engine)
+
+        self.ql_instrument = ql.VanillaSwap(ql_tradeDirection, notional, fixed_schedule, fixed_rate, fixedDayCount,
+                                            float_schedule, index.value, float_spread, floatDayCount)
+        self.ql_instrument.setPricingEngine(pricing_engine)
 
     def get_price(self):
-        return self.ql_swap.NPV()
+        return self.ql_instrument.NPV()
+
+    def get_par_rate(self):
+        return self.ql_instrument.fairRate()
+
+    def get_fixed_rate(self):
+        return self.ql_instrument.fixedRate()
 
     def get_delta(self):
-        quote = flat_ois_quote
-        delta = fd_simple_quotes([quote], self)
+        # performs a simultaneous absolute parallel shift of all quotes
+        quotes = InterestRateCurveQuotes[self.index.name].value.values()
+        delta = fd_simple_quotes(quotes, self)
         return delta

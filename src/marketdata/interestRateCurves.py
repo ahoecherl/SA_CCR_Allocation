@@ -116,7 +116,7 @@ def __create_euribor6m_curve_handle__():
                                                       euribor6m_swap_conventions['SettlementLag'],
                                                       euribor6m_swap_conventions['Calendar'],
                                                       euribor6m_swap_conventions['DateRoll'],
-                                                      False,
+                                                      euribor6m_swap_conventions['EndOfMonth'],
                                                       euribor6m_swap_conventions['FloatDayCount']))
 
     discountcurve = OisCurve.EONIA.value
@@ -166,7 +166,7 @@ def __create_usdlibor3m_curve_handle__():
                                                        usdlibor3m_swap_conventions['SettlementLag'],
                                                        usdlibor3m_swap_conventions['Calendar'],
                                                        usdlibor3m_swap_conventions['DateRoll'],
-                                                       False,
+                                                       usdlibor3m_swap_conventions['EndOfMonth'],
                                                        usdlibor3m_swap_conventions['FloatDayCount']))
 
     usdlibor3m_fra_conventions = ForwardRateAgreementConventions.USDLIBOR3M.value

@@ -12,15 +12,19 @@ class InterestRateSwapConventions(Enum):
                  'Calendar': ql.TARGET(),
                  'FixedDayCount': ql.Thirty360(),
                  'FloatDayCount': ql.Actual360(),
+                 'DateGeneration': ql.DateGeneration.Forward,
+                 'EndOfMonth': False,
                  'SettlementLag': 2}
 
     USDLIBOR3M = {'FixedFrequency': ql.Semiannual,
-                  'FloatingFrequency': ql.Quarterly,
+                  'FloatFrequency': ql.Quarterly,
                   'Currency': Currency.USD,
                   'DateRoll': ql.ModifiedFollowing,
                   'Calendar': ql.UnitedStates(ql.UnitedStates.NYSE),
                   'FixedDayCount': ql.Thirty360(),
                   'FloatDayCount': ql.Actual360(),
+                  'DateGeneration': ql.DateGeneration.Forward,
+                  'EndOfMonth': False,
                   'SettlementLag': 2}
 
 
@@ -31,6 +35,7 @@ class OvernightIndexedSwapConventions(Enum):
              'Currency': Currency.EUR,
              'DayCount': ql.Actual360(),
              'DateRoll': ql.ModifiedFollowing,
+             'EndOfMonth': False,
              'SettlementLag': 2
              }
 
@@ -40,6 +45,7 @@ class OvernightIndexedSwapConventions(Enum):
                 'Currency': Currency.USD,
                 'DayCount': ql.Actual360(),
                 'DateRoll': ql.ModifiedFollowing,
+                'EndOfMonth': False,
                 'SettlementLag': 2}
 
 
@@ -48,4 +54,3 @@ class ForwardRateAgreementConventions(Enum):
                   'Tenor': ql.Period(3, ql.Months),
                   'DayCount': ql.ModifiedFollowing,
                   'Calendar': ql.UnitedStates.NYSE}
-

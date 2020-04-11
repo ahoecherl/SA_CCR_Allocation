@@ -1,4 +1,4 @@
-from instruments.interestRateInstrument.interestRateSwap import InterestRateSwap
+from instruments.interestRateInstrument.interestRateSwap_old import InterestRateSwap
 from instruments.interestRateInstrument.swaption import Swaption
 from utilities.Enums import Currency, SwapDirection, TradeDirection
 import pytest
