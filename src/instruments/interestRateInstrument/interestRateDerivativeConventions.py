@@ -56,3 +56,15 @@ class FRAConventions(Enum):
                   'Tenor': ql.Period(3, ql.Months),
                   'DayCount': ql.ModifiedFollowing,
                   'Calendar': ql.UnitedStates.NYSE}
+
+
+class SwaptionConventions(Enum):
+    EUR = {'Calendar': IRSConventions.EURIBOR6M.value['Calendar'],
+           'DateRoll': IRSConventions.EURIBOR6M.value['DateRoll'],
+           'DayCount': IRSConventions.EURIBOR6M.value['FloatDayCount'],
+           'PricerDisplacement': 0.02}
+
+    USD = {'Calendar': IRSConventions.USDLIBOR3M.value['Calendar'],
+           'DateRoll': IRSConventions.USDLIBOR3M.value['DateRoll'],
+           'DayCount': IRSConventions.USDLIBOR3M.value['FloatDayCount'],
+           'PricerDisplacement': 0.00}

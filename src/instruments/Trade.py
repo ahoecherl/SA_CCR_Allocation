@@ -3,6 +3,8 @@ from utilities.Enums import AssetClass, SubClass, TradeType, TradeDirection
 
 class Trade:
 
+    ql_instrument = None
+
     def __init__(self,
                  assetClass: AssetClass,
                  notional: float,
@@ -37,9 +39,6 @@ class Trade:
         self.e = e
         self.t = t
         self.notional = notional
-
-    def get_pricer(self):
-        pass
 
     def __str__(self):
         return str({'Instrument': self.__class__.__name__, 'TradeType': self.tradeType.value, 'TradeDirection': self.tradeDirection.value, 'Maturity': self.m, 'Startdate': self.s, 'Notional': self.notional})

@@ -1,17 +1,16 @@
 import QuantLib as ql
 
+from marketdata.interestRateCurves import OisCurve, InterestRateCurveQuotes
 from utilities.Enums import TradeType, TradeDirection, AssetClass, Stock
 from instruments.Trade import Trade
 from marketdata.EquityVolatility import EquityVolatilty
 from marketdata.EquitySpot import EquitySpot
-from marketdata.interestRateCurves_old import ois_curve_handle
-from marketdata import init_marketdata
 from marketdata.util import today
 from marketdata.EquityVolatility import Quotes as volatilityQuotes
-from marketdata.EquitySpot import Quotes as spotQuotest
-from marketdata.interestRateCurves_old import flat_ois_quote
+from marketdata.EquitySpot import Quotes as spotQuotes
 from utilities.FDCalc import fd_simple_quotes
 
+discounting_curve = OisCurve.EONIA
 
 class EquityOption(Trade):
 
@@ -32,7 +31,7 @@ class EquityOption(Trade):
         :param K: Strike of option is no strike is given it default to an at the money option
         """
         self.underlying = underlying
-        self.K = K if K != None else spotQuotest[self.underlying.name].value()  # no K is given it is the current Spot
+        self.K = K if K != None else spotQuotes[self.underlying.name].value()  # no K is given it is the current Spot
         super(EquityOption, self).__init__(
             assetClass=AssetClass.EQ,
             tradeType=tradeType,
@@ -44,7 +43,7 @@ class EquityOption(Trade):
         vol_handle = EquityVolatilty.__getattr__(self.underlying.name).value
         spot_handle = EquitySpot.__getattr__(self.underlying.name).value
         self.S = spot_handle.value()
-        black_scholes_process = ql.BlackScholesProcess(spot_handle, ois_curve_handle, vol_handle)
+        black_scholes_process = ql.BlackScholesProcess(spot_handle, discounting_curve.value, vol_handle)
         engine = ql.AnalyticEuropeanEngine(black_scholes_process)
         if tradeType.name == TradeType.CALL.name:
             option_type = ql.Option.Call
@@ -73,6 +72,6 @@ class EquityOption(Trade):
         return vega
 
     def get_rho(self):
-        quote = flat_ois_quote
-        rho = fd_simple_quotes([quote], self)
+        quotes = InterestRateCurveQuotes[discounting_curve.name].value.values()
+        rho = fd_simple_quotes(quotes, self)
         return rho

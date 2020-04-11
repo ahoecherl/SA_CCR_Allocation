@@ -1,8 +1,10 @@
-from marketdata.interestRateCurves_old import InterestRateCurve
-from marketdata.interestRateCurves_old import flat_ois_quote
+from instruments.interestRateInstrument.interestRateDerivativeConventions import OISConventions, IRSConventions, \
+    SwaptionConventions
+from instruments.interestRateInstrument.irs import IRS
+from instruments.interestRateInstrument.ois import OIS
+from marketdata.interestRateCurves import OisCurve, LiborCurve, InterestRateCurveQuotes
 from marketdata.swaptionVolatility import SwaptionVolatility
 from utilities.Enums import TradeDirection, TradeType
-from instruments.interestRateInstrument.interestRateSwap_old import InterestRateSwap
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
 import QuantLib as ql
 from marketdata.init_marketdata import today
@@ -12,14 +14,14 @@ from utilities.FDCalc import fd_simple_quotes
 class Swaption(InterestRateTrade):
 
     def __init__(self,
-                 underlyingSwap: InterestRateSwap,
+                 underlyingSwap: InterestRateTrade,
                  optionMaturity_in_days: float,
                  tradeDirection: TradeDirection = TradeDirection.LONG):
         if underlyingSwap.tradeDirection == TradeDirection.LONG:
             tradeType = TradeType.CALL  # A swaption on a payer Swap is a Call Swaption as the call's value raises as the interest rate rises
         else:
             tradeType = TradeType.PUT  # Vice versa the above
-        self.K = underlyingSwap.ql_swap.fixedRate()
+        self.K = underlyingSwap.ql_instrument.fixedRate()
         super(Swaption, self).__init__(
             notional=underlyingSwap.notional,
             currency=underlyingSwap.currency,
@@ -31,16 +33,17 @@ class Swaption(InterestRateTrade):
             tradeDirection=tradeDirection
         )
         self.underlying_swap = underlyingSwap
-        self.ql_underlying_swap = underlyingSwap.ql_swap
+        self.ql_underlying_swap = underlyingSwap.ql_instrument
         self.S = self.ql_underlying_swap.fairRate()
 
         exerciseDate = today + ql.Period(optionMaturity_in_days, ql.Days)
         exercise = ql.EuropeanExercise(exerciseDate)
         swaption = ql.Swaption(self.ql_underlying_swap, exercise)
-        swaptionVol = SwaptionVolatility.__getattr__(self.underlying_swap.index.name).value
-        real_surface_handle = ql.SwaptionVolatilityStructureHandle(swaptionVol)
-        yts = InterestRateCurve.__getattr__(self.underlying_swap.index.name).value
-        real_surface_engine = ql.BlackSwaptionEngine(yts, real_surface_handle)
+        indexname = self.underlying_swap.index.name
+        yts = LiborCurve[self.underlying_swap.index.name].value
+        currency = IRSConventions[indexname].value['Currency']
+        swaptionVol = SwaptionVolatility[currency.name].value
+        real_surface_engine = ql.BlackSwaptionEngine(yts, swaptionVol)
         swaption.setPricingEngine(real_surface_engine)
         self.ql_swaption = swaption
 
@@ -48,8 +51,8 @@ class Swaption(InterestRateTrade):
         return self.ql_swaption.NPV()
 
     def get_delta(self):
-        quote = flat_ois_quote
-        delta = fd_simple_quotes([quote], self)
+        quotes = InterestRateCurveQuotes[self.underlying_swap.index.name].value.values()
+        delta = fd_simple_quotes(quotes, self)
         return delta
 
     def get_vega(self):
