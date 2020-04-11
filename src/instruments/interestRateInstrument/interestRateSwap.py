@@ -1,9 +1,9 @@
 from enum import Enum
 import QuantLib as ql
-from marketdata import util, interestRateCurves
-from marketdata.interestRateIndex import euribor_3M_index
-from marketdata.interestRateIndex import InterestRateIndex
-from marketdata.interestRateCurves import flat_ois_quote
+from marketdata import util, interestRateCurves_old
+from marketdata.interestRateIndex_old import euribor_3M_index
+from marketdata.interestRateIndex_old import InterestRateIndex
+from marketdata.interestRateCurves_old import flat_ois_quote
 from utilities.FDCalc import fd_simple_quotes
 
 from utilities.Enums import Currency, TradeDirection, TradeType, SwapDirection
@@ -13,7 +13,7 @@ fixed_leg_daycount = util.day_count
 float_leg_daycount = util.day_count
 business_day_convention = util.business_day_convention
 end_of_month = False
-pricing_engine = ql.DiscountingSwapEngine(interestRateCurves.ois_curve_handle)
+pricing_engine = ql.DiscountingSwapEngine(interestRateCurves_old.ois_curve_handle)
 
 class InterestRateSwap(InterestRateTrade):
 

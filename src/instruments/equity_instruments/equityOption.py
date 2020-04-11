@@ -4,12 +4,12 @@ from utilities.Enums import TradeType, TradeDirection, AssetClass, Stock
 from instruments.Trade import Trade
 from marketdata.EquityVolatility import EquityVolatilty
 from marketdata.EquitySpot import EquitySpot
-from marketdata.interestRateCurves import ois_curve_handle
+from marketdata.interestRateCurves_old import ois_curve_handle
 from marketdata import init_marketdata
 from marketdata.util import today
 from marketdata.EquityVolatility import Quotes as volatilityQuotes
 from marketdata.EquitySpot import Quotes as spotQuotest
-from marketdata.interestRateCurves import flat_ois_quote
+from marketdata.interestRateCurves_old import flat_ois_quote
 from utilities.FDCalc import fd_simple_quotes
 
 

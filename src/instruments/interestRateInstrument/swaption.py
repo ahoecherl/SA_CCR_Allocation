@@ -1,5 +1,5 @@
-from marketdata.interestRateCurves import InterestRateCurve
-from marketdata.interestRateCurves import flat_ois_quote
+from marketdata.interestRateCurves_old import InterestRateCurve
+from marketdata.interestRateCurves_old import flat_ois_quote
 from marketdata.swaptionVolatility import SwaptionVolatility
 from utilities.Enums import TradeDirection, TradeType
 from instruments.interestRateInstrument.interestRateSwap import InterestRateSwap

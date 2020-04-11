@@ -1,7 +1,7 @@
 import pytest
 from instruments.interestRateInstrument.interestRateSwap import InterestRateSwap
 from instruments.interestRateInstrument.swaption import Swaption
-from marketdata.interestRateIndex import InterestRateIndex
+from marketdata.interestRateIndex_old import InterestRateIndex
 from marketdata.util import business_day_convention, day_count, today
 import QuantLib as ql
 

@@ -30,7 +30,7 @@ def test_SwapPrice():
 
 
 def test_Changing_Delta(standard_swap):
-    from marketdata.interestRateCurves import flat_ois_quote
+    from marketdata.interestRateCurves_old import flat_ois_quote
     flat_ois_quote.setValue(0.02)
     DV01_1 = standard_swap.get_delta()/10000
     flat_ois_quote.setValue(0.05)
