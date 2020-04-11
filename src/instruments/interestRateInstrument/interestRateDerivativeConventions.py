@@ -4,7 +4,7 @@ import QuantLib as ql
 from utilities.Enums import Currency
 
 
-class InterestRateSwapConventions(Enum):
+class IRSConventions(Enum):
     EURIBOR6M = {'FixedFrequency': ql.Annual,
                  'FloatFrequency': ql.Semiannual,
                  'Currency': Currency.EUR,
@@ -28,13 +28,14 @@ class InterestRateSwapConventions(Enum):
                   'SettlementLag': 2}
 
 
-class OvernightIndexedSwapConventions(Enum):
+class OISConventions(Enum):
     EONIA = {'FixedFrequency': ql.Annual,
              'FloatFrequency': ql.Annual,
              'Calendar': ql.TARGET(),
              'Currency': Currency.EUR,
              'DayCount': ql.Actual360(),
              'DateRoll': ql.ModifiedFollowing,
+             'DateGeneration': ql.DateGeneration.Forward,
              'EndOfMonth': False,
              'SettlementLag': 2
              }
@@ -45,11 +46,12 @@ class OvernightIndexedSwapConventions(Enum):
                 'Currency': Currency.USD,
                 'DayCount': ql.Actual360(),
                 'DateRoll': ql.ModifiedFollowing,
+                'DateGeneration': ql.DateGeneration.Forward,
                 'EndOfMonth': False,
                 'SettlementLag': 2}
 
 
-class ForwardRateAgreementConventions(Enum):
+class FRAConventions(Enum):
     USDLIBOR3M = {'SettlementLag': 2,
                   'Tenor': ql.Period(3, ql.Months),
                   'DayCount': ql.ModifiedFollowing,

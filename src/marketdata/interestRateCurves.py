@@ -2,8 +2,8 @@ from enum import Enum
 
 import QuantLib as ql
 
-from instruments.interestRateInstrument.interestRateDerivativeConventions import OvernightIndexedSwapConventions, \
-    InterestRateSwapConventions, ForwardRateAgreementConventions
+from instruments.interestRateInstrument.interestRateDerivativeConventions import OISConventions, \
+    IRSConventions, FRAConventions
 
 
 class InterestRateCurveQuotes(Enum):
@@ -58,7 +58,7 @@ class InterestRateCurveQuotes(Enum):
 def __create_eonia_curve_handle__():
     # all quotes are OIS quotes
     eonia_index = ql.Eonia()
-    eonia_ois_conventions = OvernightIndexedSwapConventions.EONIA.value
+    eonia_ois_conventions = OISConventions.EONIA.value
     eonia_helpers = []
     for tenor, quote in InterestRateCurveQuotes.EONIA.value.items():
         eonia_helpers.append(ql.OISRateHelper(eonia_ois_conventions['SettlementLag'],
@@ -77,7 +77,7 @@ def __create_eonia_curve_handle__():
 def __create_fedfunds_curve_handle__():
     # all quotes are OIS quotes
     fedfunds_index = ql.FedFunds()
-    fedfunds_ois_conventions = OvernightIndexedSwapConventions.FEDFUNDS.value
+    fedfunds_ois_conventions = OISConventions.FEDFUNDS.value
     fedfunds_helpers = []
     for tenor, quote in InterestRateCurveQuotes.FEDFUNDS.value.items():
         fedfunds_helpers.append(ql.OISRateHelper(fedfunds_ois_conventions['SettlementLag'],
@@ -103,7 +103,7 @@ def __create_euribor6m_curve_handle__():
     # We are using the EONIA curve as discount curve in bootstrapping
     # We are using the conventions for Euribor6m swap for the deposit as well, which is fine in this case
 
-    euribor6m_swap_conventions = InterestRateSwapConventions.EURIBOR6M.value
+    euribor6m_swap_conventions = IRSConventions.EURIBOR6M.value
     fixing_key = ql.Period(6, ql.Months)
     money_market_quotes = {k: InterestRateCurveQuotes.EURIBOR6M.value[k] for k in [fixing_key]}
     swap_quotes = dict(InterestRateCurveQuotes.EURIBOR6M.value)
@@ -146,7 +146,7 @@ def __create_usdlibor3m_curve_handle__():
     # here we hardcode that the 3M quote is a money market quote and the 6M quote is a FRA. All other quotes are Swaps
     # We are using the conventions of the Swap for the desposit which is fine since they are the same.
 
-    usdlibor3m_swap_conventions = InterestRateSwapConventions.USDLIBOR3M.value
+    usdlibor3m_swap_conventions = IRSConventions.USDLIBOR3M.value
     index = ql.USDLibor(ql.Period(3, ql.Months))
 
     fixing_keys = [ql.Period(3, ql.Months)]
@@ -169,7 +169,7 @@ def __create_usdlibor3m_curve_handle__():
                                                        usdlibor3m_swap_conventions['EndOfMonth'],
                                                        usdlibor3m_swap_conventions['FloatDayCount']))
 
-    usdlibor3m_fra_conventions = ForwardRateAgreementConventions.USDLIBOR3M.value
+    usdlibor3m_fra_conventions = FRAConventions.USDLIBOR3M.value
     for tenor, quote in fra_quotes.items():
         usdlibor3m_helpers.append(ql.FraRateHelper(ql.QuoteHandle(quote),
                                                    tenor.length() - usdlibor3m_fra_conventions['Tenor'].length(),

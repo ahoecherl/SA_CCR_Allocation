@@ -4,12 +4,12 @@ from marketdata.interestRateIndices import InterestRateIndex
 from utilities.Enums import SwapDirection, TradeDirection, TradeType
 from utilities.FDCalc import fd_simple_quotes
 from utilities.timeUtilities import convert_period_to_days
-from instruments.interestRateInstrument.interestRateDerivativeConventions import InterestRateSwapConventions
+from instruments.interestRateInstrument.interestRateDerivativeConventions import IRSConventions
 from marketdata.util import today
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
 
 
-class InterestRateSwap(InterestRateTrade):
+class IRS(InterestRateTrade):
 
     def __init__(self,
                  notional,
@@ -31,15 +31,15 @@ class InterestRateSwap(InterestRateTrade):
         :param float_spread:
         """
 
-        currency = InterestRateSwapConventions[index.name].value['Currency']
-        calendar = InterestRateSwapConventions[index.name].value['Calendar']
-        dateRoll = InterestRateSwapConventions[index.name].value['DateRoll']
-        dateGeneration = InterestRateSwapConventions[index.name].value['DateGeneration']
-        endOfMonth = InterestRateSwapConventions[index.name].value['EndOfMonth']
-        fixedLegTenor = ql.Period(InterestRateSwapConventions[index.name].value['FixedFrequency'])
-        floatLegTenor = ql.Period(InterestRateSwapConventions[index.name].value['FloatFrequency'])
-        floatDayCount = InterestRateSwapConventions[index.name].value['FloatDayCount']
-        fixedDayCount = InterestRateSwapConventions[index.name].value['FixedDayCount']
+        currency = IRSConventions[index.name].value['Currency']
+        calendar = IRSConventions[index.name].value['Calendar']
+        dateRoll = IRSConventions[index.name].value['DateRoll']
+        dateGeneration = IRSConventions[index.name].value['DateGeneration']
+        endOfMonth = IRSConventions[index.name].value['EndOfMonth']
+        fixedLegTenor = ql.Period(IRSConventions[index.name].value['FixedFrequency'])
+        floatLegTenor = ql.Period(IRSConventions[index.name].value['FloatFrequency'])
+        floatDayCount = IRSConventions[index.name].value['FloatDayCount']
+        fixedDayCount = IRSConventions[index.name].value['FixedDayCount']
 
         self.swapDirection = swapDirection,
         if swapDirection == SwapDirection.PAYER:
@@ -48,7 +48,7 @@ class InterestRateSwap(InterestRateTrade):
         if swapDirection == SwapDirection.RECEIVER:
             tradeDirection = TradeDirection.SHORT
             ql_tradeDirection = ql.VanillaSwap.Receiver
-        super(InterestRateSwap, self).__init__(
+        super(IRS, self).__init__(
             notional=notional,
             currency=currency,
             s=convert_period_to_days(timeToSwapStart) / 360,
@@ -89,7 +89,7 @@ class InterestRateSwap(InterestRateTrade):
         return self.ql_instrument.fixedRate()
 
     def get_delta(self):
-        # performs a simultaneous absolute parallel shift of all quotes
+        # performs a simultaneous absolute parallel shift of all quotes of the LIBOR curve
         quotes = InterestRateCurveQuotes[self.index.name].value.values()
         delta = fd_simple_quotes(quotes, self)
         return delta
