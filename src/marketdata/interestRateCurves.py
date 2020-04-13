@@ -202,3 +202,8 @@ def __create_usdlibor3m_curve_handle__():
 class LiborCurve(Enum):
     EURIBOR6M = __create_euribor6m_curve_handle__()
     USDLIBOR3M = __create_usdlibor3m_curve_handle__()
+
+
+class DiscountCurve(Enum):
+    EUR = OisCurve.EONIA.value
+    USD = OisCurve.FEDFUNDS.value

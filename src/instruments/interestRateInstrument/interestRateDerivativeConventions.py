@@ -62,9 +62,9 @@ class SwaptionConventions(Enum):
     EUR = {'Calendar': IRSConventions.EURIBOR6M.value['Calendar'],
            'DateRoll': IRSConventions.EURIBOR6M.value['DateRoll'],
            'DayCount': IRSConventions.EURIBOR6M.value['FloatDayCount'],
-           'PricerDisplacement': 0.02}
+           'Pricer': ql.BachelierSwaptionEngine}
 
     USD = {'Calendar': IRSConventions.USDLIBOR3M.value['Calendar'],
            'DateRoll': IRSConventions.USDLIBOR3M.value['DateRoll'],
            'DayCount': IRSConventions.USDLIBOR3M.value['FloatDayCount'],
-           'PricerDisplacement': 0.00}
+           'Pricer': ql.BlackSwaptionEngine}

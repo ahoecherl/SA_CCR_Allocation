@@ -2,7 +2,7 @@ from instruments.interestRateInstrument.interestRateDerivativeConventions import
     SwaptionConventions
 from instruments.interestRateInstrument.irs import IRS
 from instruments.interestRateInstrument.ois import OIS
-from marketdata.interestRateCurves import OisCurve, LiborCurve, InterestRateCurveQuotes
+from marketdata.interestRateCurves import OisCurve, LiborCurve, InterestRateCurveQuotes, DiscountCurve
 from marketdata.swaptionVolatility import SwaptionVolatility
 from utilities.Enums import TradeDirection, TradeType
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
@@ -40,10 +40,11 @@ class Swaption(InterestRateTrade):
         exercise = ql.EuropeanExercise(exerciseDate)
         swaption = ql.Swaption(self.ql_underlying_swap, exercise)
         indexname = self.underlying_swap.index.name
-        yts = LiborCurve[self.underlying_swap.index.name].value
         currency = IRSConventions[indexname].value['Currency']
+        discountcuve = DiscountCurve[currency.name].value
         swaptionVol = SwaptionVolatility[currency.name].value
-        real_surface_engine = ql.BlackSwaptionEngine(yts, swaptionVol)
+        pricer = SwaptionConventions[currency.name].value['Pricer']
+        real_surface_engine = pricer(discountcuve, swaptionVol)
         swaption.setPricingEngine(real_surface_engine)
         self.ql_swaption = swaption
 

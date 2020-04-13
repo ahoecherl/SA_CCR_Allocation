@@ -8,7 +8,7 @@ from test.test_fixtures import *
 
 
 def test_USDLIBOR3MSwaption(initialize_test):
-    fw_swap = IRS(notional=1000000, timeToSwapStart=ql.Period(1, ql.Years), timeToSwapEnd=ql.Period(3, ql.Years),
+    fw_swap = IRS(notional=1000000, timeToSwapStart=ql.Period(1, ql.Years), timeToSwapEnd=ql.Period(20, ql.Years),
                   swapDirection=SwapDirection.PAYER, index=InterestRateIndex.USDLIBOR3M)
 
     swaption = Swaption(underlyingSwap=fw_swap,
@@ -18,10 +18,10 @@ def test_USDLIBOR3MSwaption(initialize_test):
     print(swaption.get_delta())
 
 
-@pytest.mark.skip(reason="Pricing of EUR swaptions currently impossible since the pricer can't handle negative rates")
+# @pytest.mark.skip(reason="Pricing of EUR swaptions currently impossible since the pricer can't handle negative rates")
 def test_EURIBOR6MSwaption(initialize_test):
-    fw_swap = IRS(notional=1000000, timeToSwapStart=ql.Period(1, ql.Years), timeToSwapEnd=ql.Period(3, ql.Years),
-                  swapDirection=SwapDirection.PAYER, index=InterestRateIndex.EURIBOR6M, fixed_rate=0.01)
+    fw_swap = IRS(notional=1000000, timeToSwapStart=ql.Period(1, ql.Years), timeToSwapEnd=ql.Period(20, ql.Years),
+                  swapDirection=SwapDirection.PAYER, index=InterestRateIndex.EURIBOR6M)
 
     swaption = Swaption(underlyingSwap=fw_swap,
                         optionMaturity_in_days=1 * 360,
