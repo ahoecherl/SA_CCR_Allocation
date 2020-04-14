@@ -24,11 +24,11 @@ class InterestRateCurveQuotes(Enum):
                  ql.Period(1, ql.Years): ql.SimpleQuote(-0.2355 / 100),
                  ql.Period(2, ql.Years): ql.SimpleQuote(-0.20860 / 100),
                  ql.Period(3, ql.Years): ql.SimpleQuote(-0.1525 / 100),
-                 ql.Period(5, ql.Years): ql.SimpleQuote(-0.17438 / 100),
-                 ql.Period(10, ql.Years): ql.SimpleQuote(0.28879 / 100),
-                 ql.Period(15, ql.Years): ql.SimpleQuote(0.62908 / 100),
-                 ql.Period(20, ql.Years): ql.SimpleQuote(0.82255 / 100),
-                 ql.Period(30, ql.Years): ql.SimpleQuote(0.92238 / 100)}
+                 ql.Period(5, ql.Years): ql.SimpleQuote(0.0045 / 100),
+                 ql.Period(10, ql.Years): ql.SimpleQuote(0.4735 / 100),
+                 ql.Period(15, ql.Years): ql.SimpleQuote(0.82 / 100),
+                 ql.Period(20, ql.Years): ql.SimpleQuote(0.9925 / 100),
+                 ql.Period(30, ql.Years): ql.SimpleQuote(1.072 / 100)}
 
     FEDFUNDS = {ql.Period(2, ql.Weeks): ql.SimpleQuote(2.372 / 100),
                 ql.Period(1, ql.Months): ql.SimpleQuote(2.375 / 100),
