@@ -14,6 +14,9 @@ class RiskType(Enum):
     Risk_EquityVol = 'Risk_EquityVol'
     Risk_FX = 'Risk_FX'
 
+class ImRole(Enum):
+    PLEDGOR = 'PLEDGOR'
+    SECURED = 'SECURED'
 
 SimmTenor = {ql.Period(2, ql.Weeks): '2w',
              ql.Period(1, ql.Months): '1m',

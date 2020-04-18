@@ -1,5 +1,5 @@
 import pytest
-from simm.simmAPI import postCrif,getCrif
+from simm.simmAPI import postCrif, getCrif, calculateCrif
 
 testCrifOneLine = [{
         "tradeId": "TestTrade1",
@@ -97,3 +97,8 @@ def test_postCrif_error():
 def test_getCrif():
     id = 0
     getCrif(id)
+
+def test_calculateCrif():
+    crif_id = postCrif(testCrifMultiLine)
+    im = calculateCrif(crif_id)
+    asdf = 1
