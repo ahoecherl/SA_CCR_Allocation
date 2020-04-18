@@ -8,7 +8,7 @@ from utilities.Enums import TradeDirection, TradeType
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
 import QuantLib as ql
 from marketdata.init_marketdata import today
-from utilities.FDCalc import fd_simple_quotes
+from utilities.sensiCalc import fd_simple_quotes
 
 
 class Swaption(InterestRateTrade):
@@ -41,7 +41,7 @@ class Swaption(InterestRateTrade):
         swaption = ql.Swaption(self.ql_underlying_swap, exercise)
         indexname = self.underlying_swap.index.name
         currency = IRSConventions[indexname].value['Currency']
-        discountcuve = DiscountCurve[currency.name].value
+        discountcuve = DiscountCurve[currency.name].value.value
         swaptionVol = SwaptionVolatility[currency.name].value
         pricer = SwaptionConventions[currency.name].value['Pricer']
         real_surface_engine = pricer(discountcuve, swaptionVol)

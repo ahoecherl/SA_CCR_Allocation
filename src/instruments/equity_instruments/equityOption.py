@@ -8,7 +8,7 @@ from marketdata.EquitySpot import EquitySpot
 from marketdata.util import today
 from marketdata.EquityVolatility import Quotes as volatilityQuotes
 from marketdata.EquitySpot import Quotes as spotQuotes
-from utilities.FDCalc import fd_simple_quotes
+from utilities.sensiCalc import fd_simple_quotes
 
 discounting_curve = OisCurve.EONIA
 

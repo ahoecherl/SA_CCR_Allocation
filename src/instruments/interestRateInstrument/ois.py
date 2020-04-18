@@ -2,7 +2,7 @@ import QuantLib as ql
 from marketdata.interestRateCurves import InterestRateCurveQuotes, OisCurve
 from marketdata.interestRateIndices import InterestRateIndex
 from utilities.Enums import SwapDirection, TradeDirection, TradeType
-from utilities.FDCalc import fd_simple_quotes
+from utilities.sensiCalc import fd_simple_quotes
 from utilities.timeUtilities import convert_period_to_days
 from instruments.interestRateInstrument.interestRateDerivativeConventions import OISConventions
 from marketdata.util import today

@@ -1,8 +1,14 @@
+from typing import Dict, List
+
 import QuantLib as ql
-from marketdata.interestRateCurves import InterestRateCurveQuotes, LiborCurve
+
+from marketdata.fxConverter import fxConvert
+from marketdata.interestRateCurves import InterestRateCurveQuotes, LiborCurve, DiscountCurve
 from marketdata.interestRateIndices import InterestRateIndex
-from utilities.Enums import SwapDirection, TradeDirection, TradeType
-from utilities.FDCalc import fd_simple_quotes
+from simm.Enums import CrifColumn, RiskType
+from simm.staticData import periodToLabel1, indexToLabel2
+from utilities.Enums import SwapDirection, TradeDirection, TradeType, Currency
+from utilities.sensiCalc import fd_simple_quotes, dv01_abs_one_bp
 from utilities.timeUtilities import convert_period_to_days
 from instruments.interestRateInstrument.interestRateDerivativeConventions import IRSConventions
 from marketdata.util import today
@@ -93,3 +99,36 @@ class IRS(InterestRateTrade):
         quotes = InterestRateCurveQuotes[self.index.name].value.values()
         delta = fd_simple_quotes(quotes, self)
         return delta
+
+    def get_simm_sensis_ircurve(self) -> List[Dict]:
+        forward_quotes = InterestRateCurveQuotes[self.index.name]
+        discCurve = DiscountCurve[self.currency.name].value
+        discounting_quotes = InterestRateCurveQuotes[discCurve.name]
+        sensiList = []
+        for period, quote in forward_quotes.value.items():
+            sensiDict = self.simmBaseDict.copy()
+            amount = dv01_abs_one_bp([quote], self)
+            sensiDict[CrifColumn.Amount.value] = '%.10f' % amount
+            sensiDict[CrifColumn.RiskType.value] = RiskType.Risk_IRCurve.value
+            sensiDict[CrifColumn.Qualifier.value] = self.currency.name
+            sensiDict[CrifColumn.Label1.value] = periodToLabel1(period)
+            sensiDict[CrifColumn.Label2.value] = indexToLabel2[self.index.name]
+            sensiDict[CrifColumn.AmountUSD.value] = '%.10f' % fxConvert(self.currency, Currency.USD, amount)
+            sensiList.append(sensiDict)
+
+        for period, quote in discounting_quotes.value.items():
+            sensiDict = self.simmBaseDict.copy()
+            amount = dv01_abs_one_bp([quote], self)
+            sensiDict[CrifColumn.Amount.value] = '%.10f' % amount
+            sensiDict[CrifColumn.RiskType.value] = RiskType.Risk_IRCurve.value
+            sensiDict[CrifColumn.Qualifier.value] = self.currency.name
+            sensiDict[CrifColumn.Label1.value] = periodToLabel1(period)
+            sensiDict[CrifColumn.Label2.value] = indexToLabel2[discCurve.name]
+            sensiDict[CrifColumn.AmountUSD.value] = '%.10f' % fxConvert(self.currency, Currency.USD, amount)
+            sensiList.append(sensiDict)
+
+        return sensiList
+
+
+    def get_simm_sensis(self):
+        return self.get_simm_sensis_fx() + self.get_simm_sensis_ircurve()

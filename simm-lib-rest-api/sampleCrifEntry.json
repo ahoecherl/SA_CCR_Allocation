@@ -1,0 +1,19 @@
+{
+	"tradeId" : "TestTrade1",
+	"valuationDate" : "2019-10-22",
+	"endDate" : "",
+	"notional" : "",
+	"notionalCurrency" : "",
+	"imModel" : "SIMM",
+	"productClass" : "RatexFx",
+	"riskType" : "Risk_FX",
+	"qualifier" : "CHF",
+	"bucket" : "",
+	"label1" : "",
+	"label2" : "",
+	"amount" : "200",
+	"amountCurrency" : "EUR",
+	"amountUSD" : "220",
+	"postRegulation" : "",
+	"collectRegulation" : ""
+}

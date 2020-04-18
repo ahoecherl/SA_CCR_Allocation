@@ -205,5 +205,5 @@ class LiborCurve(Enum):
 
 
 class DiscountCurve(Enum):
-    EUR = OisCurve.EONIA.value
-    USD = OisCurve.FEDFUNDS.value
+    EUR = OisCurve.EONIA
+    USD = OisCurve.FEDFUNDS

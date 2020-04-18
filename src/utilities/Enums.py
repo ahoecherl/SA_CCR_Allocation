@@ -64,6 +64,7 @@ class Currency(Enum):
     GBP = 'GBP'
     CHF = 'CHF'
     JPY = 'JPY'
+    KRW = 'KRW'
 
 class Stock(Enum):
     ADS = 'Adidas'

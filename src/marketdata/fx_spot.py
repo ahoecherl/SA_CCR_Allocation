@@ -1,8 +1,8 @@
 from enum import Enum
 
-from marketdata.marketData import marketData
 
-
-class FxSpot(Enum, marketData):
+class FxSpot(Enum):
     USDGBP = 0.9
-    USDEUR = 0.8
+    USDEUR = 0.92
+    USDKRW = 1/1200
+    EURUSD = 1.09

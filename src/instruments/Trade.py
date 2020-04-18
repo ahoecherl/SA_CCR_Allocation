@@ -1,9 +1,25 @@
+from typing import Dict, List
+
+from marketdata.util import today
+from simm.Enums import CrifColumn, RiskType
 from utilities.Enums import AssetClass, SubClass, TradeType, TradeDirection
+import QuantLib as ql
 
 
 class Trade:
-
     ql_instrument = None
+
+    simmBaseDict = {CrifColumn.ImModel.value: "SIMM",
+                    CrifColumn.PostRegulation.value: "",
+                    CrifColumn.CollectRegulation.value: "",
+                    CrifColumn.ValuationDate.value: "%4d-%02d-%02d" % (today.year(), today.month(), today.dayOfMonth()),
+                    CrifColumn.Notional.value: "",
+                    CrifColumn.NotionalCurrency.value: "",
+                    CrifColumn.NotionalString.value: "",
+                    CrifColumn.Qualifier.value: "",
+                    CrifColumn.Bucket.value: "",
+                    CrifColumn.Label1.value: "",
+                    CrifColumn.Label2.value: ""}
 
     def __init__(self,
                  assetClass: AssetClass,
@@ -39,6 +55,19 @@ class Trade:
         self.e = e
         self.t = t
         self.notional = notional
+        self.simmBaseDict['tradeId'] = str(id(self))
+
 
     def __str__(self):
-        return str({'Instrument': self.__class__.__name__, 'TradeType': self.tradeType.value, 'TradeDirection': self.tradeDirection.value, 'Maturity': self.m, 'Startdate': self.s, 'Notional': self.notional})
+        return str({'Instrument': self.__class__.__name__, 'TradeType': self.tradeType.value,
+                    'TradeDirection': self.tradeDirection.value, 'Maturity': self.m, 'Startdate': self.s,
+                    'Notional': self.notional})
+
+    def __tradeSimmDict__(self):
+        return result
+
+    def get_simm_sensis(self):
+        pass
+
+    def get_price(self):
+        pass
