@@ -56,6 +56,7 @@ class Trade:
         self.t = t
         self.notional = notional
         self.simmBaseDict['tradeId'] = str(id(self))
+        self.id = id(self)
 
 
     def __str__(self):

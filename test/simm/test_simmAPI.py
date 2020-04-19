@@ -86,19 +86,21 @@ testCrifMultiLine = [
     }
 ]
 
+@pytest.fixture(scope='module')
 def test_postCrif():
     crif_id = postCrif(testCrifMultiLine)
+    yield crif_id
 
 @pytest.mark.skip(reason='Test case not yet finished')
 def test_postCrif_error():
     crif_id = postCrif({'error':'error'})
 
 
-def test_getCrif():
-    id = 0
+def test_getCrif(test_postCrif):
+    id = test_postCrif
     getCrif(id)
 
-def test_calculateCrif():
-    crif_id = postCrif(testCrifMultiLine)
+
+def test_calculateCrif(test_postCrif):
+    crif_id = test_postCrif
     im = calculateCrif(crif_id)
-    asdf = 1
