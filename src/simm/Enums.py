@@ -50,3 +50,9 @@ class CrifColumn(Enum):
     Notional = 'notional'
     NotionalCurrency = 'notionalCurrency'
     NotionalString = 'notionalString'
+
+class EquityStaticData(Enum):
+    ADS = {CrifColumn.Bucket: '5',
+           CrifColumn.Qualifier: 'ISIN:DE000A1EWWW0'}
+    DBK = {CrifColumn.Bucket: '7',
+           CrifColumn.Qualifier: 'ISIN:DE0005140008'}

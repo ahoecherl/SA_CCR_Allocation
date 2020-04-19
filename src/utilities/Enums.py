@@ -67,8 +67,8 @@ class Currency(Enum):
     KRW = 'KRW'
 
 class Stock(Enum):
-    ADS = 'Adidas'
-    DBK = 'Deutsche Bank'
+    ADS = {'LongName' : 'Adidas', 'Currency' : Currency.EUR}
+    DBK = {'LongName' : 'Deutsche Bank', 'Currency' : Currency.EUR}
 
 class CurrencyPair(Enum):
     EURUSD = 'EUR / USD'

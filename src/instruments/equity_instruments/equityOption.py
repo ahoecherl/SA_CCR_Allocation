@@ -1,22 +1,23 @@
 import QuantLib as ql
 
-from marketdata.interestRateCurves import OisCurve, InterestRateCurveQuotes
+from instruments.equity_instruments.equityDerivative import EquityDerivative
+from marketdata.interestRateCurves import OisCurve, InterestRateCurveQuotes, DiscountCurve
 from utilities.Enums import TradeType, TradeDirection, AssetClass, Stock
-from instruments.Trade import Trade
 from marketdata.EquityVolatility import EquityVolatilty
 from marketdata.EquitySpot import EquitySpot
 from marketdata.util import today
 from marketdata.EquityVolatility import Quotes as volatilityQuotes
-from marketdata.EquitySpot import Quotes as spotQuotes
+from marketdata.EquitySpot import EquitySpotQuote
 from utilities.sensiCalc import fd_simple_quotes
+from utilities.timeUtilities import convert_period_to_days
 
 discounting_curve = OisCurve.EONIA
 
-class EquityOption(Trade):
+class EquityOption(EquityDerivative):
 
     def __init__(self,
                  notional: float,
-                 mat_in_days: float,
+                 maturity: ql.Period(),
                  tradeType: TradeType = TradeType.CALL,
                  tradeDirection: TradeDirection = TradeDirection.LONG,
                  underlying: Stock = Stock.ADS,
@@ -25,19 +26,20 @@ class EquityOption(Trade):
         Equity Option
 
         :param notional: Count of underlying shares
-        :param mat_in_days: Time to maturity of the option (in days). Will be used for both, M and T of paragraph 155 after being multiplied bei 360
+        :param maturity: Time to maturity of the option (in days). Will be used for both, M and T of paragraph 155 after being multiplied bei 360
         :param tradeType: Can be TradeType.CALL or TradeType.PUT
         :param tradeDirection: Can be TradeDirection.LONG or TradeDirection.SHORT
         :param K: Strike of option is no strike is given it default to an at the money option
         """
         self.underlying = underlying
-        self.K = K if K != None else spotQuotes[self.underlying.name].value()  # no K is given it is the current Spot
+        self.K = K if K != None else EquitySpotQuote[self.underlying.name].value.value()  # no K is given it is the current Spot
+        self.currency = underlying.value['Currency']
         super(EquityOption, self).__init__(
             assetClass=AssetClass.EQ,
             tradeType=tradeType,
             tradeDirection=tradeDirection,
-            m=mat_in_days*360,
-            t=mat_in_days*360,
+            m=convert_period_to_days(maturity),
+            t=convert_period_to_days(maturity),
             notional=notional
         )
         vol_handle = EquityVolatilty.__getattr__(self.underlying.name).value
@@ -50,7 +52,7 @@ class EquityOption(Trade):
         else:
             option_type = ql.Option.Put
         payoff = ql.PlainVanillaPayoff(option_type, K)
-        maturity_date = today + ql.Period(mat_in_days, ql.Days)
+        maturity_date = today + maturity
         exercise = ql.EuropeanExercise(maturity_date)
         self.ql_option = ql.VanillaOption(payoff, exercise)
         self.ql_option.setPricingEngine(engine)
@@ -75,3 +77,19 @@ class EquityOption(Trade):
         quotes = InterestRateCurveQuotes[discounting_curve.name].value.values()
         rho = fd_simple_quotes(quotes, self)
         return rho
+
+    def get_simm_sensis_ircurve(self):
+        sensis = []
+        curve = DiscountCurve[self.currency].value
+        sensis += super(EquityOption, self).get_simm_sensis_ircurve(curve)
+        return sensis
+
+    def get_simm_sensis_equityvol(self):
+        pass
+
+
+    def get_simm_sensis(self):
+        return self.get_simm_sensis_fx \
+               + self.get_simm_sensis_ircurve() \
+               + self.get_simm_sensis_equity() \
+               + self.get_simm_sensis_equityvol

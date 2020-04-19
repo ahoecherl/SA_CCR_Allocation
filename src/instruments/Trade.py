@@ -11,20 +11,8 @@ import QuantLib as ql
 import utilities.sensiCalc
 
 
-class Trade:
-    ql_instrument = None
+class Trade():
 
-    simmBaseDict = {CrifColumn.ImModel.value: "SIMM",
-                    CrifColumn.PostRegulation.value: "",
-                    CrifColumn.CollectRegulation.value: "",
-                    CrifColumn.ValuationDate.value: "%4d-%02d-%02d" % (today.year(), today.month(), today.dayOfMonth()),
-                    CrifColumn.Notional.value: "",
-                    CrifColumn.NotionalCurrency.value: "",
-                    CrifColumn.NotionalString.value: "",
-                    CrifColumn.Qualifier.value: "",
-                    CrifColumn.Bucket.value: "",
-                    CrifColumn.Label1.value: "",
-                    CrifColumn.Label2.value: ""}
 
     def __init__(self,
                  assetClass: AssetClass,
@@ -60,6 +48,19 @@ class Trade:
         self.e = e
         self.t = t
         self.notional = notional
+        self.simmBaseDict = {CrifColumn.ImModel.value: "SIMM",
+                             CrifColumn.PostRegulation.value: "",
+                             CrifColumn.CollectRegulation.value: "",
+                             CrifColumn.ValuationDate.value: "%4d-%02d-%02d" % (
+                             today.year(), today.month(), today.dayOfMonth()),
+                             CrifColumn.Notional.value: "",
+                             CrifColumn.NotionalCurrency.value: "",
+                             CrifColumn.NotionalString.value: "",
+                             CrifColumn.Qualifier.value: "",
+                             CrifColumn.Bucket.value: "",
+                             CrifColumn.Label1.value: "",
+                             CrifColumn.Label2.value: ""}
+        self.simmBaseDict[CrifColumn.AmountCurrency.value] = self.currency.value
         self.simmBaseDict['tradeId'] = str(id(self))
         self.id = id(self)
 
@@ -69,8 +70,6 @@ class Trade:
                     'TradeDirection': self.tradeDirection.value, 'Maturity': self.m, 'Startdate': self.s,
                     'Notional': self.notional})
 
-    def __tradeSimmDict__(self):
-        return result
 
     def get_simm_sensis_ircurve(self, curve: Union[LiborCurve, OisCurve]):
         sensiList = []
@@ -92,3 +91,17 @@ class Trade:
 
     def get_price(self):
         pass
+
+    def get_simm_sensis_fx(self) -> List[Dict]:
+        sensiList = []
+        sensiDict = self.simmBaseDict.copy()
+        sensiDict[CrifColumn.RiskType.value] = RiskType.Risk_FX.value
+        sensiDict[CrifColumn.Qualifier.value] = self.currency.value
+
+        # these are all single currency interest rate trades. Their fx sensi according to ISDA SIMM is 1 per cent of their NPV.
+        amount = self.get_price() * 0.01
+        sensiDict[CrifColumn.Amount.value] = '%.10f' % amount
+        sensiDict[CrifColumn.AmountUSD.value] = '%.10f' % fxConvert(self.currency, Currency.USD, amount)
+        sensiList.append(sensiDict)
+
+        return sensiList

@@ -68,8 +68,13 @@ def test_get_im_ois():
     tte = ql.Period(5, ql.Years)
     ois = OIS(1000, tts, tte, swapDirection=SwapDirection.RECEIVER, index=InterestRateIndex.FEDFUNDS)
     simm = SIMM()
-    simm.add_trades(ois)
+    simm.add_trades([ois])
     im = simm.get_im()
+    ois2 = OIS(1000, tts, tte, swapDirection=SwapDirection.RECEIVER, index=InterestRateIndex.EONIA)
+    simm.add_trades(ois2)
+    im = simm.get_im()
+
+
 
 
 def test_get_im_swaption():

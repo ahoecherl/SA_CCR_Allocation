@@ -10,14 +10,16 @@ B = TypeVar('B', int, List[int])
 
 
 class SIMM():
-    calculationCurrency = Currency.USD
-    resultCurrency = Currency.USD
-    imRole = ImRole.SECURED
-    trades = []
-    im = None
-    upload_id = None
-    calculated = False
-    allocated = False
+
+    def __init__(self):
+        self.calculationCurrency = Currency.USD
+        self.resultCurrency = Currency.USD
+        self.imRole = ImRole.SECURED
+        self.trades = []
+        self.im = None
+        self.upload_id = None
+        self.calculated = False
+        self.allocated = False
 
     def add_trades(self, trades: A):
         if type(trades) == list:
