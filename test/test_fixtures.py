@@ -13,5 +13,5 @@ def initialize_test():
 
 @pytest.fixture(scope='function')
 def standard_swaption(standard_swap):
-    swaption = Swaption(underlyingSwap=standard_swap, optionMaturity_in_days=360, tradeDirection=TradeDirection.LONG)
+    swaption = Swaption(underlyingSwap=standard_swap, optionMaturity=360, tradeDirection=TradeDirection.LONG)
     return swaption

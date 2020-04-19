@@ -65,11 +65,13 @@ class OIS(InterestRateTrade):
 
         if fixed_rate is None:
             dummy_rate = 0.02
-            dummy_ois = ql.OvernightIndexedSwap(ql_tradeDirection, notional, schedule, dummy_rate, dayCount, index.value)
+            dummy_ois = ql.OvernightIndexedSwap(ql_tradeDirection, notional, schedule, dummy_rate, dayCount,
+                                                index.value)
             dummy_ois.setPricingEngine(pricing_engine)
             fixed_rate = dummy_ois.fairRate()
 
-        self.ql_instrument = ql.OvernightIndexedSwap(ql_tradeDirection, notional, schedule, fixed_rate, dayCount, index.value)
+        self.ql_instrument = ql.OvernightIndexedSwap(ql_tradeDirection, notional, schedule, fixed_rate, dayCount,
+                                                     index.value)
         self.ql_instrument.setPricingEngine(pricing_engine)
 
     def get_price(self):
@@ -86,3 +88,12 @@ class OIS(InterestRateTrade):
         quotes = InterestRateCurveQuotes[self.index.name].value.values()
         delta = fd_simple_quotes(quotes, self)
         return delta
+
+    def get_simm_sensis_ircurve(self):
+        sensiList = []
+        curve = OisCurve[self.index.name]
+        sensiList += super(OIS, self).get_simm_sensis_ircurve(curve)
+        return sensiList
+
+    def get_simm_sensis(self):
+        return self.get_simm_sensis_fx() + self.get_simm_sensis_ircurve()

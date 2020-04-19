@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, TypeVar
 
 import QuantLib as ql
 from enum import Enum
@@ -6,6 +6,8 @@ from enum import Enum
 from instruments.interestRateInstrument.interestRateDerivativeConventions import IRSConventions, SwaptionConventions
 from utilities.Enums import Currency
 
+A = TypeVar('A', ql.Period, Tuple[ql.Period, ql.Period])
+B = TypeVar('B', List[ql.SimpleQuote], ql.SimpleQuote)
 
 class SwaptionVolatilitySurface():
     def __init__(self, optionTenors: List[ql.Period], swapTenors: List[ql.Period], vols: List[List[ql.SimpleQuote]]):
@@ -13,17 +15,24 @@ class SwaptionVolatilitySurface():
         self.swapTenors = swapTenors
         self.vols = vols
 
-    def __getitem__(self, keytuple : Tuple[ql.Period, ql.Period]) -> ql.SimpleQuote:
+    def __getitem__(self, key : A) -> B:
         """
 
-        :param keytuple: First item of tuple is option tenor, second is swap tenor
+        :param key: First item of tuple is option tenor, second is swap tenor
         :return:
         """
-        optionTenor = keytuple[0]
-        swapTenor = keytuple[1]
-        optionIndex = self.optionTenors.index(optionTenor)
-        swapIndex = self.swapTenors.index(swapTenor)
-        return self.vols[optionIndex][swapIndex]
+        if type(key) == tuple:
+            optionTenor = key[0]
+            swapTenor = key[1]
+            optionIndex = self.optionTenors.index(optionTenor)
+            swapIndex = self.swapTenors.index(swapTenor)
+            return self.vols[optionIndex][swapIndex]
+        elif type(key) == ql.Period:
+            #return all quotes of a common option Tenor
+            optionIndex = self.optionTenors.index(key)
+            return self.vols[optionIndex]
+        else:
+            raise TypeError(r'Only ql.Period or Tuple[ql.Period, ql.Period] allowed as input')
 
 
 optionTenors = [ql.Period(1, ql.Months),

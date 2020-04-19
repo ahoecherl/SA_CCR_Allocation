@@ -2,10 +2,13 @@ import pytest
 import QuantLib as ql
 
 from instruments.interestRateInstrument.irs import IRS
+from instruments.interestRateInstrument.ois import OIS
+from instruments.interestRateInstrument.swaption import Swaption
 from marketdata.interestRateIndices import InterestRateIndex
 from simm.simm import SIMM
 from marketdata import init_marketdata
 from utilities.Enums import SwapDirection
+
 
 @pytest.fixture()
 def test_setup_simm():
@@ -18,6 +21,7 @@ def test_setup_simm():
     swap3 = IRS(400, tts, tte, SwapDirection.RECEIVER, InterestRateIndex.EURIBOR6M)
     simm.add_trades([swap2, swap3])
     yield simm
+
 
 def test_remove_single_trade(test_setup_simm):
     simm = test_setup_simm
@@ -52,3 +56,30 @@ def test_get_im(test_setup_simm):
     im2 = simm.get_im()
     assert simm.upload_id > upload_id_1
     assert im1 != im2
+
+
+@pytest.mark.skip(reason='SIMM sensis for Equity option not implemented yet')
+def test_get_im_equity_option():
+    pass
+
+
+def test_get_im_ois():
+    tts = ql.Period(2, ql.Days)
+    tte = ql.Period(5, ql.Years)
+    ois = OIS(1000, tts, tte, swapDirection=SwapDirection.RECEIVER, index=InterestRateIndex.FEDFUNDS)
+    simm = SIMM()
+    simm.add_trades(ois)
+    im = simm.get_im()
+
+
+def test_get_im_swaption():
+    tts = ql.Period(2, ql.Years)
+    tte = ql.Period(10, ql.Years)
+    swap1 = IRS(600, tts, tte, SwapDirection.RECEIVER, InterestRateIndex.USDLIBOR3M)
+    swaption1 = Swaption(swap1, ql.Period(2, ql.Years))
+    simm = SIMM()
+    simm.add_trades(swaption1)
+    im = simm.get_im()
+    swap2 = IRS(600, tts, tte, SwapDirection.RECEIVER, InterestRateIndex.EURIBOR6M)
+    simm.add_trades(swap2)
+    im = simm.get_im()

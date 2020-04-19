@@ -1,9 +1,14 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 
+from marketdata.fxConverter import fxConvert
+from marketdata.interestRateCurves import LiborCurve, OisCurve, InterestRateCurveQuotes
 from marketdata.util import today
 from simm.Enums import CrifColumn, RiskType
-from utilities.Enums import AssetClass, SubClass, TradeType, TradeDirection
+from simm.staticData import periodToLabel1, indexToLabel2
+from utilities.Enums import AssetClass, SubClass, TradeType, TradeDirection, Currency
 import QuantLib as ql
+
+import utilities.sensiCalc
 
 
 class Trade:
@@ -66,6 +71,21 @@ class Trade:
 
     def __tradeSimmDict__(self):
         return result
+
+    def get_simm_sensis_ircurve(self, curve: Union[LiborCurve, OisCurve]):
+        sensiList = []
+        quotes = InterestRateCurveQuotes[curve.name].value
+        for period, quote in quotes.items():
+            sensiDict = self.simmBaseDict.copy()
+            amount = utilities.sensiCalc.dv01_abs_one_bp([quote], self)
+            sensiDict[CrifColumn.Amount.value] = '%.10f' % amount
+            sensiDict[CrifColumn.RiskType.value] = RiskType.Risk_IRCurve.value
+            sensiDict[CrifColumn.Qualifier.value] = self.currency.name
+            sensiDict[CrifColumn.Label1.value] = periodToLabel1(period)
+            sensiDict[CrifColumn.Label2.value] = indexToLabel2[curve.name]
+            sensiDict[CrifColumn.AmountUSD.value] = '%.10f' % fxConvert(self.currency, Currency.USD, amount)
+            sensiList.append(sensiDict)
+        return sensiList
 
     def get_simm_sensis(self):
         pass

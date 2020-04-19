@@ -46,3 +46,6 @@ def test_SwaptionVolatilitySurface():
 
     testSurface = SwaptionVolatilitySurface(optionTenors, swapTenors, vols)
     assert testSurface[(ql.Period(2, ql.Weeks), ql.Period(2, ql.Months))].value() == ql.SimpleQuote(0.2).value()
+
+    testSurface[ql.Period(2, ql.Weeks)]
+    asdf = 1

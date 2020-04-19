@@ -101,34 +101,12 @@ class IRS(InterestRateTrade):
         return delta
 
     def get_simm_sensis_ircurve(self) -> List[Dict]:
-        forward_quotes = InterestRateCurveQuotes[self.index.name]
         discCurve = DiscountCurve[self.currency.name].value
-        discounting_quotes = InterestRateCurveQuotes[discCurve.name]
         sensiList = []
-        for period, quote in forward_quotes.value.items():
-            sensiDict = self.simmBaseDict.copy()
-            amount = dv01_abs_one_bp([quote], self)
-            sensiDict[CrifColumn.Amount.value] = '%.10f' % amount
-            sensiDict[CrifColumn.RiskType.value] = RiskType.Risk_IRCurve.value
-            sensiDict[CrifColumn.Qualifier.value] = self.currency.name
-            sensiDict[CrifColumn.Label1.value] = periodToLabel1(period)
-            sensiDict[CrifColumn.Label2.value] = indexToLabel2[self.index.name]
-            sensiDict[CrifColumn.AmountUSD.value] = '%.10f' % fxConvert(self.currency, Currency.USD, amount)
-            sensiList.append(sensiDict)
-
-        for period, quote in discounting_quotes.value.items():
-            sensiDict = self.simmBaseDict.copy()
-            amount = dv01_abs_one_bp([quote], self)
-            sensiDict[CrifColumn.Amount.value] = '%.10f' % amount
-            sensiDict[CrifColumn.RiskType.value] = RiskType.Risk_IRCurve.value
-            sensiDict[CrifColumn.Qualifier.value] = self.currency.name
-            sensiDict[CrifColumn.Label1.value] = periodToLabel1(period)
-            sensiDict[CrifColumn.Label2.value] = indexToLabel2[discCurve.name]
-            sensiDict[CrifColumn.AmountUSD.value] = '%.10f' % fxConvert(self.currency, Currency.USD, amount)
-            sensiList.append(sensiDict)
-
+        forwardCurve = LiborCurve[self.index.name]
+        sensiList += super(IRS, self).get_simm_sensis_ircurve(forwardCurve)
+        sensiList += super(IRS, self).get_simm_sensis_ircurve(discCurve)
         return sensiList
-
 
     def get_simm_sensis(self):
         return self.get_simm_sensis_fx() + self.get_simm_sensis_ircurve()
