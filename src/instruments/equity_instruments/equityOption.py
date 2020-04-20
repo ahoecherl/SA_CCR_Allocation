@@ -85,7 +85,7 @@ class EquityOption(EquityDerivative):
             amount = self.get_price() - p0
             sensiDict[CrifColumn.Label1.value] = periodToLabel1(optionMaturity)
             sensiDict[CrifColumn.Amount.value] = '%.10f' % amount
-            sensiDict[CrifColumn.Amount.value] = '%.10f' % fxConvert(self.currency, Currency.USD, amount)
+            sensiDict[CrifColumn.AmountUSD.value] = '%.10f' % fxConvert(self.currency, Currency.USD, amount)
             sensis.append(sensiDict)
 
         volHandle.linkTo(volQuotes.ql_BlackVarianceSurface)
@@ -98,3 +98,5 @@ class EquityOption(EquityDerivative):
                + self.get_simm_sensis_ircurve() \
                + self.get_simm_sensis_equity() \
                + self.get_simm_sensis_equityvol()
+
+
