@@ -1,17 +1,16 @@
 import QuantLib as ql
 
 from instruments.equity_instruments.equityDerivative import EquityDerivative
+from marketdata.fxConverter import fxConvert
 from marketdata.interestRateCurves import OisCurve, InterestRateCurveQuotes, DiscountCurve
-from utilities.Enums import TradeType, TradeDirection, AssetClass, Stock
-from marketdata.EquityVolatility import EquityVolatilty
+from simm.Enums import CrifColumn, EquityStaticData, RiskType
+from simm.staticData import periodToLabel1
+from utilities.Enums import TradeType, TradeDirection, AssetClass, Stock, Currency
+from marketdata.EquityVolatility import EquityVolatility, EquityVolatilityQuotes
 from marketdata.EquitySpot import EquitySpot
 from marketdata.util import today
-from marketdata.EquityVolatility import Quotes as volatilityQuotes
 from marketdata.EquitySpot import EquitySpotQuote
-from utilities.sensiCalc import fd_simple_quotes
 from utilities.timeUtilities import convert_period_to_days
-
-discounting_curve = OisCurve.EONIA
 
 class EquityOption(EquityDerivative):
 
@@ -42,9 +41,10 @@ class EquityOption(EquityDerivative):
             t=convert_period_to_days(maturity),
             notional=notional
         )
-        vol_handle = EquityVolatilty.__getattr__(self.underlying.name).value
-        spot_handle = EquitySpot.__getattr__(self.underlying.name).value
+        vol_handle = EquityVolatility[self.underlying.name].value
+        spot_handle = EquitySpot[self.underlying.name].value
         self.S = spot_handle.value()
+        discounting_curve = DiscountCurve[self.currency.name].value
         black_scholes_process = ql.BlackScholesProcess(spot_handle, discounting_curve.value, vol_handle)
         engine = ql.AnalyticEuropeanEngine(black_scholes_process)
         if tradeType.name == TradeType.CALL.name:
@@ -63,33 +63,38 @@ class EquityOption(EquityDerivative):
             multiplier = -1*multiplier
         return multiplier * self.ql_option.NPV()
 
-    def get_delta(self):
-        quote = spotQuotes[self.underlying.name]
-        delta = fd_simple_quotes([quote], self)
-        return delta
-
-    def get_vega(self):
-        quote = volatilityQuotes[self.underlying.name]
-        vega = fd_simple_quotes([quote], self)
-        return vega
-
-    def get_rho(self):
-        quotes = InterestRateCurveQuotes[discounting_curve.name].value.values()
-        rho = fd_simple_quotes(quotes, self)
-        return rho
-
     def get_simm_sensis_ircurve(self):
         sensis = []
-        curve = DiscountCurve[self.currency].value
+        curve = DiscountCurve[self.currency.name].value
         sensis += super(EquityOption, self).get_simm_sensis_ircurve(curve)
         return sensis
 
     def get_simm_sensis_equityvol(self):
-        pass
+        sensis = []
+        volHandle = EquityVolatility[self.underlying.name].value
+        volQuotes = EquityVolatilityQuotes[self.underlying.name].value
+        p0 = self.get_price()
+
+        simmBase2 = self.simmBaseDict.copy()
+        simmBase2[CrifColumn.Qualifier.value] = EquityStaticData[self.underlying.name].value[CrifColumn.Qualifier]
+        simmBase2[CrifColumn.Bucket.value] = EquityStaticData[self.underlying.name].value[CrifColumn.Bucket]
+        simmBase2[CrifColumn.RiskType.value] = RiskType.Risk_EquityVol.value
+        for optionMaturity in volQuotes.optionMaturities:
+            sensiDict = simmBase2.copy()
+            volHandle.linkTo(volQuotes.get_atm_shifted_surface_abs_one_pct(optionMaturity))
+            amount = self.get_price() - p0
+            sensiDict[CrifColumn.Label1.value] = periodToLabel1(optionMaturity)
+            sensiDict[CrifColumn.Amount.value] = '%.10f' % amount
+            sensiDict[CrifColumn.Amount.value] = '%.10f' % fxConvert(self.currency, Currency.USD, amount)
+            sensis.append(sensiDict)
+
+        volHandle.linkTo(volQuotes.ql_BlackVarianceSurface)
+        return sensis
+
 
 
     def get_simm_sensis(self):
-        return self.get_simm_sensis_fx \
+        return self.get_simm_sensis_fx() \
                + self.get_simm_sensis_ircurve() \
                + self.get_simm_sensis_equity() \
-               + self.get_simm_sensis_equityvol
+               + self.get_simm_sensis_equityvol()

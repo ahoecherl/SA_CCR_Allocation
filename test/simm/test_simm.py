@@ -1,13 +1,14 @@
 import pytest
 import QuantLib as ql
 
+from instruments.equity_instruments.equityOption import EquityOption
 from instruments.interestRateInstrument.irs import IRS
 from instruments.interestRateInstrument.ois import OIS
 from instruments.interestRateInstrument.swaption import Swaption
 from marketdata.interestRateIndices import InterestRateIndex
 from simm.simm import SIMM
 from marketdata import init_marketdata
-from utilities.Enums import SwapDirection
+from utilities.Enums import SwapDirection, TradeDirection, TradeType, Stock
 
 
 @pytest.fixture()
@@ -88,3 +89,14 @@ def test_get_im_swaption():
     swap2 = IRS(600, tts, tte, SwapDirection.RECEIVER, InterestRateIndex.EURIBOR6M)
     simm.add_trades(swap2)
     im = simm.get_im()
+
+
+
+def test_get_im_equityoption():
+    option2 = EquityOption(notional=100, K=50, maturity=ql.Period(3, ql.Years), tradeType=TradeType.CALL,
+                           tradeDirection=TradeDirection.LONG,
+                           underlying=Stock.ADS)
+    simm = SIMM()
+    simm.add_trades(option2)
+    im = simm.get_im()
+    asdf = 1
