@@ -1,0 +1,68 @@
+\begin{thebibliography}{10}
+
+\bibitem{EurexDMP}
+Eurex.
+\newblock {Eurex Default Management Process}.
+\newblock
+  \url{http://www.eurexclearing.com/clearing-en/risk-management/default-management-process}.
+\newblock Accessed: 2019-01-24.
+
+\bibitem{EurexDec2018}
+Eurex.
+\newblock {Eurex Monthly Statistics December 2018}.
+\newblock
+  \url{http://www.eurexchange.com/blob/3571518/1aa0157c4b96709caa97b254a4075aaf/data/monthlystat_201812.pdf}.
+\newblock Accessed: 2019-01-22.
+
+\bibitem{gregory2015xva}
+J.~Gregory.
+\newblock {\em The XVA Challenge: Counterparty Credit Risk, Funding, Collateral
+  and Capital}.
+\newblock John Wiley \& Sons, 2015.
+
+\bibitem{koyluoglu2002risk}
+U.~Koyluoglu and J.~Stoker.
+\newblock Risk decomposition honour your contribution.
+\newblock {\em RISK-LONDON-RISK MAGAZINE LIMITED-}, 15(4):90--94, 2002.
+
+\bibitem{BISOTCStats}
+B.~of~International Settlements~(BIS).
+\newblock {OTC derivatives outstanding}.
+\newblock \url{https://www.bis.org/statistics/derstats.htm}.
+\newblock Accessed: 2019-01-24.
+
+\bibitem{basel2}
+B.~C. on~Banking Supervision~(BCBS).
+\newblock {International convergence of capital measurement and capital
+  standards, a revised framework - comprehensive version}.
+\newblock \url{https://www.bis.org/publ/bcbs128.htm}, 2009.
+\newblock Accessed: 2019-04-29.
+
+\bibitem{RiskDataStandard}
+I.~Swaps and D.~A. (ISDA).
+\newblock {ISDA SIMM{\texttrademark} Methodology: Risk Data Standards, version
+  1.36}.
+\newblock
+  \url{https://www.isda.org/a/owEDE/risk-data-standards-v1-36-public.pdf}.
+\newblock Accessed: 2019-04-29.
+
+\bibitem{SIMM}
+I.~Swaps and D.~A. (ISDA).
+\newblock {ISDA SIMM{\texttrademark} Methodology, version 2.1}.
+\newblock \url{https://www.isda.org/a/zSpEE/ISDA-SIMM-v2.1-PUBLIC.pdf}.
+\newblock Accessed: 2019-04-29.
+
+\bibitem{ISDADec2013}
+I.~Swaps and D.~A. (ISDA).
+\newblock {ISDA Standard Initial Margin Model (SIMM\texttrademark) for
+  Non-Cleared Derivatives}.
+\newblock
+  \url{https://www.isda.org/a/gwEDE/march-26-simm-for-non-cleared-paper.pdf}.
+\newblock Accessed: 2019-04-29.
+
+\bibitem{tibiletti2001incremental}
+L.~Tibiletti.
+\newblock Incremental value-at-risk: traps and misinter-pretations.
+\newblock In {\em Mathematical Finance}, pages 355--364. Springer, 2001.
+
+\end{thebibliography}

@@ -1,0 +1,22 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Establishing Background}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Bilateral initial margin}{section.2}% 3
+\BOOKMARK [3][-]{subsubsection.2.1.1}{Reducing counterparty credit risk with initial margin}{subsection.2.1}% 4
+\BOOKMARK [3][-]{subsubsection.2.1.2}{Market structure and regulatory background}{subsection.2.1}% 5
+\BOOKMARK [3][-]{subsubsection.2.1.3}{Regulatory requirements for an internal initial margin model}{subsection.2.1}% 6
+\BOOKMARK [3][-]{subsubsection.2.1.4}{The ISDA-SIMM model}{subsection.2.1}% 7
+\BOOKMARK [2][-]{subsection.2.2}{Capital requirements for counterparty credit risk}{section.2}% 8
+\BOOKMARK [3][-]{subsubsection.2.2.1}{The SA-CCR}{subsection.2.2}% 9
+\BOOKMARK [2][-]{subsection.2.3}{Approaches to allocation}{section.2}% 10
+\BOOKMARK [3][-]{subsubsection.2.3.1}{Incremental allocation}{subsection.2.3}% 11
+\BOOKMARK [3][-]{subsubsection.2.3.2}{Marginal allocation}{subsection.2.3}% 12
+\BOOKMARK [3][-]{subsubsection.2.3.3}{Euler allocation}{subsection.2.3}% 13
+\BOOKMARK [3][-]{subsubsection.2.3.4}{Shapley allocation}{subsection.2.3}% 14
+\BOOKMARK [2][-]{subsection.2.4}{Allocation of SA-CCR}{section.2}% 15
+\BOOKMARK [3][-]{subsubsection.2.4.1}{Allocation without margining}{subsection.2.4}% 16
+\BOOKMARK [3][-]{subsubsection.2.4.2}{Allocation under VM collateralization}{subsection.2.4}% 17
+\BOOKMARK [3][-]{subsubsection.2.4.3}{Allocation under VM and IM collateralization}{subsection.2.4}% 18
+\BOOKMARK [2][-]{subsection.2.5}{Comparison of allocation approaches}{section.2}% 19
+\BOOKMARK [2][-]{subsection.2.6}{Calculating the Euler allocation}{section.2}% 20
+\BOOKMARK [1][-]{section.3}{Outlook}{}% 21
+\BOOKMARK [1][-]{section.3}{Bibliography}{}% 22
