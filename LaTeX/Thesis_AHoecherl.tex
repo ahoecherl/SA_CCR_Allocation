@@ -43,6 +43,10 @@
 		\usepackage{pdfpages}
 		%\usepackage{jurabib}
 		
+    %using subfiles
+    \usepackage[subpreambles=true]{standalone}
+    \usepackage{import}
+		
 
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
 
@@ -189,6 +193,8 @@ The incremental allocation can be calculated as or before a new trade is added t
 In the past, some academic work focussed on approximating the incremental VaR as it requires a recalculation of the VaR for the entire portfolio. An overview of these works and their potential pitfalls may be found in \cite{tibiletti2001incremental}. Since this work will rather focus on marginal than incremental allocation further details may be found in the referred paper. In the empirical analysis the incremental allocation will be calculated exactly.
 
 \subsubsection{Marginal allocation}
+
+\import{sections/}{JupyterNotebooks/ExampleJupyterToLatex.tex}
 
 \subsubsection{Euler allocation}
 
