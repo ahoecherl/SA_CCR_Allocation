@@ -1,86 +1,4 @@
-\documentclass[12pt,a4paper]{article}
-%   Standards
-    \usepackage[latin1]{inputenc}
-    \usepackage{fontenc}
-%   Bibliography style
-%    \usepackage{chicago}
-
-% German language support
-  % \usepackage{german}
-  % \usepackage{bibgerm}
-	 \usepackage[english]{babel}
-
-%   Mathematics
-    \usepackage{amsmath}
-    \usepackage{amssymb}
-    \usepackage{amsthm}
-    \usepackage{amscd}
-    \usepackage{amsfonts}
-
-%   Formatting
-	\usepackage{url}
-    \usepackage{graphicx}   %Graphics
-    \usepackage{booktabs}   %Tables
-    \usepackage{a4}         %Page setting
-    \usepackage{fancyhdr}   %Headers and footers
-    \usepackage{longtable}  %Tabellen l\"{a}nger als eine Seite
-    \usepackage{subfigure}
-    \usepackage{textcomp}   %For Trademark Symbol
-    \usepackage{enumerate}
-    \usepackage{epsfig}
-    \usepackage{layout}
-    \usepackage{tabularx}
-    \usepackage{array}
-    \usepackage{wasysym}
-    \usepackage{fancybox}
-    \usepackage{color}
-		\usepackage{mathtools}
-    \usepackage{rotating}
-   % \usepackage{slashbox}% kann in Tabelle diagonalen Strich darstellen
-    \usepackage{multirow}
-    \usepackage{natbib}		% Anpassung
-		\usepackage{pdfpages}
-		%\usepackage{jurabib}
-		
-    %using subfiles
-    \usepackage[subpreambles=true]{standalone}
-    \usepackage{import}
-		
-
-\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
-
-    %Calculation: 1Inch = 2.54 cm
-        \setlength{\topmargin}{0.0in}
-				\setlength{\oddsidemargin}{0.33in}
-				\setlength{\textheight}{9.0in}
-				\setlength{\textwidth}{6.0in}
-				
-
-    %Chapter pages
-        \pagestyle{headings}
-%        \pagestyle{fancy}
-%        \lhead{\emph{COLLATERALIZED DEBT OBLIGATIONS}}
-%        \chead{}
-%        \rhead{\thepage}
-%        \lfoot{}
-%        \cfoot{}
-%        \rfoot{}
-%        \renewcommand{\headrulewidth}{0pt}
-%        \renewcommand{\footrulewidth}{0pt}
-
-    % Chapter title pages
-        \renewcommand{\baselinestretch}{1.25}
-				\let\footnoteOld\footnote		% Zeilenabstand in der Fussnote wird zurückgesetzt
-				\renewcommand{\footnote}[1]{\linespread{1.0}\footnoteOld{#1}\linespread{1.2}}		% Zeilenabstand in der Fußnote wird gesetzt
-				
-
-
-\renewcommand{\baselinestretch}{1.25}
-
-
-\title{SA CCR Allocation under consideration of ISDA-SIMM, Master Thesis}
-\author{Candidate Number: 1018756}
-
+\documentclass[11pt]{article}
 
     \usepackage[breakable]{tcolorbox}
     \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
@@ -105,8 +23,8 @@
     \DeclareCaptionFormat{nocaption}{}
     \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
 
-    %\usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
-    %\adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
     \usepackage{float}
     \floatplacement{figure}{H} % forces figures to be placed at the correct location
     \usepackage{xcolor} % Allow colors to be defined
@@ -227,6 +145,8 @@
     \renewcommand{\TeX}{\textrm{\Oldtex}}
     \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
     % Document parameters
+    % Document title
+    \title{building\_SA\_CCR\_2}
     
     
     
@@ -443,162 +363,417 @@
     
     
 
-
-
 \begin{document}
+    
+    \maketitle
+    
+    
 
-\maketitle
+    
+    \hypertarget{addon-calculation}{%
+\section{AddOn calculation}\label{addon-calculation}}
 
-\thispagestyle{empty}
+Most of the SA-CCR logic is hidden inside the AddOn calculation. At
+first it is important to define the following four data parameters:
 
-\newpage
-\setcounter{page}{1}
+\hypertarget{m_i}{%
+\subparagraph{\texorpdfstring{\(M_i\)}{M\_i}}\label{m_i}}
 
+\begin{quote}
+Maturity of the derivative contract. If the underlying of a derivative
+is another derivative - e.g.~in the case of a swaption the maturity date
+of the underlying needs to be chosen.
+\end{quote}
 
+\hypertarget{s_i}{%
+\subparagraph{\texorpdfstring{\(S_i\)}{S\_i}}\label{s_i}}
 
-\begin{abstract}
-This will be the abstract.
-\end{abstract}
+\begin{quote}
+For interest rate and credit derivatives the start date of the time
+periodreferenced by an interst rate or credit contract. If the
+derivtives underlying is another interest rate or credit intsrument (eg
+swaption or bond option) \(S_i\) is the start date of the underlying
+instead.
+\end{quote}
 
-\section{Introduction}
+\hypertarget{e_i}{%
+\subparagraph{\texorpdfstring{\(E_i\)}{E\_i}}\label{e_i}}
 
-\section{Establishing Background}
-\subsection{Bilateral initial margin}
-\subsubsection{Reducing counterparty credit risk with initial margin}
-Counterparty credit risk refers to the risk of a default of the counterparty of a derivative. Derivatives are contracts between two institutions which give raise to future cash flows dependent of the performance of its underlying. These future cash flows may be at risk if the counterparty defaults during the lifetime of the derivative. 
+\begin{quote}
+Defined as \(S_i\) but referencing the end date instead of the start
+date.
+\end{quote}
 
-Over the past decades several measures were established in the derivatives markets to mitigate counterparty credit risk.
+\hypertarget{t_i}{%
+\subparagraph{\texorpdfstring{\(T_i\)}{T\_i}}\label{t_i}}
 
-The most impactful measure is close-out netting. Close-out netting is a contractual agreement of two counterparties how their bilateral derivative contracts have to be settled if one of the counterparties defaults. With close-out netting, in case one of the two counterparties defaults all derivatives which are yet to mature are immediately closed out based on the current market value. The market values of the individual derivatives are summed up and the netted amount needs to be paid by whichever party is trailing across the portfolio. In case of a default this close-out netting procedure takes priority over all other claims of creditors against the defaulted counterparty. Close-out netting has two major advantages. First, the non-defaulting counterparty only suffers a counterparty credit loss, if it is ahead across the entire portfolio of currently running derivatives with the defaulted party. Just having a positive market value on a few derivatives does not necessarily result in a counterparty credit loss. Secondly, the immediate close-out of the open derivatives of the defaulted counterparty greatly facilitates unwinding its portfolio. A disadvantage of close-out netting is, that it may proof difficult to find an objective market value of the derivatives that have to be closed out - especially in a stressed market environment, which is likely to be present if e.g. a large investment bank defaults. The contractual obligation to perform close-out netting is agreed upon in a master agreement, which was introduced to the derivatives market by ISDA in 1985. More details on close-out netting may be found in \cite[Chapter~5]{gregory2015xva}.
+\begin{quote}
+For options across all asset classes this is the latest contractual
+exercise date.
+\end{quote}
 
-The second most effective measure in mitigating counterparty credit risk is posting variation margin. If the obligation to post variation margin is agreed as part of a master agreement the accrued mark-to-market of the derivative portfolio has to be collateralized by the trailing counterparty. This measure effectively resets counterparty credit risk to zero for both parties every time a variation margin payment is made or the exchanged variation margin is adjusted to the current market value of the portfolio. The exchange of variation margin was common but not a given in the inter-bank market before the financial crisis of 2008. After the crisis it has become commonplace in the interbank market and recently has even been mandated by regulators\footnote{In the European Union the exchange of Initial Margin for inter bank bilateral OTC derivatives is compulsory since September of 2016 for large banks or March of 2017 for smaller banks.}. Non-financial counterparties oftentimes do not collaterialize their derivatives since they are not mandated to do so, shy away from the operational burden and have a harder time funding the significant amount of cash necessary to cover the current mark-to-market value of their entire derivatives portfolio. Collateralizing a derivatives portfolio not only significantly reduces CCR but also significantly alters how the remaining CCR behaves. The CCR of a collateralized portfolio may rather be driven by the terms of the CSA\footnote{Explain what a CSA is} or residual phenomenons such as collateral spikes\footnote{Quote something regarding collateral Spikes} than by the underlying instruments.
+    \hypertarget{trade-level-adjusted-notional}{%
+\subsection{Trade level adjusted
+notional}\label{trade-level-adjusted-notional}}
 
+Each trade \(i\) has a trade level adjusted notional \(d_i^a\) assigned
+to it. This is calculated differently for the different asset classes.
 
-Close-out Netting
-Variation margin
-Initial margin
+\hypertarget{interest-rate-and-credit-derivatives}{%
+\paragraph{Interest rate and credit
+derivatives}\label{interest-rate-and-credit-derivatives}}
 
-A more comprehensive introduction to counterparty credit risk and its reduction through netting and margining may be found in chapters four through six of \citep{gregory2015xva}.
-\subsubsection{Market structure and regulatory background}
-The derivative market is divided into exchange traded derivatives, cleared OTC derivatives and uncleared OTC derivatives. According to \citep[Figure~3.2]{gregory2015xva} based on notional 9\% of derivatives are exchange traded, 55\% are cleared OTC derivatives and 36\% are uncleared OTC derivatives. It has to be noted that these figures are from 2014 and it can be assumed, that the fraction of cleared OTC derivatives has increased since then at the expense of the fraction of uncleared OTC derivatives. The reason for this is, that regulators have incentivised or even mandated the clearing of simpler OTC derivatives over the course of the last years. In connection with this development the large CCPs such as Eurex or the LCH have extended the product range for which they offer OTC clearing in recent years.
+The notional of the trade is usually a well defined value in domestic
+currency for interest rate and credit derivatives. It is multiplied by a
+supervisory duration factor. The basic idea is, that the value of the
+derivative can change more the longer the remaining
 
-Exchange traded or listed derivatives are usually futures or options on a limited scope of underlyings which can be directly traded at a clearing house at a bid and ask quoted by the clearing house. As seen in figure XX usual underlyings are single name equities, equity indices, commodities or baskets of liquid government bonds. 
-\begin{figure}
-	\centering
-	\def\svgwidth{\columnwidth}
-    \input{Graphics/ListedVolumesEurex_201812_extractListedOverview.pdf_tex}
-    \caption{Breakdown by underlying of listed contracts derivatives at Eurex in December 2018. Interest rate derivatives are almost exclusively futures and options on baskets of German government bonds. Graph has been extracted from \citep{EurexDec2018}.}
-\end{figure}
-The clearing house acts as a mediator to match market participants which are willing to buy and sell and market participants will not be informed with whom they have been matched. All market participants exchange variation margin with the CCP and have to post a unilateral initial margin to the CCP. This initial margin is calculated by the CCP and is usually calculated using a portfolio based historical simulation VaR model. If a market participants defaults to CCP inherits its positions and needs to auction them to other market participants. The purpose of the initial margin is to cover mark-to-market losses which the portfolio suffers until it can be fully auctioned or otherwise closed by the CCP.
+\begin{align*}
+d_i &= \text{Notional}_i * SD_i \\
+\\
+\text{where} \qquad SD_i &=\frac{\exp\left(-0.05 * S_i\right)-\exp\left(-0.05 * E_i\right)}{0.05}
+\end{align*}
 
-Cleared OTC derivatives are initially bilaterally agreed upon by two market participants. If the parametrization of the derivative is sufficiently common CCPs may offer to clear it and the market participants may choose or even be forced by regulation to clear it using a qualifying CCP. OTC clearing is especially common for simple interest rate derivatives such as interest rate swaps, forward rate agreements or cross currency swaps and for some credit derivatives. Similarly to exchange traded derivatives the CCP will charge both participants an initial margin and will also regularly determine the derivatives present value and execute the exchange of variation margin between the two market participants. If one of the market participants defaults, the CCP inherits the positions of the defaulted party and can again use the initial margin posted by the defaulted party to cover mark-to-market losses until it has auctioned or closed the inherited positions \citep{EurexDMP}.
+\hypertarget{fx-derivatives}{%
+\paragraph{FX derivatives}\label{fx-derivatives}}
 
-Assuming that the CCP cannot default itself, cleared OTC derivatives and listed derivatives bear no counterparty credit risk for the market participants.
+While the wording in the BCBS paper is a bit more specific we will just
+assume that every FX traded derivative has a USD leg and set the
+notional equal the to USD notional.
 
-As of December 2018 common derivatives that are still uncleared are structured equity derivatives, swaptions and many other interest rate derivatives with optionality, derivatives on securitizations, swaps with unusual cashflow structures or in uncommon currencies and most FX derivatives \citep{BISOTCStats}.
+\hypertarget{equity-and-commodity-derivatives}{%
+\paragraph{Equity and commodity
+derivatives}\label{equity-and-commodity-derivatives}}
 
+The notional is defined as the price of the underlying. Therefore, it
+fluctuates over time.
 
+\hypertarget{notional-of-exotic-derivatives}{%
+\paragraph{Notional of exotic
+derivatives}\label{notional-of-exotic-derivatives}}
 
-What are uncleared OTC derivatives
+For more exotic derivatives which do have adjustable notionals,
+resetting notionals etc. detailed handling of the notional is defined in
+paragraph 158.
 
+    Within this thesis we investigate only equity and interest rate
+derivatives. For these we can make a few exemplary calculations of the
+trade level adjusted notional.
 
-\subsubsection{Regulatory requirements for an internal initial margin model}
-After the 2008 financial crisis the G20 agreed to reduce systematic, counterparty and operational risk and as a result of this commitment has been put into effect by regulators worldwide. In Europe the European Market Infrastructure Regulation (EMIR) came into force in August 2012 and focused on promoting or mandating central clearing as the primary measure to reduce counterparty risk. EMIR also mant
+For equity trades determining the trade level adjusted notional is
+trivial as it always is the spot price of the underlying. As an example
+consider the two trades defined below:
 
-\subsubsection{The ISDA-SIMM model}
-In December of 2013 the International Swap and Derviatives Association (ISDA) published a motivation and basic methodological outline of a common internal initial margin model called Standard Initial Margin Model (SIMM\texttrademark)\citep{ISDADec2013}. The goal of the model is to meet the model requirements to an internal model of all regulators, while being among others easy to replicate, quick to calculate and relatively cheap to operate, implement and validate.
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}When the strike is not set explicitly an at the money option is created with K = S(t0)}
+\PY{n}{eqOption1} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{maturity} \PY{o}{=} \PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+                         \PY{n}{tradeType}\PY{o}{=} \PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL}\PY{p}{,}
+                         \PY{n}{tradeDirection}\PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{,}
+                         \PY{n}{underlying}\PY{o}{=} \PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{)}
 
-SIMM is a Delta-Gamma VaR model using Delta and Vega sensitivities calculated by the banks themselves and risk weights and correlations provided and recalibrated annually by ISDA. ISDA provides member with a methodological paper \citep{SIMM} and a paper describing the input format of sensitivities \citep{RiskDataStandard}.
+\PY{n}{eqOption2} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{maturity} \PY{o}{=} \PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}   \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+                         \PY{n}{tradeType}\PY{o}{=} \PY{n}{TradeType}\PY{o}{.}\PY{n}{PUT}\PY{p}{,}
+                         \PY{n}{tradeDirection}\PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{SHORT}\PY{p}{,}
+                         \PY{n}{underlying}\PY{o}{=} \PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{,}
+                         \PY{n}{strike} \PY{o}{=} \PY{l+m+mi}{60}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
 
-\subsection{Capital requirements for counterparty credit risk}
-Counterparty credit risk is considered to be a part of credit risk by the regulator. Risk weighted assets have to be calculated and need to be backed by own capital. The three main inputs for calculating credit risk are the probability of default (PD) the loss given default (LGD) and the exposure at default (EAD). Assuming the default of a counterparty over the course of the next year, the EAD is the current estimation of money indebted by the counterparty to the bank at the time of default. Estimating EAD for traditional credit instruments s.a. loans, credit cards, mortgages or bonds is relatively simple. Such instruments do often times have deterministic payment schedules making it easy to predict the exposure in one years time. Credit lines or credit cards behave less deterministic but it is still simple to determine an upper bound to the future exposure by assuming that the entire credit line is exhausted.
-The counterparty credit risk incurred by derivatives has first been regarded in regulatory capital calculation in Basel II \citep{basel2}.
-Due to the stochastic nature of derivatives EAD calculation for counterparty credit risk has always been regulated separately ever since 
-To calculate the counterparty credit risk associated with derivatives a different approach to calculating 
+    Let the spot price of Adidas stock be 42. Then, the adjusted notional of
+\texttt{eqOption1}, an at the money call on Adidas, is 42 and the
+adjusted notional of \texttt{eqOption2}, a short in the money put on
+Adidas, is also 42.
 
-\subsubsection{The SA-CCR}
+    
+    For interest rate derivatives such as interest rate swaps or swaptions
+on the other hand, the notional is adjusted by the supervisory duration
+factor. As the supervisory duration depends on \emph{S} and \emph{E} it
+is important to understand how these are determined for the different
+interest rate derivatives.
 
-\input{JupyterNotebooksFull/building_SA_CCR_Core.tex}
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+\begin{minipage}[b]{0.24\columnwidth}\raggedright
+Trade Type\strut
+\end{minipage} & \begin{minipage}[b]{0.32\columnwidth}\raggedright
+\emph{S}\strut
+\end{minipage} & \begin{minipage}[b]{0.36\columnwidth}\raggedright
+\emph{E}\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.24\columnwidth}\raggedright
+\textbf{Interest Rate Swap}\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+Current date\strut
+\end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright
+Maturity date\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.24\columnwidth}\raggedright
+\textbf{Forward starting IRS}\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+Start date of the underlying swap\strut
+\end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright
+Maturity date of the underlying swap\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.24\columnwidth}\raggedright
+\textbf{Swaption}\strut
+\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
+Start date of the underlying swap\strut
+\end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright
+Maturity data of the underlying swap\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
 
-\begin{figure}
-	\centering
-	\def\svgwidth{\columnwidth}
-%	\input{Graphics/ListedVolumesEurex_201812_extractListedOverview.pdf_tex}
-%	\input{Graphics/SACCR_Multiplier_Function.pdf_tex}
-	\input{Graphics/testFig.pdf_tex}
-    \caption{}
-\end{figure}
+    \hypertarget{supervisory-delta-adjustments-delta_i}{%
+\subsection{\texorpdfstring{Supervisory delta adjustments:
+\(\delta_i\)}{Supervisory delta adjustments: \textbackslash{}delta\_i}}\label{supervisory-delta-adjustments-delta_i}}
 
-\input{JupyterNotebooksFull/building_SA_CCR_2_Core.tex}
+For linear derivatives \(\delta\) is 1 for long derivatives and -1 for
+short derivatives.
 
-\subsection{Approaches to allocation}
-With increasing sophistication of risk, own capital and margining models the need for equally sophisticated tools for attributing these measures rises aswell. Allocating the variation margin or the current exposure method (CEM) to individual trades is trivial as these measures may just be calculated for an individual trade and then added up across all trades to obtain the correct aggregate value. For measures which take portfolio effects into account such as a state of the art VaR model, ISDA-SIMM or SA-CCR however, this approach is not possible. The advent of portfolio based models for internal risk measurement in the late 1990s and for regulatory risk measurement in the late 2000s sparked research into how such measures should be reallocated. Gregory \cite[Chapter~10.7]{gregory2015xva} states that three approaches are used in practice: \begin{itemize}
-\item Incremental allocation
-\item Marginal allocation 
-\item Pro rata allocation
-\end{itemize}
-Additionally \citep{koyluoglu2002risk}
-Eigenschaften von Allokationen
+For options \(\delta\) is defined as under Black-Scholes:
+
+\begin{align*}
+\delta_{\text{long Call}} &= +\Phi\left(\frac{\ln\left(P_i / K_i \right) + 0.5 * \sigma_i^2 * T_i}{\sigma_i * \sqrt{T_i}}\right) \\
+\\
+\text{where} \qquad \Phi &: \text{standard normal cdf} \\
+\sigma_i &: \text{supervisory volatility as defined in Table 2 in paragraph 183}
+\end{align*}
+
+This delta is multiplied by -1 in case of a long Put option or a short
+Call option. This formula is used for both, equity options and
+swaptions.
+
+No detail is given at this point on the delta calculation of CDO
+tranches as these are not in the scope of this thesis.
+
+    In the case of an european equity option the parametrization is quite
+straight forward.
+
+\(\sigma_i\): 1.2 is the supervisory volatility for a single stock
+option
+
+\(K_i\): The strike of the option
+
+\(P_i\): The spot price of the underlying stock
+
+\(T_i\): The maturity of the option
+
+A swaption on the other hand is parametrized as follows for calculation
+of its supervisory delta:
+
+\(\sigma_i\): 0.5 is the supervisory volatility for any interst rate
+option.
+
+\(K_i\): The strike of the option is the fixed rate of the underlying
+swap
+
+\(P_i\): Is the current par rate of the underlying (forward starting)
+swap
+
+\(T_i\): The maturity of the option. Please note the difference to
+\(E_i\) used for calculation of the adjusted notional, which is the
+maturity of the underlying swap.
+
+SA-CCR uses the same Black-Scholes based formula for Swaps as it uses
+for Equities. It differentiates options in two dimensions. Whether they
+are \emph{bought} or \emph{sold} and whether they are \emph{Call} or
+\emph{Put} options (Compare paragraph 159).
+
+SA-CCR defines an option as a call option if it rises in value as the
+underlying rises in value. A fixed payer swap rises in value as the
+underlying interest rate rises in value. Therefore, an option to buy a
+fixed payer swap at a predetermined strike also rises in value as the
+underlying interest rate rises in value. Therefore, a swaption on a
+payer swap is considered a \emph{Call} under SA-CCR, while a swaption on
+a receiver swap is considered a \emph{Put}.
+
+    For the at the money option \texttt{eqOption1} that was set up above we
+yield a supervisory delta adjustment of 0.7257.
+
+    
+    For an examplary short european swaption that has a par swap as
+underlying (i.e.~the NPV of the swap is 0) that is set up as follows:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{swap} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,}
+           \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+           \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+           \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,}
+           \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{EURIBOR6M}
+          \PY{p}{)}
+
+\PY{n}{swaption} \PY{o}{=} \PY{n}{Swaption}\PY{p}{(}\PY{n}{underlyingSwap}\PY{o}{=}\PY{n}{swap}\PY{p}{,}
+                    \PY{n}{optionMaturity}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+                    \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{SHORT}\PY{p}{)}
+
+\PY{n}{SA\PYZus{}CCR}\PY{o}{.}\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{swaption}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+-0.5987063256828626
+\end{Verbatim}
+\end{tcolorbox}
+        
+    we yield a regulatory delta of -0.5987.
+
+    
+    \hypertarget{risk-horizon}{%
+\subsubsection{Risk Horizon}\label{risk-horizon}}
+
+For unmargined transaction the margining factor is
+
+\[MF^{\text{unmargined}}_i = \sqrt{\frac{\min\left(M_i;1\text{ year}\right)}{1\text{ year}}}\]
+
+This factor can be used to scale down a risk weight calibrated for a 1
+year horizon to a shorter period.
+
+With margining the margin period of risk (MPOR) is:
+
 \begin{itemize}
-\item Nativ additiv
-\item Risk sensitivity
-\item Unabhaengig von Portfoliozusammensetzung
-\item Stable through time
+\tightlist
+\item
+  10 business days for small, uncleared OTC portfolios
+\item
+  5 business days for cleared derivatives
+\item
+  20 business days for netting sets with more than 5000 transactions
+  that are not with a central counterparty
+\item
+  and doubling this period for portfolios with outstanding disputes
 \end{itemize}
 
+The margining factor is then
 
+\[ MF^{\text{margined}}_i = \frac{3}{2}\sqrt{\frac{MPOR_i}{1\text{ year}}} \]
 
-\subsubsection{Incremental allocation}
-Incremental allocation can only be applied when observing the development of a portfolio through time. Given a pre-existing portfolio $P$ consisting of $n$ trades $t_1$ through $t_n$ and a portfolio-based measure $M$ the incremental contribution of the first and second additional trade may be calculated as:
-\begin{align*}
-M_{\text{inc},t_{n+1}} & =M\left(t_1\dots t_{n+1}\right)- M\left(t_1\dots t_{n}\right) \\
-M_{\text{inc},t_{n+2}} & =M\left(t_1\dots t_{n+2}\right)- M\left(t_1\dots t_{n+1}\right)
-%IncM_{t_{n+1}} =M\left(t_1\dots t_{n+1}\right) - M\left(t_1\dots t_{n+1}\right) \\
-%IncM_{t_{n+2}} =M\left(t_1\dots \t_{n+2}\right) - M\left(t_1\dots t_{n+1}\right)
-\end{align*}
-It can be easily seen that this approach yields a natively additive allocation since it forms a telescoping sum\footnote{For brevity in Notation let $M(t_i)$ be equivalent to $M(t_1\dots t_i)$ 
-} :
-\begin{align*}
-M_{\text{inc},t_1}&=M(t_1) \\
-M_{\text{inc},t_i}&= M(t_i)-M(t_{i-1}) \\
-M_{\text{inc},t_n}&= M(t_n) - M(t_{n-1})\\
-\sum_{i=1}^{n}{M_{\text{inc},i}} &= M(t_1)-M(t_1)+\dots+M(t_{n-1})-M(t_{n-1})+M(t_n) = M(t_n)
-\end{align*}
-The incremental allocation can be calculated as or before a new trade is added to the portfolio. It is a risk sensitive value when it is calculated as it accurately reflect how the additional trade changes the risk measure. If the trade is mitigating risk at the time of its inception according to $M$ its incremental allocation $M_{inc}$ is negative. If it increases the risk its $M_{inc}$ is positive. However, $M_{inc}$ does not adapt over time and is likely to loose its accurate risk depiction as additional trade are added to the portfolio. As a portfolio develops it may well be possible, that a trade for which a negative $M_{inc}$ was calculated at its inception may loose its risk mitigation. Due to this property $M_{inc}$ of a given trade should ideally only be used at or before trade inception. One such use case is the PnL calculation of a new trade to determine the performance of the trading desk or trader which initiated the trade. Another would be to use it prior to an investment decision \cite{tibiletti2001incremental}. It can however not be used to analyse an existing portfolio to e.g. identify trades which drive risk or determine how increases or decreases in a given position would impact the portfolio measure. It also cant be calculated deterministically a posteriori for a portfolio without knowing its composition through time.
+At this point we need to introduce a collateral agreement object. For
+simplicities sake we will not differentiate between collateral and
+netting sets in this thesis. All trades that are covered by the same
+collateral agreement are also admissible for netting with each other.
+(Also refer to the introduction of close out netting above). To take
+into account the different parameters determining the risk horizon a
+couple of parameters are required to create a collateral agreement. As
+an example, below we are setting up a collateral agreement for uncleared
+derivatives without exchange of variation margin or initial margin.
 
-In the past, some academic work focussed on approximating the incremental VaR as it requires a recalculation of the VaR for the entire portfolio. An overview of these works and their potential pitfalls may be found in \cite{tibiletti2001incremental}. Since this work will rather focus on marginal than incremental allocation further details may be found in the referred paper. In the empirical analysis the incremental allocation will be calculated exactly.
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}
+        \PY{n}{margining}\PY{o}{=}\PY{n}{Margining}\PY{o}{.}\PY{n}{UNMARGINED}\PY{p}{,}
+        \PY{n}{clearing}\PY{o}{=}\PY{n}{Clearing}\PY{o}{.}\PY{n}{UNCLEARED}\PY{p}{,}
+        \PY{n}{tradecount}\PY{o}{=}\PY{n}{Tradecount}\PY{o}{.}\PY{n}{UNDER\PYZus{}FIVE\PYZus{}THOUSAND}\PY{p}{,}
+        \PY{n}{dispute}\PY{o}{=}\PY{n}{Dispute}\PY{o}{.}\PY{n}{NO\PYZus{}OUTSTANDING\PYZus{}DISPUTES}\PY{p}{,}
+        \PY{n}{threshold}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,}      \PY{c+c1}{\PYZsh{}Threshold to trigger a margin call}
+        \PY{n}{mta}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,}            \PY{c+c1}{\PYZsh{}Minimum transfer amount for a margin call}
+        \PY{n}{vm}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,}             \PY{c+c1}{\PYZsh{}Variation margin balance}
+        \PY{n}{posted\PYZus{}im}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,}      \PY{c+c1}{\PYZsh{}posted initial margin}
+        \PY{n}{received\PYZus{}im}\PY{o}{=}\PY{l+m+mf}{0.0}     \PY{c+c1}{\PYZsh{}received initial margin}
+        \PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
 
-\subsubsection{Marginal allocation}
+    The SA\_CCR paper provides a small exemplary portfolio in Annex 4a
+Example 1. It consists of the following trades:
 
-\input{JupyterNotebooksFull/ExampleJupyterToLatex_Core.tex}
+\begin{longtable}[]{@{}llllllll@{}}
+\toprule
+\begin{minipage}[b]{0.04\columnwidth}\raggedright
+Trade \#\strut
+\end{minipage} & \begin{minipage}[b]{0.10\columnwidth}\raggedright
+Nature\strut
+\end{minipage} & \begin{minipage}[b]{0.09\columnwidth}\raggedright
+Residual Maturity\strut
+\end{minipage} & \begin{minipage}[b]{0.07\columnwidth}\raggedright
+Base Ccy\strut
+\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright
+Notional (tsd)\strut
+\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright
+Pay Leg\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Receive Leg\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Market value (tsd)\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.04\columnwidth}\raggedright
+1\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+Interest rate swap\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+10 years\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\raggedright
+USD\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+10000\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Fixed\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Floating\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+30\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.04\columnwidth}\raggedright
+2\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+Interest rate swap\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+4 years\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\raggedright
+USD\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+10000\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Floating\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Fixed\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+-20\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.04\columnwidth}\raggedright
+3\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+European Swaption\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+1 into 10 years\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\raggedright
+EUR\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+5000\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Floating\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Fixed\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+50\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
 
-\subsubsection{Euler allocation}
+To set up this examplary portfolio we need to find fixed rates for the
+swaps and underlying swaps to match the desired market values.
 
-\subsubsection{Shapley allocation}
+    Through optimization and using the market data of the 10th of May 2019
+the fixed rates to match the market values in Example 1 were identified.
 
-\subsection{Allocation of SA-CCR}
+    For trade 1 the matching fixed rate is 2.3754\%, for trade 1 it is
+2.2108\% and for the underlying swap of trade 3 it is 0.1610\%
 
-\subsubsection{Allocation without margining}
+    
 
-\subsubsection{Allocation under VM collateralization}
-
-\subsubsection{Allocation under VM and IM collateralization}
-
-\subsection{Comparison of allocation approaches}
-
-\subsection{Calculating the Euler allocation}
-
-\section{Outlook}
-
-\newpage
-\addcontentsline{toc}{section}{\bibname} \nocite{*} % Deutsch
-\bibliographystyle{abbrv}
-\bibliography{Thesis_Bib}
-\newpage
-\begin{appendix}
-\end{appendix}
-\newpage \thispagestyle{empty}
-
+    % Add a bibliography block to the postdoc
+    
+    
+    
 \end{document}
-
-

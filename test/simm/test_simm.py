@@ -93,7 +93,7 @@ def test_get_im_swaption():
 
 
 def test_get_im_equityoption():
-    option2 = EquityOption(notional=100, K=50, maturity=ql.Period(3, ql.Years), tradeType=TradeType.CALL,
+    option2 = EquityOption(notional=100, strike=50, maturity=ql.Period(3, ql.Years), tradeType=TradeType.CALL,
                            tradeDirection=TradeDirection.LONG,
                            underlying=Stock.ADS)
     simm = SIMM()

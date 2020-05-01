@@ -31,7 +31,7 @@ class Swaption(InterestRateTrade):
             currency=underlyingSwap.currency,
             s=underlyingSwap.s,
             m=underlyingSwap.e,  # assuming the Swaption is physically settled
-            t=convert_period_to_days(optionMaturity),
+            t=convert_period_to_days(optionMaturity) / 360,
             e=underlyingSwap.e,
             tradeType=tradeType,
             tradeDirection=tradeDirection

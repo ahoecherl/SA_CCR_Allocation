@@ -15,30 +15,30 @@ from utilities.timeUtilities import convert_period_to_days
 class EquityOption(EquityDerivative):
 
     def __init__(self,
-                 notional: float,
                  maturity: ql.Period(),
                  tradeType: TradeType = TradeType.CALL,
                  tradeDirection: TradeDirection = TradeDirection.LONG,
                  underlying: Stock = Stock.ADS,
-                 K = None):
+                 notional: float = 1,
+                 strike = None):
         """
         Equity Option
 
         :param notional: Count of underlying shares
-        :param maturity: Time to maturity of the option (in days). Will be used for both, M and T of paragraph 155 after being multiplied bei 360
+        :param maturity: Time to maturity of the option (in days). Will be used for both, M and T of paragraph 155 after being divided by 360
         :param tradeType: Can be TradeType.CALL or TradeType.PUT
         :param tradeDirection: Can be TradeDirection.LONG or TradeDirection.SHORT
-        :param K: Strike of option is no strike is given it default to an at the money option
+        :param strike: Strike of option is no strike is given it default to an at the money option
         """
         self.underlying = underlying
-        self.K = K if K != None else EquitySpotQuote[self.underlying.name].value.value()  # no K is given it is the current Spot
+        self.K = strike if strike != None else EquitySpotQuote[self.underlying.name].value.value()  # no K is given it is the current Spot
         self.currency = underlying.value['Currency']
         super(EquityOption, self).__init__(
             assetClass=AssetClass.EQ,
             tradeType=tradeType,
             tradeDirection=tradeDirection,
-            m=convert_period_to_days(maturity),
-            t=convert_period_to_days(maturity),
+            m=convert_period_to_days(maturity) / 360,
+            t=convert_period_to_days(maturity) / 360,
             notional=notional
         )
         vol_handle = EquityVolatility[self.underlying.name].value
@@ -51,7 +51,7 @@ class EquityOption(EquityDerivative):
             option_type = ql.Option.Call
         else:
             option_type = ql.Option.Put
-        payoff = ql.PlainVanillaPayoff(option_type, K)
+        payoff = ql.PlainVanillaPayoff(option_type, self.K)
         maturity_date = today + maturity
         exercise = ql.EuropeanExercise(maturity_date)
         self.ql_option = ql.VanillaOption(payoff, exercise)

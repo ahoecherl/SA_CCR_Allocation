@@ -1,0 +1,26 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Establishing Background}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Bilateral initial margin}{section.2}% 3
+\BOOKMARK [3][-]{subsubsection.2.1.1}{Reducing counterparty credit risk with initial margin}{subsection.2.1}% 4
+\BOOKMARK [3][-]{subsubsection.2.1.2}{Market structure and regulatory background}{subsection.2.1}% 5
+\BOOKMARK [3][-]{subsubsection.2.1.3}{Regulatory requirements for an internal initial margin model}{subsection.2.1}% 6
+\BOOKMARK [3][-]{subsubsection.2.1.4}{The ISDA-SIMM model}{subsection.2.1}% 7
+\BOOKMARK [2][-]{subsection.2.2}{Capital requirements for counterparty credit risk}{section.2}% 8
+\BOOKMARK [3][-]{subsubsection.2.2.1}{The SA-CCR}{subsection.2.2}% 9
+\BOOKMARK [1][-]{section.3}{AddOn calculation}{}% 10
+\BOOKMARK [2][-]{subsection.3.1}{Trade level adjusted notional}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.2}{Supervisory delta adjustments: \134delta\137i}{section.3}% 12
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Risk Horizon}{subsection.3.2}% 13
+\BOOKMARK [2][-]{subsection.3.3}{Approaches to allocation}{section.3}% 14
+\BOOKMARK [3][-]{subsubsection.3.3.1}{Incremental allocation}{subsection.3.3}% 15
+\BOOKMARK [3][-]{subsubsection.3.3.2}{Marginal allocation}{subsection.3.3}% 16
+\BOOKMARK [3][-]{subsubsection.3.3.3}{Euler allocation}{subsection.3.3}% 17
+\BOOKMARK [3][-]{subsubsection.3.3.4}{Shapley allocation}{subsection.3.3}% 18
+\BOOKMARK [2][-]{subsection.3.4}{Allocation of SA-CCR}{section.3}% 19
+\BOOKMARK [3][-]{subsubsection.3.4.1}{Allocation without margining}{subsection.3.4}% 20
+\BOOKMARK [3][-]{subsubsection.3.4.2}{Allocation under VM collateralization}{subsection.3.4}% 21
+\BOOKMARK [3][-]{subsubsection.3.4.3}{Allocation under VM and IM collateralization}{subsection.3.4}% 22
+\BOOKMARK [2][-]{subsection.3.5}{Comparison of allocation approaches}{section.3}% 23
+\BOOKMARK [2][-]{subsection.3.6}{Calculating the Euler allocation}{section.3}% 24
+\BOOKMARK [1][-]{section.4}{Outlook}{}% 25
+\BOOKMARK [1][-]{section.4}{Bibliography}{}% 26
