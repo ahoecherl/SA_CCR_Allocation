@@ -1,0 +1,162 @@
+    
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}import cell}
+\PY{k+kn}{import} \PY{n+nn}{QuantLib} \PY{k}{as} \PY{n+nn}{ql}
+\PY{k+kn}{import} \PY{n+nn}{numpy}
+\PY{k+kn}{from} \PY{n+nn}{collateralAgreement} \PY{k+kn}{import} \PY{n}{CollateralAgreement}\PY{p}{,} \PY{n}{Margining}\PY{p}{,} \PY{n}{Clearing}\PY{p}{,} \PY{n}{Tradecount}\PY{p}{,} \PY{n}{Dispute}
+\PY{k+kn}{from} \PY{n+nn}{instruments}\PY{n+nn}{.}\PY{n+nn}{interestRateInstrument}\PY{n+nn}{.}\PY{n+nn}{irs} \PY{k+kn}{import} \PY{n}{IRS}
+\PY{k+kn}{from} \PY{n+nn}{jupyterUtils} \PY{k+kn}{import} \PY{n}{export}
+\PY{k+kn}{from} \PY{n+nn}{sa\PYZus{}ccr}\PY{n+nn}{.}\PY{n+nn}{sa\PYZus{}ccr} \PY{k+kn}{import} \PY{n}{SA\PYZus{}CCR}
+\PY{n}{asdf} \PY{o}{=}\PY{l+m+mi}{1}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{risk-horizon}{%
+\subsubsection{Risk Horizon}\label{risk-horizon}}
+
+For unmargined transaction the margining factor is
+
+\[MF^{\text{unmargined}}_i = \sqrt{\frac{\min\left(M_i;1\text{ year}\right)}{1\text{ year}}}\]
+
+This factor can be used to scale down a risk weight calibrated for a 1
+year horizon to a shorter period.
+
+With margining the margin period of risk (MPOR) is:
+
+\begin{itemize}
+\tightlist
+\item
+  10 business days for small, uncleared OTC portfolios
+\item
+  5 business days for cleared derivatives
+\item
+  20 business days for netting sets with more than 5000 transactions
+  that are not with a central counterparty
+\item
+  and doubling this period for portfolios with outstanding disputes
+\end{itemize}
+
+The margining factor is then
+
+\[ MF^{\text{margined}}_i = \frac{3}{2}\sqrt{\frac{MPOR_i}{1\text{ year}}} \]
+
+At this point we need to introduce a collateral agreement object. For
+simplicities sake we will not differentiate between collateral and
+netting sets in this thesis. All trades that are covered by the same
+collateral agreement are also admissible for netting with each other.
+(Also refer to the introduction of close out netting above). To take
+into account the different parameters determining the risk horizon a
+couple of parameters are required to create a collateral agreement. As
+an example, below we are setting up a collateral agreement for uncleared
+derivatives without exchange of variation margin or initial margin.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}
+        \PY{n}{margining}\PY{o}{=}\PY{n}{Margining}\PY{o}{.}\PY{n}{UNMARGINED}\PY{p}{,}
+        \PY{n}{clearing}\PY{o}{=}\PY{n}{Clearing}\PY{o}{.}\PY{n}{UNCLEARED}\PY{p}{,}
+        \PY{n}{tradecount}\PY{o}{=}\PY{n}{Tradecount}\PY{o}{.}\PY{n}{UNDER\PYZus{}FIVE\PYZus{}THOUSAND}\PY{p}{,}
+        \PY{n}{dispute}\PY{o}{=}\PY{n}{Dispute}\PY{o}{.}\PY{n}{NO\PYZus{}OUTSTANDING\PYZus{}DISPUTES}\PY{p}{,}
+        \PY{n}{threshold}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,}      \PY{c+c1}{\PYZsh{}Threshold to trigger a margin call}
+        \PY{n}{mta}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,}            \PY{c+c1}{\PYZsh{}Minimum transfer amount for a margin call}
+        \PY{n}{vm}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,}             \PY{c+c1}{\PYZsh{}Variation margin balance}
+        \PY{n}{posted\PYZus{}im}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,}      \PY{c+c1}{\PYZsh{}posted initial margin}
+        \PY{n}{received\PYZus{}im}\PY{o}{=}\PY{l+m+mf}{0.0}     \PY{c+c1}{\PYZsh{}received initial margin}
+        \PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    With this collateral set object we can define a function for calculation
+the margining factor:
+
+    For trades of differing maturity let's compare the margining factor for
+the three most common scenarios:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  No margining
+\item
+  Bilateral margining
+\item
+  Centrally cleared
+\end{enumerate}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{three\PYZus{}day} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,} \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,} \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{EURIBOR6M}\PY{p}{)}
+\PY{n}{two\PYZus{}weeks} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,} \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,} \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Weeks}\PY{p}{)}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{EURIBOR6M}\PY{p}{)}
+\PY{n}{six\PYZus{}months} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,} \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,} \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{6}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Months}\PY{p}{)}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{EURIBOR6M}\PY{p}{)}
+\PY{n}{one\PYZus{}year} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,} \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,} \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{EURIBOR6M}\PY{p}{)}
+\PY{n}{ten\PYZus{}years} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,} \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,} \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{EURIBOR6M}\PY{p}{)}
+
+\PY{n}{no\PYZus{}margining} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{p}{)}
+\PY{n}{bilateral\PYZus{}margining} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{margining} \PY{o}{=} \PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}\PY{p}{)}
+\PY{n}{central\PYZus{}clearing} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{margining} \PY{o}{=} \PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}\PY{p}{,} \PY{n}{clearing} \PY{o}{=} \PY{n}{Clearing}\PY{o}{.}\PY{n}{CLEARED}\PY{p}{)}
+
+\PY{n}{trades} \PY{o}{=} \PY{p}{[}\PY{n}{three\PYZus{}day}\PY{p}{,} \PY{n}{two\PYZus{}weeks}\PY{p}{,} \PY{n}{six\PYZus{}months}\PY{p}{,} \PY{n}{one\PYZus{}year}\PY{p}{,} \PY{n}{ten\PYZus{}years}\PY{p}{]}
+\PY{n}{cas} \PY{o}{=} \PY{p}{[}\PY{n}{no\PYZus{}margining}\PY{p}{,} \PY{n}{bilateral\PYZus{}margining}\PY{p}{,} \PY{n}{central\PYZus{}clearing}\PY{p}{]}
+\PY{n}{ar} \PY{o}{=} \PY{n}{numpy}\PY{o}{.}\PY{n}{empty}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+\PY{n}{i} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{trades}\PY{p}{:}
+    \PY{n}{j} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{k}{for} \PY{n}{ca} \PY{o+ow}{in} \PY{n}{cas}\PY{p}{:}
+        \PY{n}{ar}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{SA\PYZus{}CCR}\PY{o}{.}\PY{n}{margining\PYZus{}factor}\PY{p}{(}\PY{n}{t}\PY{p}{,}\PY{n}{ca}\PY{p}{)}
+        \PY{n}{j} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+    \PY{n}{i} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        ---------------------------------------------------------------------------
+
+        NameError                                 Traceback (most recent call last)
+
+        <ipython-input-3-72227631e25a> in <module>
+    ----> 1 three\_day = IRS(notional = 1000000, timeToSwapStart=ql.Period(2, ql.Days), timeToSwapEnd=ql.Period(3, ql.Days), swapDirection=SwapDirection.PAYER, index=InterestRateIndex.EURIBOR6M)
+          2 two\_weeks = IRS(notional = 1000000, timeToSwapStart=ql.Period(2, ql.Days), timeToSwapEnd=ql.Period(2, ql.Weeks), swapDirection=SwapDirection.PAYER, index=InterestRateIndex.EURIBOR6M)
+          3 six\_months = IRS(notional = 1000000, timeToSwapStart=ql.Period(2, ql.Days), timeToSwapEnd=ql.Period(6, ql.Months), swapDirection=SwapDirection.PAYER, index=InterestRateIndex.EURIBOR6M)
+          4 one\_year = IRS(notional = 1000000, timeToSwapStart=ql.Period(2, ql.Days), timeToSwapEnd=ql.Period(1, ql.Years), swapDirection=SwapDirection.PAYER, index=InterestRateIndex.EURIBOR6M)
+          5 ten\_years = IRS(notional = 1000000, timeToSwapStart=ql.Period(2, ql.Days), timeToSwapEnd=ql.Period(10, ql.Years), swapDirection=SwapDirection.PAYER, index=InterestRateIndex.EURIBOR6M)
+    
+
+        NameError: name 'SwapDirection' is not defined
+
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} making a nice looking latex pandas dataframe out of it}
+
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+
+\PY{n}{pd}\PY{o}{.}\PY{n}{set\PYZus{}option}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{display.notebook\PYZus{}repr\PYZus{}html}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{k+kc}{True}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{\PYZus{}repr\PYZus{}latex\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{centering}\PY{l+s+s2}{\PYZob{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s2}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{to\PYZus{}latex}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{o}{.}\PY{n}{\PYZus{}repr\PYZus{}latex\PYZus{}} \PY{o}{=} \PY{n}{\PYZus{}repr\PYZus{}latex\PYZus{}}  \PY{c+c1}{\PYZsh{} monkey patch pandas DataFrame}
+
+\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{index}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{No margining}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bilateral margining}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Centrally cleared}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+          \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Three days}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Two weeks}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Six months}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{One year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ten years}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+          \PY{n}{data} \PY{o}{=} \PY{n}{ar}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{export}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{building\PYZus{}SA\PYZus{}CCR\PYZus{}risk\PYZus{}horizon.ipynb}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+

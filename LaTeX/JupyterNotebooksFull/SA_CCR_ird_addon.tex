@@ -146,7 +146,7 @@
     \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
     % Document parameters
     % Document title
-    \title{building\_SA\_CCR\_2}
+    \title{SA\_CCR\_ird\_addon}
     
     
     
@@ -370,263 +370,280 @@
     
 
     
-    \hypertarget{addon-calculation}{%
-\section{AddOn calculation}\label{addon-calculation}}
-
-Most of the SA-CCR logic is hidden inside the AddOn calculation. At
-first it is important to define the following four data parameters:
-
-\hypertarget{m_i}{%
-\subparagraph{\texorpdfstring{\(M_i\)}{M\_i}}\label{m_i}}
-
-\begin{quote}
-Maturity of the derivative contract. If the underlying of a derivative
-is another derivative - e.g.~in the case of a swaption the maturity date
-of the underlying needs to be chosen.
-\end{quote}
-
-\hypertarget{s_i}{%
-\subparagraph{\texorpdfstring{\(S_i\)}{S\_i}}\label{s_i}}
-
-\begin{quote}
-For interest rate and credit derivatives the start date of the time
-periodreferenced by an interst rate or credit contract. If the
-derivtives underlying is another interest rate or credit intsrument (eg
-swaption or bond option) \(S_i\) is the start date of the underlying
-instead.
-\end{quote}
-
-\hypertarget{e_i}{%
-\subparagraph{\texorpdfstring{\(E_i\)}{E\_i}}\label{e_i}}
-
-\begin{quote}
-Defined as \(S_i\) but referencing the end date instead of the start
-date.
-\end{quote}
-
-\hypertarget{t_i}{%
-\subparagraph{\texorpdfstring{\(T_i\)}{T\_i}}\label{t_i}}
-
-\begin{quote}
-For options across all asset classes this is the latest contractual
-exercise date.
-\end{quote}
-
-    \hypertarget{trade-level-adjusted-notional}{%
-\subsection{Trade level adjusted
-notional}\label{trade-level-adjusted-notional}}
-
-Each trade \(i\) has a trade level adjusted notional \(d_i^a\) assigned
-to it. This is calculated differently for the different asset classes.
-
-\hypertarget{interest-rate-and-credit-derivatives}{%
-\paragraph{Interest rate and credit
-derivatives}\label{interest-rate-and-credit-derivatives}}
-
-The notional of the trade is usually a well defined value in domestic
-currency for interest rate and credit derivatives. It is multiplied by a
-supervisory duration factor. The basic idea is, that the value of the
-derivative can change more the longer the remaining
-
-\begin{align*}
-d_i &= \text{Notional}_i * SD_i \\
-\\
-\text{where} \qquad SD_i &=\frac{\exp\left(-0.05 * S_i\right)-\exp\left(-0.05 * E_i\right)}{0.05}
-\end{align*}
-
-\hypertarget{fx-derivatives}{%
-\paragraph{FX derivatives}\label{fx-derivatives}}
-
-While the wording in the BCBS paper is a bit more specific we will just
-assume that every FX traded derivative has a USD leg and set the
-notional equal the to USD notional.
-
-\hypertarget{equity-and-commodity-derivatives}{%
-\paragraph{Equity and commodity
-derivatives}\label{equity-and-commodity-derivatives}}
-
-The notional is defined as the price of the underlying. Therefore, it
-fluctuates over time.
-
-\hypertarget{notional-of-exotic-derivatives}{%
-\paragraph{Notional of exotic
-derivatives}\label{notional-of-exotic-derivatives}}
-
-For more exotic derivatives which do have adjustable notionals,
-resetting notionals etc. detailed handling of the notional is defined in
-paragraph 158.
-
-    Within this thesis we investigate only equity and interest rate
-derivatives. For these we can make a few exemplary calculations of the
-trade level adjusted notional.
-
-For equity trades determining the trade level adjusted notional is
-trivial as it always is the spot price of the underlying. As an example
-consider the two trades defined below:
-
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{2}{\boxspacing}
+\prompt{In}{incolor}{1}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{c+c1}{\PYZsh{}When the strike is not set explicitly an at the money option is created with K = S(t0)}
-\PY{n}{eqOption1} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{maturity} \PY{o}{=} \PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-                         \PY{n}{tradeType}\PY{o}{=} \PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL}\PY{p}{,}
-                         \PY{n}{tradeDirection}\PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{,}
-                         \PY{n}{underlying}\PY{o}{=} \PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{)}
-
-\PY{n}{eqOption2} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{maturity} \PY{o}{=} \PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}   \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-                         \PY{n}{tradeType}\PY{o}{=} \PY{n}{TradeType}\PY{o}{.}\PY{n}{PUT}\PY{p}{,}
-                         \PY{n}{tradeDirection}\PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{SHORT}\PY{p}{,}
-                         \PY{n}{underlying}\PY{o}{=} \PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{,}
-                         \PY{n}{strike} \PY{o}{=} \PY{l+m+mi}{60}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}import cell}
+\PY{k+kn}{import} \PY{n+nn}{QuantLib} \PY{k}{as} \PY{n+nn}{ql}
+\PY{k+kn}{from} \PY{n+nn}{IPython}\PY{n+nn}{.}\PY{n+nn}{core}\PY{n+nn}{.}\PY{n+nn}{display} \PY{k+kn}{import} \PY{n}{display}\PY{p}{,} \PY{n}{Markdown}
+\PY{k+kn}{from} \PY{n+nn}{scipy} \PY{k+kn}{import} \PY{n}{optimize}
+\PY{k+kn}{from} \PY{n+nn}{collateralAgreement} \PY{k+kn}{import} \PY{n}{CollateralAgreement}
+\PY{k+kn}{from} \PY{n+nn}{instruments}\PY{n+nn}{.}\PY{n+nn}{interestRateInstrument}\PY{n+nn}{.}\PY{n+nn}{irs} \PY{k+kn}{import} \PY{n}{IRS}
+\PY{k+kn}{from} \PY{n+nn}{instruments}\PY{n+nn}{.}\PY{n+nn}{interestRateInstrument}\PY{n+nn}{.}\PY{n+nn}{swaption} \PY{k+kn}{import} \PY{n}{Swaption}
+\PY{k+kn}{from} \PY{n+nn}{jupyterUtils} \PY{k+kn}{import} \PY{n}{export}
+\PY{k+kn}{from} \PY{n+nn}{marketdata}\PY{n+nn}{.}\PY{n+nn}{fx\PYZus{}spot} \PY{k+kn}{import} \PY{n}{FxSpot}
+\PY{k+kn}{from} \PY{n+nn}{marketdata}\PY{n+nn}{.}\PY{n+nn}{interestRateIndices} \PY{k+kn}{import} \PY{n}{InterestRateIndex}
+\PY{k+kn}{from} \PY{n+nn}{sa\PYZus{}ccr}\PY{n+nn}{.}\PY{n+nn}{sa\PYZus{}ccr} \PY{k+kn}{import} \PY{n}{SA\PYZus{}CCR}
+\PY{k+kn}{from} \PY{n+nn}{utilities}\PY{n+nn}{.}\PY{n+nn}{Enums} \PY{k+kn}{import} \PY{n}{SwapDirection}\PY{p}{,} \PY{n}{TradeDirection}
+\PY{n}{asdf} \PY{o}{=}\PY{l+m+mi}{1}
 \end{Verbatim}
 \end{tcolorbox}
 
-    Let the spot price of Adidas stock be 42. Then, the adjusted notional of
-\texttt{eqOption1}, an at the money call on Adidas, is 42 and the
-adjusted notional of \texttt{eqOption2}, a short in the money put on
-Adidas, is also 42.
+    \hypertarget{addon-for-interest-rate-derivatives}{%
+\subsection{AddOn for interest rate
+derivatives}\label{addon-for-interest-rate-derivatives}}
 
-    
-    For interest rate derivatives such as interest rate swaps or swaptions
-on the other hand, the notional is adjusted by the supervisory duration
-factor. As the supervisory duration depends on \emph{S} and \emph{E} it
-is important to understand how these are determined for the different
-interest rate derivatives.
+\hypertarget{step-1---calculation-of-effective-notional-d_jkir}{%
+\paragraph{\texorpdfstring{Step 1 - calculation of effective notional
+\(D_{jk}^{IR}\)}{Step 1 - calculation of effective notional D\_\{jk\}\^{}\{IR\}}}\label{step-1---calculation-of-effective-notional-d_jkir}}
 
-\begin{longtable}[]{@{}lll@{}}
+\begin{align*}
+D_{jk}^{IR} &= \sum_{i\in\left\{Ccy_j, MB_k\right\}}{\delta_i*d_i^{IR}*MF_i}
+\end{align*}
+
+Here, the notation \(i\in\left\{Ccy_j, MB_k\right\}\) refers to trades
+whose underlying is the interest rate of a common currency \(j\) and
+which mature in a common maturity bucket \(k\)
+
+    We can test our implementation of the effective notional against a small
+exemplary portfolio in Annex 4a Example 1 of the SA\_CCR paper. It
+consists of the following trades:
+
+\begin{longtable}[]{@{}llllllll@{}}
 \toprule
-\begin{minipage}[b]{0.24\columnwidth}\raggedright
-Trade Type\strut
-\end{minipage} & \begin{minipage}[b]{0.32\columnwidth}\raggedright
-\emph{S}\strut
-\end{minipage} & \begin{minipage}[b]{0.36\columnwidth}\raggedright
-\emph{E}\strut
+\begin{minipage}[b]{0.04\columnwidth}\raggedright
+Trade \#\strut
+\end{minipage} & \begin{minipage}[b]{0.10\columnwidth}\raggedright
+Nature\strut
+\end{minipage} & \begin{minipage}[b]{0.09\columnwidth}\raggedright
+Residual Maturity\strut
+\end{minipage} & \begin{minipage}[b]{0.07\columnwidth}\raggedright
+Base Ccy\strut
+\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright
+Notional (tsd)\strut
+\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright
+Pay Leg\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Receive Leg\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright
+Market value (tsd)\strut
 \end{minipage}\tabularnewline
 \midrule
 \endhead
-\begin{minipage}[t]{0.24\columnwidth}\raggedright
-\textbf{Interest Rate Swap}\strut
-\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
-Current date\strut
-\end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright
-Maturity date\strut
+\begin{minipage}[t]{0.04\columnwidth}\raggedright
+1\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+Interest rate swap\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+10 years\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\raggedright
+USD\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+10000\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Fixed\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Floating\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+30\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.24\columnwidth}\raggedright
-\textbf{Forward starting IRS}\strut
-\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
-Start date of the underlying swap\strut
-\end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright
-Maturity date of the underlying swap\strut
+\begin{minipage}[t]{0.04\columnwidth}\raggedright
+2\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+Interest rate swap\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+4 years\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\raggedright
+USD\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+10000\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Floating\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Fixed\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+-20\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.24\columnwidth}\raggedright
-\textbf{Swaption}\strut
-\end{minipage} & \begin{minipage}[t]{0.32\columnwidth}\raggedright
-Start date of the underlying swap\strut
-\end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright
-Maturity data of the underlying swap\strut
+\begin{minipage}[t]{0.04\columnwidth}\raggedright
+3\strut
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright
+European Swaption\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+1 into 10 years\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\raggedright
+EUR\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+5000\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+Floating\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+Fixed\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright
+50\strut
 \end{minipage}\tabularnewline
 \bottomrule
 \end{longtable}
 
-    \hypertarget{supervisory-delta-adjustments-delta_i}{%
-\subsection{\texorpdfstring{Supervisory delta adjustments:
-\(\delta_i\)}{Supervisory delta adjustments: \textbackslash{}delta\_i}}\label{supervisory-delta-adjustments-delta_i}}
-
-For linear derivatives \(\delta\) is 1 for long derivatives and -1 for
-short derivatives.
-
-For options \(\delta\) is defined as under Black-Scholes:
-
-\begin{align*}
-\delta_{\text{long Call}} &= +\Phi\left(\frac{\ln\left(P_i / K_i \right) + 0.5 * \sigma_i^2 * T_i}{\sigma_i * \sqrt{T_i}}\right) \\
-\\
-\text{where} \qquad \Phi &: \text{standard normal cdf} \\
-\sigma_i &: \text{supervisory volatility as defined in Table 2 in paragraph 183}
-\end{align*}
-
-This delta is multiplied by -1 in case of a long Put option or a short
-Call option. This formula is used for both, equity options and
-swaptions.
-
-No detail is given at this point on the delta calculation of CDO
-tranches as these are not in the scope of this thesis.
-
-    In the case of an european equity option the parametrization is quite
-straight forward.
-
-\(\sigma_i\): 1.2 is the supervisory volatility for a single stock
-option
-
-\(K_i\): The strike of the option
-
-\(P_i\): The spot price of the underlying stock
-
-\(T_i\): The maturity of the option
-
-A swaption on the other hand is parametrized as follows for calculation
-of its supervisory delta:
-
-\(\sigma_i\): 0.5 is the supervisory volatility for any interst rate
-option.
-
-\(K_i\): The strike of the option is the fixed rate of the underlying
-swap
-
-\(P_i\): Is the current par rate of the underlying (forward starting)
-swap
-
-\(T_i\): The maturity of the option. Please note the difference to
-\(E_i\) used for calculation of the adjusted notional, which is the
-maturity of the underlying swap.
-
-SA-CCR uses the same Black-Scholes based formula for Swaps as it uses
-for Equities. It differentiates options in two dimensions. Whether they
-are \emph{bought} or \emph{sold} and whether they are \emph{Call} or
-\emph{Put} options (Compare paragraph 159).
-
-SA-CCR defines an option as a call option if it rises in value as the
-underlying rises in value. A fixed payer swap rises in value as the
-underlying interest rate rises in value. Therefore, an option to buy a
-fixed payer swap at a predetermined strike also rises in value as the
-underlying interest rate rises in value. Therefore, a swaption on a
-payer swap is considered a \emph{Call} under SA-CCR, while a swaption on
-a receiver swap is considered a \emph{Put}.
-
-    For the at the money option \texttt{eqOption1} that was set up above we
-yield a supervisory delta adjustment of 0.7257.
-
-    
-    For an examplary short european swaption that has a par swap as
-underlying (i.e.~the NPV of the swap is 0) that is set up as follows:
+To set up this exemplary portfolio we need to find fixed rates for the
+swaps and underlying swaps to match the desired market values.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{9}{\boxspacing}
+\prompt{In}{incolor}{2}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{swap} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,}
-           \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-           \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-           \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,}
-           \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{EURIBOR6M}
-          \PY{p}{)}
+\PY{k}{def} \PY{n+nf}{find\PYZus{}1}\PY{p}{(}\PY{n}{fixed\PYZus{}rate}\PY{p}{)}\PY{p}{:}
+    \PY{n}{target\PYZus{}value} \PY{o}{=} \PY{l+m+mi}{30000}
+    \PY{n}{swap} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{10000000}\PY{p}{,}
+               \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+               \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+               \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,}
+               \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
+               \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+               \PY{p}{)}
+    \PY{k}{return} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{swap}\PY{o}{.}\PY{n}{get\PYZus{}price}\PY{p}{(}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n}{target\PYZus{}value}\PY{p}{)}
 
-\PY{n}{swaption} \PY{o}{=} \PY{n}{Swaption}\PY{p}{(}\PY{n}{underlyingSwap}\PY{o}{=}\PY{n}{swap}\PY{p}{,}
-                    \PY{n}{optionMaturity}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-                    \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{SHORT}\PY{p}{)}
+\PY{k}{def} \PY{n+nf}{find\PYZus{}2}\PY{p}{(}\PY{n}{fixed\PYZus{}rate}\PY{p}{)}\PY{p}{:}
+    \PY{n}{target\PYZus{}value} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{20000}
+    \PY{n}{swap} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{10000000}\PY{p}{,}
+               \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+               \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+               \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
+               \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
+               \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+               \PY{p}{)}
+    \PY{k}{return} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{swap}\PY{o}{.}\PY{n}{get\PYZus{}price}\PY{p}{(}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n}{target\PYZus{}value}\PY{p}{)}
 
-\PY{n}{SA\PYZus{}CCR}\PY{o}{.}\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{swaption}\PY{p}{)}
+\PY{k}{def} \PY{n+nf}{find\PYZus{}3}\PY{p}{(}\PY{n}{fixed\PYZus{}rate}\PY{p}{)}\PY{p}{:}
+    \PY{n}{target\PYZus{}value} \PY{o}{=} \PY{l+m+mi}{50000}
+    \PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{5000000}\PY{o}{*}\PY{n}{FxSpot}\PY{o}{.}\PY{n}{USDEUR}\PY{o}{.}\PY{n}{value}
+    \PY{n}{swap} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{n}{notional}\PY{p}{,}
+               \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+               \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+               \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
+               \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{EURIBOR6M}\PY{p}{,}
+               \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+               \PY{p}{)}
+    \PY{n}{swaption} \PY{o}{=} \PY{n}{Swaption}\PY{p}{(}\PY{n}{underlyingSwap}\PY{o}{=}\PY{n}{swap}\PY{p}{,}
+                        \PY{n}{optionMaturity}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+                        \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
+    \PY{n}{price} \PY{o}{=} \PY{n}{swaption}\PY{o}{.}\PY{n}{get\PYZus{}price}\PY{p}{(}\PY{p}{)}\PY{o}{*}\PY{n}{FxSpot}\PY{o}{.}\PY{n}{EURUSD}\PY{o}{.}\PY{n}{value}
+    \PY{k}{return} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{price}\PY{o}{\PYZhy{}}\PY{n}{target\PYZus{}value}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{find\PYZus{}4}\PY{p}{(}\PY{n}{fixed\PYZus{}rate}\PY{p}{)}\PY{p}{:}
+    \PY{n}{target\PYZus{}value} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.27}
+    \PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{5000000}\PY{o}{*}\PY{n}{FxSpot}\PY{o}{.}\PY{n}{USDEUR}\PY{o}{.}\PY{n}{value}
+    \PY{n}{swap} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{n}{notional}\PY{p}{,}
+               \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+               \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+               \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
+               \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{EURIBOR6M}\PY{p}{,}
+               \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+               \PY{p}{)}
+    \PY{n}{swaption} \PY{o}{=} \PY{n}{Swaption}\PY{p}{(}\PY{n}{underlyingSwap}\PY{o}{=}\PY{n}{swap}\PY{p}{,}
+                        \PY{n}{optionMaturity}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+                        \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
+    \PY{n}{delta} \PY{o}{=} \PY{n}{SA\PYZus{}CCR}\PY{o}{.}\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{swaption}\PY{p}{)}
+    \PY{k}{return} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{delta}\PY{o}{\PYZhy{}}\PY{n}{target\PYZus{}value}\PY{p}{)}
+
+\PY{n}{result} \PY{o}{=} \PY{n}{optimize}\PY{o}{.}\PY{n}{minimize}\PY{p}{(}\PY{n}{find\PYZus{}1}\PY{p}{,} \PY{n}{x0}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{n}{tol}\PY{o}{=}\PY{l+m+mf}{0.0000000001}\PY{p}{)}
+\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}1} \PY{o}{=} \PY{n}{result}\PY{o}{.}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{result} \PY{o}{=} \PY{n}{optimize}\PY{o}{.}\PY{n}{minimize}\PY{p}{(}\PY{n}{find\PYZus{}2}\PY{p}{,} \PY{n}{x0}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{n}{tol}\PY{o}{=}\PY{l+m+mf}{0.0000000001}\PY{p}{)}
+\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}2} \PY{o}{=} \PY{n}{result}\PY{o}{.}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{result} \PY{o}{=} \PY{n}{optimize}\PY{o}{.}\PY{n}{minimize}\PY{p}{(}\PY{n}{find\PYZus{}3}\PY{p}{,} \PY{n}{x0}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{n}{constraints}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ineq}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fun}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{l+m+mf}{0.02}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{tol}\PY{o}{=}\PY{l+m+mf}{0.0000000001}\PY{p}{)}
+\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}3} \PY{o}{=} \PY{n}{result}\PY{o}{.}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{result} \PY{o}{=} \PY{n}{optimize}\PY{o}{.}\PY{n}{minimize}\PY{p}{(}\PY{n}{find\PYZus{}4}\PY{p}{,} \PY{n}{x0}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{n}{constraints}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ineq}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fun}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{tol}\PY{o}{=}\PY{l+m+mf}{0.0000000001}\PY{p}{)}
+\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}4} \PY{o}{=} \PY{n}{result}\PY{o}{.}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
 \end{Verbatim}
 \end{tcolorbox}
 
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{9}{\boxspacing}
+    Through optimization and using the market data of the 10th of May 2019
+the fixed rates to match the market values in Example 1 were identified.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
--0.5987063256828626
+\PY{n}{trade\PYZus{}1} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{10000000}\PY{p}{,}
+             \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+             \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+             \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,}
+             \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
+             \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}1}
+             \PY{p}{)}
+
+\PY{n}{trade\PYZus{}2} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{10000000}\PY{p}{,}
+              \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+              \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+              \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
+              \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
+              \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}2}
+              \PY{p}{)}
+
+\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{5000000}\PY{o}{*}\PY{n}{FxSpot}\PY{o}{.}\PY{n}{USDEUR}\PY{o}{.}\PY{n}{value}
+\PY{n}{ul\PYZus{}swap} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{n}{notional}\PY{p}{,}
+              \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+              \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+              \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
+              \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{EURIBOR6M}\PY{p}{,}
+              \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}3}
+              \PY{p}{)}
+
+\PY{n}{trade\PYZus{}3} \PY{o}{=} \PY{n}{Swaption}\PY{p}{(}\PY{n}{underlyingSwap}\PY{o}{=}\PY{n}{ul\PYZus{}swap}\PY{p}{,}
+                   \PY{n}{optionMaturity}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+                   \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
+
+\PY{n}{test\PYZus{}portfolio} \PY{o}{=} \PY{p}{[}\PY{n}{trade\PYZus{}1}\PY{p}{,} \PY{n}{trade\PYZus{}2}\PY{p}{,} \PY{n}{trade\PYZus{}3}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{display}\PY{p}{(}\PY{n}{Markdown}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{For trade 1 the matching fixed rate is }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+si}{\PYZpc{}\PYZpc{}}\PY{l+s+s1}{, for trade 1 it is }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+si}{\PYZpc{}\PYZpc{}}\PY{l+s+s1}{ and for the underlying swap of trade 3 it is }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+si}{\PYZpc{}\PYZpc{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{p}{(}\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}1}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{)}\PY{p}{,}\PY{p}{(}\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}2}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{)}\PY{p}{,}\PY{p}{(}\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}3}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    For trade 1 the matching fixed rate is 2.3754\%, for trade 1 it is
+2.2108\% and for the underlying swap of trade 3 it is 0.1610\%
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca}\PY{o}{=}\PY{n}{CollateralAgreement}\PY{p}{(}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{o}{.}\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{trade\PYZus{}1}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{o}{.}\PY{n}{trade\PYZus{}level\PYZus{}adjusted\PYZus{}notional}\PY{p}{(}\PY{n}{trade\PYZus{}1}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{o}{.}\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{trade\PYZus{}2}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{o}{.}\PY{n}{trade\PYZus{}level\PYZus{}adjusted\PYZus{}notional}\PY{p}{(}\PY{n}{trade\PYZus{}2}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{o}{.}\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{trade\PYZus{}3}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{o}{.}\PY{n}{trade\PYZus{}level\PYZus{}adjusted\PYZus{}notional}\PY{p}{(}\PY{n}{trade\PYZus{}3}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{SA\PYZus{}CCR}\PY{o}{.}\PY{n}{interest\PYZus{}rate\PYZus{}addOn}\PY{p}{(}\PY{n}{test\PYZus{}portfolio}\PY{p}{,}\PY{n}{ca}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+1
+78638320.21725275
+-1
+36198301.54418307
+-0.00343382383244269
+31712286.360503413
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+296732.72980308026
 \end{Verbatim}
 \end{tcolorbox}
         
-    we yield a regulatory delta of -0.5987.
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{export}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SA\PYZus{}CCR\PYZus{}ird\PYZus{}addon.ipynb}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
 
-    
 
     % Add a bibliography block to the postdoc
     

@@ -518,18 +518,23 @@ To calculate the counterparty credit risk associated with derivatives a differen
 
 \subsubsection{The SA-CCR}
 
-\input{JupyterNotebooksFull/building_SA_CCR_Core.tex}
+% \input{JupyterNotebooksFull/building_SA_CCR_Core.tex}
 
 \begin{figure}
 	\centering
 	\def\svgwidth{\columnwidth}
-%	\input{Graphics/ListedVolumesEurex_201812_extractListedOverview.pdf_tex}
-%	\input{Graphics/SACCR_Multiplier_Function.pdf_tex}
-	\input{Graphics/testFig.pdf_tex}
+	\input{Graphics/SACCR_Multiplier_Function.pdf_tex}
     \caption{}
 \end{figure}
 
-\input{JupyterNotebooksFull/building_SA_CCR_2_Core.tex}
+% \input{JupyterNotebooksFull/building_SA_CCR_2_Core.tex}
+
+
+
+%\input{JupyterNotebooksFull/building_SA_CCR_risk_horizon_Core.tex}
+
+%\input{JupyterNotebooksFull/SA_CCR_ird_addon_Core.tex}
+
 
 \subsection{Approaches to allocation}
 With increasing sophistication of risk, own capital and margining models the need for equally sophisticated tools for attributing these measures rises aswell. Allocating the variation margin or the current exposure method (CEM) to individual trades is trivial as these measures may just be calculated for an individual trade and then added up across all trades to obtain the correct aggregate value. For measures which take portfolio effects into account such as a state of the art VaR model, ISDA-SIMM or SA-CCR however, this approach is not possible. The advent of portfolio based models for internal risk measurement in the late 1990s and for regulatory risk measurement in the late 2000s sparked research into how such measures should be reallocated. Gregory \cite[Chapter~10.7]{gregory2015xva} states that three approaches are used in practice: \begin{itemize}

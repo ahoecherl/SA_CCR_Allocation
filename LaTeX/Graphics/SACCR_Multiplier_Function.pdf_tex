@@ -1,6 +1,6 @@
 %% Creator: Inkscape inkscape 0.92.3, www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
-%% Accompanies image file 'SACCR_Multiplier_Function.pdf' (pdf, eps, ps)
+%% Accompanies image file 'Graphics/SACCR_Multiplier_Function.pdf' (pdf, eps, ps)
 %%
 %% To include the image in your LaTeX document, write
 %%   \input{<filename>.pdf_tex}
@@ -53,12 +53,12 @@
   \begin{picture}(1,0.71428571)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
-    \put(0,0){\includegraphics[width=\unitlength,page=1]{SACCR_Multiplier_Function.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{Graphics/SACCR_Multiplier_Function.pdf}}%
     \put(0.94557146,0.19024286){\color[rgb]{0.16470588,0.24705882,0.37254902}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.2\end{tabular}}}}%
     \put(0.94557146,0.28047143){\color[rgb]{0.16470588,0.24705882,0.37254902}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.4\end{tabular}}}}%
     \put(0.94557146,0.37068571){\color[rgb]{0.16470588,0.24705882,0.37254902}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.6\end{tabular}}}}%
     \put(0.94557146,0.46091429){\color[rgb]{0.16470588,0.24705882,0.37254902}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.8\end{tabular}}}}%
     \put(0.94557146,0.55114286){\color[rgb]{0.16470588,0.24705882,0.37254902}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}1\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=2]{SACCR_Multiplier_Function.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{Graphics/SACCR_Multiplier_Function.pdf}}%
   \end{picture}%
 \endgroup%
