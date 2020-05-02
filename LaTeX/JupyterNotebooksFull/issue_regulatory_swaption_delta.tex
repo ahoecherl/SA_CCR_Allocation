@@ -1,86 +1,4 @@
-\documentclass[12pt,a4paper]{article}
-%   Standards
-    \usepackage[latin1]{inputenc}
-    \usepackage{fontenc}
-%   Bibliography style
-%    \usepackage{chicago}
-
-% German language support
-  % \usepackage{german}
-  % \usepackage{bibgerm}
-	 \usepackage[english]{babel}
-
-%   Mathematics
-    \usepackage{amsmath}
-    \usepackage{amssymb}
-    \usepackage{amsthm}
-    \usepackage{amscd}
-    \usepackage{amsfonts}
-
-%   Formatting
-	\usepackage{url}
-    \usepackage{graphicx}   %Graphics
-    \usepackage{booktabs}   %Tables
-    \usepackage{a4}         %Page setting
-    \usepackage{fancyhdr}   %Headers and footers
-    \usepackage{longtable}  %Tabellen l\"{a}nger als eine Seite
-    \usepackage{subfigure}
-    \usepackage{textcomp}   %For Trademark Symbol
-    \usepackage{enumerate}
-    \usepackage{epsfig}
-    \usepackage{layout}
-    \usepackage{tabularx}
-    \usepackage{array}
-    \usepackage{wasysym}
-    \usepackage{fancybox}
-    \usepackage{color}
-		\usepackage{mathtools}
-    \usepackage{rotating}
-   % \usepackage{slashbox}% kann in Tabelle diagonalen Strich darstellen
-    \usepackage{multirow}
-    \usepackage{natbib}		% Anpassung
-		\usepackage{pdfpages}
-		%\usepackage{jurabib}
-		
-    %using subfiles
-    \usepackage[subpreambles=true]{standalone}
-    \usepackage{import}
-		
-
-\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
-
-    %Calculation: 1Inch = 2.54 cm
-        \setlength{\topmargin}{0.0in}
-				\setlength{\oddsidemargin}{0.33in}
-				\setlength{\textheight}{9.0in}
-				\setlength{\textwidth}{6.0in}
-				
-
-    %Chapter pages
-        \pagestyle{headings}
-%        \pagestyle{fancy}
-%        \lhead{\emph{COLLATERALIZED DEBT OBLIGATIONS}}
-%        \chead{}
-%        \rhead{\thepage}
-%        \lfoot{}
-%        \cfoot{}
-%        \rfoot{}
-%        \renewcommand{\headrulewidth}{0pt}
-%        \renewcommand{\footrulewidth}{0pt}
-
-    % Chapter title pages
-        \renewcommand{\baselinestretch}{1.25}
-				\let\footnoteOld\footnote		% Zeilenabstand in der Fussnote wird zurückgesetzt
-				\renewcommand{\footnote}[1]{\linespread{1.0}\footnoteOld{#1}\linespread{1.2}}		% Zeilenabstand in der Fußnote wird gesetzt
-				
-
-
-\renewcommand{\baselinestretch}{1.25}
-
-
-\title{SA CCR Allocation under consideration of ISDA-SIMM, Master Thesis}
-\author{Candidate Number: 1018756}
-
+\documentclass[11pt]{article}
 
     \usepackage[breakable]{tcolorbox}
     \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
@@ -105,8 +23,8 @@
     \DeclareCaptionFormat{nocaption}{}
     \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
 
-    %\usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
-    %\adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
     \usepackage{float}
     \floatplacement{figure}{H} % forces figures to be placed at the correct location
     \usepackage{xcolor} % Allow colors to be defined
@@ -227,6 +145,8 @@
     \renewcommand{\TeX}{\textrm{\Oldtex}}
     \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
     % Document parameters
+    % Document title
+    \title{issue\_regulatory\_swaption\_delta}
     
     
     
@@ -443,172 +363,29 @@
     
     
 
-
-
 \begin{document}
+    
+    \maketitle
+    
+    
 
-\maketitle
+    
+    However, the approach of SA-CCR to use the Black-Scholes for interest
+rate derivatives does have a significant flaw.
 
-\thispagestyle{empty}
+Obviously, \(\ln\left(P_i / K_i \right)\) is not defined, if \(P_i/K_i\)
+is negative. This has, however been very commonplace in recent years,
+especially for Euro swaptions. One can always set the fixed rate of the
+underlying swap and therefore \(K_i\) as a negative value. But based on
+the market data of the 10th of May 2019 it is even possible to yield
+negative par rates for the underlying swap.
 
-\newpage
-\setcounter{page}{1}
-
-
-
-\begin{abstract}
-This will be the abstract.
-\end{abstract}
-
-\section{Introduction}
-
-\section{Establishing Background}
-\subsection{Bilateral initial margin}
-\subsubsection{Reducing counterparty credit risk with initial margin}
-Counterparty credit risk refers to the risk of a default of the counterparty of a derivative. Derivatives are contracts between two institutions which give raise to future cash flows dependent of the performance of its underlying. These future cash flows may be at risk if the counterparty defaults during the lifetime of the derivative. 
-
-Over the past decades several measures were established in the derivatives markets to mitigate counterparty credit risk.
-
-The most impactful measure is close-out netting. Close-out netting is a contractual agreement of two counterparties how their bilateral derivative contracts have to be settled if one of the counterparties defaults. With close-out netting, in case one of the two counterparties defaults all derivatives which are yet to mature are immediately closed out based on the current market value. The market values of the individual derivatives are summed up and the netted amount needs to be paid by whichever party is trailing across the portfolio. In case of a default this close-out netting procedure takes priority over all other claims of creditors against the defaulted counterparty. Close-out netting has two major advantages. First, the non-defaulting counterparty only suffers a counterparty credit loss, if it is ahead across the entire portfolio of currently running derivatives with the defaulted party. Just having a positive market value on a few derivatives does not necessarily result in a counterparty credit loss. Secondly, the immediate close-out of the open derivatives of the defaulted counterparty greatly facilitates unwinding its portfolio. A disadvantage of close-out netting is, that it may proof difficult to find an objective market value of the derivatives that have to be closed out - especially in a stressed market environment, which is likely to be present if e.g. a large investment bank defaults. The contractual obligation to perform close-out netting is agreed upon in a master agreement, which was introduced to the derivatives market by ISDA in 1985. More details on close-out netting may be found in \cite[Chapter~5]{gregory2015xva}.
-
-The second most effective measure in mitigating counterparty credit risk is posting variation margin. If the obligation to post variation margin is agreed as part of a master agreement the accrued mark-to-market of the derivative portfolio has to be collateralized by the trailing counterparty. This measure effectively resets counterparty credit risk to zero for both parties every time a variation margin payment is made or the exchanged variation margin is adjusted to the current market value of the portfolio. The exchange of variation margin was common but not a given in the inter-bank market before the financial crisis of 2008. After the crisis it has become commonplace in the interbank market and recently has even been mandated by regulators\footnote{In the European Union the exchange of Initial Margin for inter bank bilateral OTC derivatives is compulsory since September of 2016 for large banks or March of 2017 for smaller banks.}. Non-financial counterparties oftentimes do not collaterialize their derivatives since they are not mandated to do so, shy away from the operational burden and have a harder time funding the significant amount of cash necessary to cover the current mark-to-market value of their entire derivatives portfolio. Collateralizing a derivatives portfolio not only significantly reduces CCR but also significantly alters how the remaining CCR behaves. The CCR of a collateralized portfolio may rather be driven by the terms of the CSA\footnote{Explain what a CSA is} or residual phenomenons such as collateral spikes\footnote{Quote something regarding collateral Spikes} than by the underlying instruments.
+As an example we are plotting the zero and the 6M forward curve for the
+EURIBOR 6M index below.
 
 
-Close-out Netting
-Variation margin
-Initial margin
-
-A more comprehensive introduction to counterparty credit risk and its reduction through netting and margining may be found in chapters four through six of \citep{gregory2015xva}.
-\subsubsection{Market structure and regulatory background}
-The derivative market is divided into exchange traded derivatives, cleared OTC derivatives and uncleared OTC derivatives. According to \citep[Figure~3.2]{gregory2015xva} based on notional 9\% of derivatives are exchange traded, 55\% are cleared OTC derivatives and 36\% are uncleared OTC derivatives. It has to be noted that these figures are from 2014 and it can be assumed, that the fraction of cleared OTC derivatives has increased since then at the expense of the fraction of uncleared OTC derivatives. The reason for this is, that regulators have incentivised or even mandated the clearing of simpler OTC derivatives over the course of the last years. In connection with this development the large CCPs such as Eurex or the LCH have extended the product range for which they offer OTC clearing in recent years.
-
-Exchange traded or listed derivatives are usually futures or options on a limited scope of underlyings which can be directly traded at a clearing house at a bid and ask quoted by the clearing house. As seen in figure XX usual underlyings are single name equities, equity indices, commodities or baskets of liquid government bonds. 
-\begin{figure}
-	\centering
-	\def\svgwidth{\columnwidth}
-    \input{Graphics/ListedVolumesEurex_201812_extractListedOverview.pdf_tex}
-    \caption{Breakdown by underlying of listed contracts derivatives at Eurex in December 2018. Interest rate derivatives are almost exclusively futures and options on baskets of German government bonds. Graph has been extracted from \citep{EurexDec2018}.}
-\end{figure}
-The clearing house acts as a mediator to match market participants which are willing to buy and sell and market participants will not be informed with whom they have been matched. All market participants exchange variation margin with the CCP and have to post a unilateral initial margin to the CCP. This initial margin is calculated by the CCP and is usually calculated using a portfolio based historical simulation VaR model. If a market participants defaults to CCP inherits its positions and needs to auction them to other market participants. The purpose of the initial margin is to cover mark-to-market losses which the portfolio suffers until it can be fully auctioned or otherwise closed by the CCP.
-
-Cleared OTC derivatives are initially bilaterally agreed upon by two market participants. If the parametrization of the derivative is sufficiently common CCPs may offer to clear it and the market participants may choose or even be forced by regulation to clear it using a qualifying CCP. OTC clearing is especially common for simple interest rate derivatives such as interest rate swaps, forward rate agreements or cross currency swaps and for some credit derivatives. Similarly to exchange traded derivatives the CCP will charge both participants an initial margin and will also regularly determine the derivatives present value and execute the exchange of variation margin between the two market participants. If one of the market participants defaults, the CCP inherits the positions of the defaulted party and can again use the initial margin posted by the defaulted party to cover mark-to-market losses until it has auctioned or closed the inherited positions \citep{EurexDMP}.
-
-Assuming that the CCP cannot default itself, cleared OTC derivatives and listed derivatives bear no counterparty credit risk for the market participants.
-
-As of December 2018 common derivatives that are still uncleared are structured equity derivatives, swaptions and many other interest rate derivatives with optionality, derivatives on securitizations, swaps with unusual cashflow structures or in uncommon currencies and most FX derivatives \citep{BISOTCStats}.
-
-
-
-What are uncleared OTC derivatives
-
-
-\subsubsection{Regulatory requirements for an internal initial margin model}
-After the 2008 financial crisis the G20 agreed to reduce systematic, counterparty and operational risk and as a result of this commitment has been put into effect by regulators worldwide. In Europe the European Market Infrastructure Regulation (EMIR) came into force in August 2012 and focused on promoting or mandating central clearing as the primary measure to reduce counterparty risk. EMIR also mant
-
-\subsubsection{The ISDA-SIMM model}
-In December of 2013 the International Swap and Derviatives Association (ISDA) published a motivation and basic methodological outline of a common internal initial margin model called Standard Initial Margin Model (SIMM\texttrademark)\citep{ISDADec2013}. The goal of the model is to meet the model requirements to an internal model of all regulators, while being among others easy to replicate, quick to calculate and relatively cheap to operate, implement and validate.
-
-SIMM is a Delta-Gamma VaR model using Delta and Vega sensitivities calculated by the banks themselves and risk weights and correlations provided and recalibrated annually by ISDA. ISDA provides member with a methodological paper \citep{SIMM} and a paper describing the input format of sensitivities \citep{RiskDataStandard}.
-
-\subsection{Capital requirements for counterparty credit risk}
-Counterparty credit risk is considered to be a part of credit risk by the regulator. Risk weighted assets have to be calculated and need to be backed by own capital. The three main inputs for calculating credit risk are the probability of default (PD) the loss given default (LGD) and the exposure at default (EAD). Assuming the default of a counterparty over the course of the next year, the EAD is the current estimation of money indebted by the counterparty to the bank at the time of default. Estimating EAD for traditional credit instruments s.a. loans, credit cards, mortgages or bonds is relatively simple. Such instruments do often times have deterministic payment schedules making it easy to predict the exposure in one years time. Credit lines or credit cards behave less deterministic but it is still simple to determine an upper bound to the future exposure by assuming that the entire credit line is exhausted.
-The counterparty credit risk incurred by derivatives has first been regarded in regulatory capital calculation in Basel II \citep{basel2}.
-Due to the stochastic nature of derivatives EAD calculation for counterparty credit risk has always been regulated separately ever since 
-To calculate the counterparty credit risk associated with derivatives a different approach to calculating 
-
-\subsubsection{The SA-CCR}
-
-\input{JupyterNotebooksFull/building_SA_CCR_Core.tex}
-
-\begin{figure}
-	\centering
-	\includegraphics[scale=0.9]{Graphics/SACCR_Multiplier_Function.pdf}
-    \caption{}
-\end{figure}
-
-\input{JupyterNotebooksFull/building_SA_CCR_2_Core.tex}
-
-\input{JupyterNotebooksFull/issue_regulatory_swaption_delta_Core.tex}
-
-\begin{figure}
-	\centering
-	\includegraphics[scale=0.95]{Graphics/euribor6m_termstructure.pdf}
-    \caption{}
-\end{figure}
-
-\input{JupyterNotebooksFull/building_SA_CCR_risk_horizon_Core.tex}
-
-\input{JupyterNotebooksFull/SA_CCR_ird_addon_Core.tex}
-
-
-\subsection{Approaches to allocation}
-With increasing sophistication of risk, own capital and margining models the need for equally sophisticated tools for attributing these measures rises aswell. Allocating the variation margin or the current exposure method (CEM) to individual trades is trivial as these measures may just be calculated for an individual trade and then added up across all trades to obtain the correct aggregate value. For measures which take portfolio effects into account such as a state of the art VaR model, ISDA-SIMM or SA-CCR however, this approach is not possible. The advent of portfolio based models for internal risk measurement in the late 1990s and for regulatory risk measurement in the late 2000s sparked research into how such measures should be reallocated. Gregory \cite[Chapter~10.7]{gregory2015xva} states that three approaches are used in practice: \begin{itemize}
-\item Incremental allocation
-\item Marginal allocation 
-\item Pro rata allocation
-\end{itemize}
-Additionally \citep{koyluoglu2002risk}
-Eigenschaften von Allokationen
-\begin{itemize}
-\item Nativ additiv
-\item Risk sensitivity
-\item Unabhaengig von Portfoliozusammensetzung
-\item Stable through time
-\end{itemize}
-
-
-
-\subsubsection{Incremental allocation}
-Incremental allocation can only be applied when observing the development of a portfolio through time. Given a pre-existing portfolio $P$ consisting of $n$ trades $t_1$ through $t_n$ and a portfolio-based measure $M$ the incremental contribution of the first and second additional trade may be calculated as:
-\begin{align*}
-M_{\text{inc},t_{n+1}} & =M\left(t_1\dots t_{n+1}\right)- M\left(t_1\dots t_{n}\right) \\
-M_{\text{inc},t_{n+2}} & =M\left(t_1\dots t_{n+2}\right)- M\left(t_1\dots t_{n+1}\right)
-%IncM_{t_{n+1}} =M\left(t_1\dots t_{n+1}\right) - M\left(t_1\dots t_{n+1}\right) \\
-%IncM_{t_{n+2}} =M\left(t_1\dots \t_{n+2}\right) - M\left(t_1\dots t_{n+1}\right)
-\end{align*}
-It can be easily seen that this approach yields a natively additive allocation since it forms a telescoping sum\footnote{For brevity in Notation let $M(t_i)$ be equivalent to $M(t_1\dots t_i)$ 
-} :
-\begin{align*}
-M_{\text{inc},t_1}&=M(t_1) \\
-M_{\text{inc},t_i}&= M(t_i)-M(t_{i-1}) \\
-M_{\text{inc},t_n}&= M(t_n) - M(t_{n-1})\\
-\sum_{i=1}^{n}{M_{\text{inc},i}} &= M(t_1)-M(t_1)+\dots+M(t_{n-1})-M(t_{n-1})+M(t_n) = M(t_n)
-\end{align*}
-The incremental allocation can be calculated as or before a new trade is added to the portfolio. It is a risk sensitive value when it is calculated as it accurately reflect how the additional trade changes the risk measure. If the trade is mitigating risk at the time of its inception according to $M$ its incremental allocation $M_{inc}$ is negative. If it increases the risk its $M_{inc}$ is positive. However, $M_{inc}$ does not adapt over time and is likely to loose its accurate risk depiction as additional trade are added to the portfolio. As a portfolio develops it may well be possible, that a trade for which a negative $M_{inc}$ was calculated at its inception may loose its risk mitigation. Due to this property $M_{inc}$ of a given trade should ideally only be used at or before trade inception. One such use case is the PnL calculation of a new trade to determine the performance of the trading desk or trader which initiated the trade. Another would be to use it prior to an investment decision \cite{tibiletti2001incremental}. It can however not be used to analyse an existing portfolio to e.g. identify trades which drive risk or determine how increases or decreases in a given position would impact the portfolio measure. It also cant be calculated deterministically a posteriori for a portfolio without knowing its composition through time.
-
-In the past, some academic work focussed on approximating the incremental VaR as it requires a recalculation of the VaR for the entire portfolio. An overview of these works and their potential pitfalls may be found in \cite{tibiletti2001incremental}. Since this work will rather focus on marginal than incremental allocation further details may be found in the referred paper. In the empirical analysis the incremental allocation will be calculated exactly.
-
-\subsubsection{Marginal allocation}
-
-\input{JupyterNotebooksFull/ExampleJupyterToLatex_Core.tex}
-
-\subsubsection{Euler allocation}
-
-\subsubsection{Shapley allocation}
-
-\subsection{Allocation of SA-CCR}
-
-\subsubsection{Allocation without margining}
-
-\subsubsection{Allocation under VM collateralization}
-
-\subsubsection{Allocation under VM and IM collateralization}
-
-\subsection{Comparison of allocation approaches}
-
-\subsection{Calculating the Euler allocation}
-
-\section{Outlook}
-
-\newpage
-\addcontentsline{toc}{section}{\bibname} \nocite{*} % Deutsch
-\bibliographystyle{abbrv}
-\bibliography{Thesis_Bib}
-\newpage
-\begin{appendix}
-\end{appendix}
-\newpage \thispagestyle{empty}
-
+    % Add a bibliography block to the postdoc
+    
+    
+    
 \end{document}
-
-

@@ -13,25 +13,25 @@ graphicsFolder = r'C:\Oxford\Master Thesis\Allocation Thesis\SA_CCR_Allocation\L
 latexFolder = r'C:\Oxford\Master Thesis\Allocation Thesis\SA_CCR_Allocation\LaTeX'
 
 def exportPlotlyFigure(fig: go.Figure, name: str):
-    fig.write_image(graphicsFolder + name + '.svg')
-    cwd = os.getcwd()
-    os.chdir(graphicsFolder)
-    cmd_sting = r'inkscape -D -z --file=' + name +r'.svg --export-pdf='+name+'.pdf --export-latex'
-    os.system(cmd_sting)
-
-    lines_to_write = []
-    tag_found = False
-
-    with open(name+'.pdf_tex', encoding="utf8") as in_file:
-        for line in in_file:
-
-            line = re.sub(rf"({name}.pdf)", r"Graphics/\g<1>", line)
-            lines_to_write.append(line)
-
-    with open(name+'.pdf_tex', 'w+', encoding="utf8") as out_file:
-        out_file.writelines(lines_to_write)
-
-    os.chdir(cwd)
+    fig.write_image(graphicsFolder + name + '.pdf')
+    # cwd = os.getcwd()
+    # os.chdir(graphicsFolder)
+    # cmd_sting = r'inkscape -D -z --file=' + name +r'.svg --export-pdf='+name+'.pdf --export-latex'
+    # os.system(cmd_sting)
+    #
+    # lines_to_write = []
+    # tag_found = False
+    #
+    # with open(name+'.pdf_tex', encoding="utf8") as in_file:
+    #     for line in in_file:
+    #
+    #         line = re.sub(rf"({name}.pdf)", r"Graphics/\g<1>", line)
+    #         lines_to_write.append(line)
+    #
+    # with open(name+'.pdf_tex', 'w+', encoding="utf8") as out_file:
+    #     out_file.writelines(lines_to_write)
+    #
+    # os.chdir(cwd)
 
 def export(filename):
 
