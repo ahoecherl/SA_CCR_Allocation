@@ -1,15 +1,46 @@
 from math import exp, log, sqrt
-from typing import List
+from typing import List, Union
 
 from pandas import read_csv, Series
 from scipy.stats import norm
 
 from collateralAgreement import CollateralAgreement, Margining, Clearing, Tradecount, Dispute
 from instruments.Trade import Trade
-from utilities.Enums import AssetClass, TradeType, TradeDirection, SubClass, MaturityBucket
+from utilities.Enums import AssetClass, TradeType, TradeDirection, SubClass, MaturityBucket, EquitySubClass
 
+import os
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 class SA_CCR():
+
+    supervisory_parameter = read_csv(os.path.join(__location__, 'supervisory_parameters.csv'))
+
+    def get_ead(self):
+
+        pfe = SA_CCR.calculate_pfe(self.trades, self.collateralAgreement)
+        rc = SA_CCR.calculate_rc(self.trades, self.collateralAgreement)
+        ead = SA_CCR.calculate_sa_ccr_ead(rc, pfe)
+        return ead
+
+    def __init__(self, collateralAgreement = CollateralAgreement()):
+        self.trades = []
+        self.collateralAgreement = CollateralAgreement
+
+    def add_trades(self, trades: Union[Trade, List[Trade]]):
+        if type(trades) == list:
+            self.trades += trades
+        else:
+            self.trades.append(trades)
+
+    def remove_trades(self, trade_ids: Union[None, int, List[int]] = None, trades: Union[None, Trade, List[Trade]] = None):
+        if trade_ids is not None:
+            if isinstance(trade_ids, int):
+                trade_ids = [trade_ids]
+            self.trades = [t for t in self.trades if t.id not in trade_ids]
+        if trades is not None:
+            if isinstance(trades, Trade):
+                trades = [trades]
+            self.trades = [t for t in self.trades if t not in trades]
 
     def calculate_sa_ccr_ead(rc: float, pfe: float) -> float:
         """
@@ -64,7 +95,8 @@ class SA_CCR():
             return trade.notional
 
     def get_supervisory_volatility(trade: Trade) -> float:
-        supervisory_parameter = read_csv('supervisory_parameters.csv')
+        asdf = 1
+        supervisory_parameter = SA_CCR.supervisory_parameter
         sigma = None
         if trade.subClass is None:
             sigma = supervisory_parameter[(supervisory_parameter.AssetClass == trade.assetClass.value)][
@@ -93,10 +125,20 @@ class SA_CCR():
 
             sigma = SA_CCR.get_supervisory_volatility(trade)
 
-            d1 = (log(trade.S / trade.K) + 0.5 * sigma ** 2 * trade.t) / (sigma * sqrt(trade.t))
+            lambda_factor = SA_CCR.__calculate_lambda__(trade)
+
+            d1 = (log((trade.S+lambda_factor) / (trade.K+lambda_factor)) + 0.5 * sigma ** 2 * trade.t) / (sigma * sqrt(trade.t))
 
             delta = n_mult * norm.cdf(d1_mult * d1)
             return delta
+
+    def __calculate_lambda__(trade: Trade):
+        lambda_factor = 0
+        threshold = 0.001
+        if trade.assetClass == AssetClass.IR:
+            lambda_factor = max(threshold-min(trade.S, trade.K),0)
+        return lambda_factor
+
 
     def margining_factor(trade: Trade, ca: CollateralAgreement) -> float:
         if ca.margining == Margining.UNMARGINED:
@@ -120,7 +162,7 @@ class SA_CCR():
             return mf_margined
 
     def get_supervisory_factor(assetClass: AssetClass, subClass: SubClass = None) -> float:
-        supervisory_parameter = read_csv('supervisory_parameters.csv')
+        supervisory_parameter = SA_CCR.supervisory_parameter
         sf = None
         if subClass is None:
             sf = \
@@ -161,3 +203,106 @@ class SA_CCR():
             add_on_cur[cur] = SA_CCR.get_supervisory_factor(assetClass=AssetClass.IR) * en_cur
 
         return add_on_cur.sum()
+
+    def equity_addOn(trades: List[Trade], ca: CollateralAgreement):
+        bucketed_trades = {}
+        en_eq = {}
+        add_on_eq = Series()
+        equities = set()
+
+        for t in trades:
+            key = (t.underlying)
+            equities.add(t.underlying)
+            if key in bucketed_trades:
+                bucketed_trades[key].append(t)
+            else:
+                bucketed_trades[key] = [t]
+
+        for key, trades in bucketed_trades.items():
+            effective_notional = 0
+            for t in trades:
+                effective_notional += SA_CCR.calculate_sa_ccr_delta(t) * SA_CCR.trade_level_adjusted_notional(t) * SA_CCR.margining_factor(t,
+                                                                                                                      ca)
+            en_eq[key] = effective_notional
+
+        for eq in equities:
+            add_on_eq[eq] = SA_CCR.get_supervisory_factor(assetClass=AssetClass.EQ, subClass=EquitySubClass.SINGLE_NAME) * \
+                            en_eq[eq]
+
+        add_on_aggr = sqrt((0.5 * add_on_eq.sum()) ** 2 + (0.75 * add_on_eq ** 2).sum())
+        return add_on_aggr
+
+    def fx_addOn(trades: List[Trade], ca: CollateralAgreement) -> float:
+        bucketed_trades = {}
+        en_cur = {}
+        add_on_cur = Series()
+        currencyPairs = set()
+
+        for t in trades:
+            key = (t.currencyPair)
+            currencyPairs.add(t.currencyPair)
+            if key in bucketed_trades:
+                bucketed_trades[key].append(t)
+            else:
+                bucketed_trades[key] = [t]
+
+        for key, trades in bucketed_trades.items():
+            effective_notional = 0
+            for t in trades:
+                effective_notional += SA_CCR.calculate_sa_ccr_delta(t) * SA_CCR.trade_level_adjusted_notional(t) * SA_CCR.margining_factor(t,
+                                                                                                                      ca)
+            en_cur[key] = effective_notional
+
+        for cur in currencyPairs:
+            add_on_cur[cur] = SA_CCR.get_supervisory_factor(assetClass=AssetClass.FX) * abs(en_cur[cur])
+
+        return add_on_cur.sum()
+
+    def calculate_pfe(trades: List[Trade], ca: CollateralAgreement):
+        ac_bucketing = {}
+        addOns = Series()
+        V = 0
+        for t in trades:
+            if t.assetClass in ac_bucketing:
+                ac_bucketing[t.assetClass].append(t)
+            else:
+                ac_bucketing[t.assetClass] = [t]
+        for ac, ac_trades in ac_bucketing.items():
+            if ac == AssetClass.EQ:
+                addOns[ac] = SA_CCR.equity_addOn(ac_trades, ca)
+            elif ac == AssetClass.IR:
+                addOns[ac] = SA_CCR.interest_rate_addOn(ac_trades, ca)
+            elif ac == AssetClass.FX:
+                addOns[ac] = SA_CCR.fx_addOn(ac_trades, ca)
+
+        for t in trades:
+            V += t.get_price()
+
+        C = ca.get_C()
+        aggregate_addOn = addOns.sum()
+        multiplier_var = SA_CCR.multiplier(V, C, aggregate_addOn)
+
+        PFE = multiplier_var * aggregate_addOn
+        return {'PFE': PFE,
+                'multiplier': multiplier_var,
+                'AddOn_agg': aggregate_addOn}
+
+    def calculate_rc(trades: List[Trade], ca: CollateralAgreement) -> float:
+        """
+
+        :param v: Current value of the derivative transactions in the netting set
+        :param c: Haircut value of the net collateral held
+        :param th: Threshold set in the collateral agreement
+        :param mta: Minimum transfer amount set in the collateral agreement
+        :param nica: Current net independent collateral amount (compare paragraph 143)
+        :return: Replacement Cost as defined in paragraph 144
+        """
+        v = 0
+        for t in trades:
+            v += t.get_price()
+        c = ca.get_C()
+        th = ca.threshold
+        mta = ca.mta
+        nica = ca.get_nica()
+        result = max(v - c, th + mta - nica, 0)
+        return result
