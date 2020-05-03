@@ -22,7 +22,7 @@ class SA_CCR(TradeContainerInterface):
 
     def get_ead(self):
 
-        pfe = SA_CCR.calculate_pfe(self.trades, self.collateralAgreement)
+        pfe = SA_CCR.calculate_pfe(self.trades, self.collateralAgreement)['PFE']
         rc = SA_CCR.calculate_rc(self.trades, self.collateralAgreement)
         ead = SA_CCR.calculate_sa_ccr_ead(rc, pfe)
         return ead

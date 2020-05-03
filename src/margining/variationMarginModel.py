@@ -13,6 +13,7 @@ class VariationMarginModel(MarginModel):
         vm = 0
         for t in self.trades:
             vm += fxConvert(fromCcy=t.currency, toCcy=self.vm_currency, amount=t.get_price())
+        return vm
 
 
 class NoVariationMargin(VariationMarginModel):

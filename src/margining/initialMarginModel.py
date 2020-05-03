@@ -2,9 +2,14 @@ from typing import Union, List
 
 from instruments.Trade import Trade
 from margining.marginModel import MarginModel
+from utilities.Enums import Currency
 
 
 class InitialMarginModel(MarginModel):
+
+    def __init__(self, resultCurrency : Currency = Currency.USD):
+        self.resultCurrency = resultCurrency
+        self.trades=[]
 
     def add_trades(self, trades: Union[Trade, List[Trade]]):
         super().add_trades(trades)

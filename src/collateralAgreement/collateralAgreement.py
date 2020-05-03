@@ -4,6 +4,7 @@ from typing import Union, List
 
 from instruments.Trade import Trade
 from margining.ccpimm import CCPIMM
+from margining.noimm import NOIMM
 from margining.simm import SIMM
 from margining.variationMarginModel import NoVariationMargin, VariationMarginModel
 from tradeContainerInterface import TradeContainerInterface
@@ -51,6 +52,7 @@ class CollateralAgreement(TradeContainerInterface):
                  unsegregated_overcollateralization_received: float = 0.0,
                  segregated_overcollateralization_posted: float = 0.0,
                  segregated_overcollateralization_received: float = 0.0):
+        self.trades = []
         self.margining = margining
         self.clearing = clearing
         self.initialMargining = initialMargining
@@ -76,8 +78,14 @@ class CollateralAgreement(TradeContainerInterface):
             self.im_model = CCPIMM(resultCurrency=margin_currency)
         elif initialMargining == InitialMargining.SIMM:
             self.im_model = SIMM(resultCurrency=margin_currency)
-        from sa_ccr.sa_ccr import SA_CCR
-        self.sa_ccr_model = SA_CCR(collateralAgreement=self)
+        elif initialMargining == InitialMargining.NO_IM:
+            self.im_model = NOIMM(resultCurrency=margin_currency)
+
+    def link_sa_ccr_instance(self, sa_ccr_instance):
+        # Has to be done this way to avoid circular references between collateral agreement and SA_CCR
+        if sa_ccr_instance.trades != []:
+            raise (Exception('Should be an empty SA_CCR instance with no associated trades'))
+        self.sa_ccr_model = sa_ccr_instance
 
     def add_trades(self, trades: Union[Trade, List[Trade]]):
         super().add_trades(trades=trades)
@@ -105,4 +113,4 @@ class CollateralAgreement(TradeContainerInterface):
         return self.vm_model.get_vm() + self.get_nica()
 
     def get_nica(self):
-        return self.im_model.im_receive - self.unsegregated_overcollateraliziation_posted + self.segregated_overcollateralization_received + self.unsegregated_overcollateralization_received
+        return self.im_model.get_im_receive() - self.unsegregated_overcollateraliziation_posted + self.segregated_overcollateralization_received + self.unsegregated_overcollateralization_received
