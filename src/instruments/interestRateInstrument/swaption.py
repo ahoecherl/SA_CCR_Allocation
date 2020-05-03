@@ -5,8 +5,8 @@ from instruments.interestRateInstrument.ois import OIS
 from marketdata.fxConverter import fxConvert
 from marketdata.interestRateCurves import OisCurve, LiborCurve, InterestRateCurveQuotes, DiscountCurve
 from marketdata.swaptionVolatility import SwaptionVolatility, SwaptionVolatilityQuotes
-from simm.Enums import CrifColumn, RiskType
-from simm.staticData import periodToLabel1
+from margining.Enums import CrifColumn, RiskType
+from margining.staticData import periodToLabel1
 from utilities.Enums import TradeDirection, TradeType, Currency
 from instruments.interestRateInstrument.interestRateTrade import InterestRateTrade
 import QuantLib as ql

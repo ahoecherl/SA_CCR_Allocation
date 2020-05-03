@@ -4,16 +4,21 @@ from typing import List, Union
 from pandas import read_csv, Series
 from scipy.stats import norm
 
-from collateralAgreement import CollateralAgreement, Margining, Clearing, Tradecount, Dispute
+from collateralAgreement.collateralAgreement import CollateralAgreement, Margining, Clearing, Tradecount, Dispute
 from instruments.Trade import Trade
+from tradeContainerInterface import TradeContainerInterface
 from utilities.Enums import AssetClass, TradeType, TradeDirection, SubClass, MaturityBucket, EquitySubClass
 
 import os
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-class SA_CCR():
+class SA_CCR(TradeContainerInterface):
 
     supervisory_parameter = read_csv(os.path.join(__location__, 'supervisory_parameters.csv'))
+
+    def __init__(self, collateralAgreement = CollateralAgreement()):
+        self.trades = []
+        self.collateralAgreement = collateralAgreement
 
     def get_ead(self):
 
@@ -21,26 +26,6 @@ class SA_CCR():
         rc = SA_CCR.calculate_rc(self.trades, self.collateralAgreement)
         ead = SA_CCR.calculate_sa_ccr_ead(rc, pfe)
         return ead
-
-    def __init__(self, collateralAgreement = CollateralAgreement()):
-        self.trades = []
-        self.collateralAgreement = CollateralAgreement
-
-    def add_trades(self, trades: Union[Trade, List[Trade]]):
-        if type(trades) == list:
-            self.trades += trades
-        else:
-            self.trades.append(trades)
-
-    def remove_trades(self, trade_ids: Union[None, int, List[int]] = None, trades: Union[None, Trade, List[Trade]] = None):
-        if trade_ids is not None:
-            if isinstance(trade_ids, int):
-                trade_ids = [trade_ids]
-            self.trades = [t for t in self.trades if t.id not in trade_ids]
-        if trades is not None:
-            if isinstance(trades, Trade):
-                trades = [trades]
-            self.trades = [t for t in self.trades if t not in trades]
 
     def calculate_sa_ccr_ead(rc: float, pfe: float) -> float:
         """

@@ -1,5 +1,5 @@
 import pytest
-from simm.simmAPI import postCrif, getCrif, calculateCrif
+from margining.simmAPI import postCrif, getCrif, calculateCrif
 
 testCrifOneLine = [{
         "tradeId": "TestTrade1",

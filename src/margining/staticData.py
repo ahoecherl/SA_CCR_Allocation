@@ -1,6 +1,6 @@
 import QuantLib as ql
 
-from simm.Enums import SimmTenor
+from margining.Enums import SimmTenor
 
 indexToLabel2 = {'EONIA':'OIS',
                  'USDLIBOR3M': 'Libor3m',

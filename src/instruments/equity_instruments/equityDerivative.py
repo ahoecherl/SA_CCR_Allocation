@@ -5,7 +5,7 @@ from instruments.Trade import Trade
 from marketdata.EquitySpot import EquitySpotQuote
 from marketdata.fxConverter import fxConvert
 from marketdata.util import today
-from simm.Enums import CrifColumn, RiskType, EquityStaticData, ProductClass
+from margining.Enums import CrifColumn, RiskType, EquityStaticData, ProductClass
 from utilities.Enums import Currency
 from utilities.sensiCalc import dv01_rel_one_percent
 

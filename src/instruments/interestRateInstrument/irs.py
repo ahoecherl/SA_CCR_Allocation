@@ -5,8 +5,8 @@ import QuantLib as ql
 from marketdata.fxConverter import fxConvert
 from marketdata.interestRateCurves import InterestRateCurveQuotes, LiborCurve, DiscountCurve
 from marketdata.interestRateIndices import InterestRateIndex
-from simm.Enums import CrifColumn, RiskType
-from simm.staticData import periodToLabel1, indexToLabel2
+from margining.Enums import CrifColumn, RiskType
+from margining.staticData import periodToLabel1, indexToLabel2
 from utilities.Enums import SwapDirection, TradeDirection, TradeType, Currency
 from utilities.sensiCalc import fd_simple_quotes, dv01_abs_one_bp
 from utilities.timeUtilities import convert_period_to_days

@@ -3,7 +3,7 @@ import QuantLib as ql
 
 from marketdata.fxConverter import fxConvert
 from marketdata.util import today
-from simm.Enums import ProductClass, CrifColumn, RiskType
+from margining.Enums import ProductClass, CrifColumn, RiskType
 from utilities.Enums import Currency, TradeType, TradeDirection, AssetClass, MaturityBucket
 from instruments.Trade import Trade
 

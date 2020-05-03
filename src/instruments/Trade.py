@@ -3,8 +3,8 @@ from typing import Dict, List, Union
 from marketdata.fxConverter import fxConvert
 from marketdata.interestRateCurves import LiborCurve, OisCurve, InterestRateCurveQuotes
 from marketdata.util import today
-from simm.Enums import CrifColumn, RiskType
-from simm.staticData import periodToLabel1, indexToLabel2
+from margining.Enums import CrifColumn, RiskType
+from margining.staticData import periodToLabel1, indexToLabel2
 from utilities.Enums import AssetClass, SubClass, TradeType, TradeDirection, Currency
 import QuantLib as ql
 

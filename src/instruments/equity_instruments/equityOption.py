@@ -3,8 +3,8 @@ import QuantLib as ql
 from instruments.equity_instruments.equityDerivative import EquityDerivative
 from marketdata.fxConverter import fxConvert
 from marketdata.interestRateCurves import OisCurve, InterestRateCurveQuotes, DiscountCurve
-from simm.Enums import CrifColumn, EquityStaticData, RiskType
-from simm.staticData import periodToLabel1
+from margining.Enums import CrifColumn, EquityStaticData, RiskType
+from margining.staticData import periodToLabel1
 from utilities.Enums import TradeType, TradeDirection, AssetClass, Stock, Currency
 from marketdata.EquityVolatility import EquityVolatility, EquityVolatilityQuotes
 from marketdata.EquitySpot import EquitySpot

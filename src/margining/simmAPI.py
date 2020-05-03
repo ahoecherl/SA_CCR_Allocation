@@ -3,7 +3,7 @@ import ast
 import pprint
 from typing import List, Dict
 
-from simm.Enums import ImRole
+from margining.Enums import ImRole
 from utilities.Enums import Currency
 
 home = 'http://localhost:8080/'
