@@ -40,9 +40,9 @@ class Dispute(Enum):
 class CollateralAgreement(GenericRiskMeasureModel):
 
     def __init__(self,
-                 margining: Margining = Margining.UNMARGINED,
+                 margining: Margining = Margining.MARGINED,
                  clearing: Clearing = Clearing.UNCLEARED,
-                 initialMargining: InitialMargining = InitialMargining.NO_IM,
+                 initialMargining: InitialMargining = InitialMargining.SIMM,
                  tradecount: Tradecount = Tradecount.UNDER_FIVE_THOUSAND,
                  dispute: Dispute = Dispute.NO_OUTSTANDING_DISPUTES,
                  margin_currency: Currency = Currency.USD,

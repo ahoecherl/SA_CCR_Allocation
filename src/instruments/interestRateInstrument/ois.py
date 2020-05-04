@@ -11,11 +11,11 @@ from instruments.interestRateInstrument.interestRateTrade import InterestRateTra
 
 class OIS(InterestRateTrade):
     def __init__(self,
-                 notional,
-                 timeToSwapStart: ql.Period,
-                 timeToSwapEnd: ql.Period,
-                 swapDirection: SwapDirection,
-                 index: InterestRateIndex,
+                 notional: float = 100,
+                 timeToSwapStart: ql.Period = ql.Period(2, ql.Days),
+                 timeToSwapEnd: ql.Period = ql.Period(2, ql.Years),
+                 swapDirection: SwapDirection = SwapDirection.PAYER,
+                 index: InterestRateIndex = InterestRateIndex.EONIA,
                  fixed_rate: float = None
                  ):
         """

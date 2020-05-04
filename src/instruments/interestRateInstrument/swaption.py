@@ -18,8 +18,8 @@ from utilities.timeUtilities import convert_period_to_days
 class Swaption(InterestRateTrade):
 
     def __init__(self,
-                 underlyingSwap: IRS,
-                 optionMaturity: ql.Period,
+                 underlyingSwap: IRS = IRS(),
+                 optionMaturity: ql.Period = ql.Period(1, ql.Years),
                  tradeDirection: TradeDirection = TradeDirection.LONG):
         if underlyingSwap.tradeDirection == TradeDirection.LONG:
             tradeType = TradeType.CALL  # A swaption on a payer Swap is a Call Swaption as the call's value raises as the interest rate rises

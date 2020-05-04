@@ -19,11 +19,11 @@ from instruments.interestRateInstrument.interestRateTrade import InterestRateTra
 class IRS(InterestRateTrade):
 
     def __init__(self,
-                 notional,
-                 timeToSwapStart: ql.Period,
-                 timeToSwapEnd: ql.Period,
-                 swapDirection: SwapDirection,
-                 index: InterestRateIndex,
+                 notional = 100,
+                 timeToSwapStart: ql.Period = ql.Period(1, ql.Years),
+                 timeToSwapEnd: ql.Period = ql.Period(2, ql.Years),
+                 swapDirection: SwapDirection = SwapDirection.PAYER,
+                 index: InterestRateIndex = InterestRateIndex.EURIBOR6M,
                  fixed_rate: float = None,
                  float_spread: float = 0,
                  ):

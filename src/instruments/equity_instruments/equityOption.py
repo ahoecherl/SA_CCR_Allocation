@@ -12,15 +12,16 @@ from marketdata.util import today
 from marketdata.EquitySpot import EquitySpotQuote
 from utilities.timeUtilities import convert_period_to_days
 
+
 class EquityOption(EquityDerivative):
 
     def __init__(self,
-                 maturity: ql.Period(),
+                 maturity: ql.Period() = ql.Period(1, ql.Years),
                  tradeType: TradeType = TradeType.CALL,
                  tradeDirection: TradeDirection = TradeDirection.LONG,
                  underlying: Stock = Stock.ADS,
                  notional: float = 1,
-                 strike = None):
+                 strike: float = None):
         """
         Equity Option
 
@@ -31,7 +32,8 @@ class EquityOption(EquityDerivative):
         :param strike: Strike of option is no strike is given it default to an at the money option
         """
         self.underlying = underlying
-        self.K = strike if strike != None else EquitySpotQuote[self.underlying.name].value.value()  # no K is given it is the current Spot
+        self.K = strike if strike != None else EquitySpotQuote[
+            self.underlying.name].value.value()  # no K is given it is the current Spot
         self.currency = underlying.value['Currency']
         self.ql_maturity = maturity
         super(EquityOption, self).__init__(
@@ -61,7 +63,7 @@ class EquityOption(EquityDerivative):
     def get_price(self):
         multiplier = self.notional
         if self.tradeDirection == TradeDirection.SHORT:
-            multiplier = -1*multiplier
+            multiplier = -1 * multiplier
         return multiplier * self.ql_option.NPV()
 
     def get_simm_sensis_ircurve(self):
@@ -92,17 +94,14 @@ class EquityOption(EquityDerivative):
         volHandle.linkTo(volQuotes.ql_BlackVarianceSurface)
         return sensis
 
-
-
     def get_simm_sensis(self):
         return self.get_simm_sensis_fx() \
                + self.get_simm_sensis_ircurve() \
                + self.get_simm_sensis_equity() \
                + self.get_simm_sensis_equityvol()
 
-
     def get_bumped_copy(self, rel_bump_size):
-        new_notional = self.notional*(1+rel_bump_size)
+        new_notional = self.notional * (1 + rel_bump_size)
         return EquityOption(maturity=self.ql_maturity,
                             tradeType=self.tradeType,
                             tradeDirection=self.tradeDirection,
