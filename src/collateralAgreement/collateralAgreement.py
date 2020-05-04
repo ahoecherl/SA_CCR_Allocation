@@ -81,6 +81,10 @@ class CollateralAgreement(TradeContainerInterface):
         elif initialMargining == InitialMargining.NO_IM:
             self.im_model = NOIMM(resultCurrency=margin_currency)
 
+        self.sync_vm_model = True
+        self.sync_im_model = True
+        self.sync_sa_ccr_model = True
+
     def link_sa_ccr_instance(self, sa_ccr_instance):
         # Has to be done this way to avoid circular references between collateral agreement and SA_CCR
         if sa_ccr_instance.trades != []:
@@ -89,16 +93,31 @@ class CollateralAgreement(TradeContainerInterface):
 
     def add_trades(self, trades: Union[Trade, List[Trade]]):
         super().add_trades(trades=trades)
-        self.im_model.add_trades(trades=trades)
-        self.sa_ccr_model.add_trades(trades=trades)
-        self.vm_model.add_trades(trades=trades)
+        if self.sync_im_model:
+            self.im_model.add_trades(trades=trades)
+        if self.sync_sa_ccr_model:
+            self.sa_ccr_model.add_trades(trades=trades)
+        if self.sync_vm_model:
+            self.vm_model.add_trades(trades=trades)
 
     def remove_trades(self, trade_ids: Union[None, int, List[int]] = None,
                       trades: Union[None, Trade, List[Trade]] = None):
         super().remove_trades(trade_ids=trade_ids, trades=trades)
-        self.im_model.remove_trades(trade_ids=trade_ids, trades=trades)
-        self.sa_ccr_model.remove_trades(trade_ids=trade_ids, trades=trades)
-        self.vm_model.remove_trades(trade_ids=trade_ids, trades=trades)
+        if self.sync_im_model:
+            self.im_model.remove_trades(trade_ids=trade_ids, trades=trades)
+        if self.sync_sa_ccr_model:
+            self.sa_ccr_model.remove_trades(trade_ids=trade_ids, trades=trades)
+        if self.sync_vm_model:
+            self.vm_model.remove_trades(trade_ids=trade_ids, trades=trades)
+
+    def remove_all_trades(self):
+        super().remove_all_trades()
+        if self.sync_im_model:
+            self.im_model.remove_all_trades()
+        if self.sync_sa_ccr_model:
+            self.sa_ccr_model.remove_all_trades()
+        if self.sync_vm_model:
+            self.vm_model.remove_all_trades()
 
     def get_im_model(self):
         return self.im_model
@@ -114,3 +133,45 @@ class CollateralAgreement(TradeContainerInterface):
 
     def get_nica(self):
         return self.im_model.get_im_receive() - self.unsegregated_overcollateraliziation_posted + self.segregated_overcollateralization_received + self.unsegregated_overcollateralization_received
+
+    @property
+    def sync_im_model(self):
+        return self.__sync_im_model
+
+    @property
+    def sync_vm_model(self):
+        return self.__sync_vm_model
+
+    @property
+    def sync_sa_ccr_model(self):
+        return self.__sync_sa_ccr_model
+
+    @sync_im_model.setter
+    def sync_im_model(self, value : bool):
+        try:
+            if value == True and self.__sync_im_model == False:
+                self.im_model.remove_all_trades()
+                self.im_model.add_trades(self.trades)
+        except AttributeError:
+            pass
+        self.__sync_im_model = value
+
+    @sync_vm_model.setter
+    def sync_vm_model(self, value: bool):
+        try:
+            if value == True and self.__sync_vm_model == False:
+                self.vm_model.remove_all_trades()
+                self.vm_model.add_trades(self.trades)
+        except AttributeError:
+            pass
+        self.__sync_vm_model = value
+
+    @sync_sa_ccr_model.setter
+    def sync_sa_ccr_model(self, value: bool):
+        try:
+            if value == True and self.__sync_sa_ccr_model == False:
+                self.sa_ccr_model.remove_all_trades()
+                self.sa_ccr_model.add_trades(self.trades)
+        except AttributeError:
+            pass
+        self.__sync_sa_ccr_model = value

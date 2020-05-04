@@ -24,3 +24,6 @@ class TradeContainerInterface:
             if isinstance(trades, Trade):
                 trades = [trades]
             self.trades = [t for t in self.trades if t not in trades]
+
+    def remove_all_trades(self):
+        self.trades = []
