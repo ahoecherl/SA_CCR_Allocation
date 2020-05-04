@@ -1,6 +1,7 @@
 from typing import Dict, List
 
 import QuantLib as ql
+from pytest import approx
 
 from marketdata.fxConverter import fxConvert
 from marketdata.interestRateCurves import InterestRateCurveQuotes, LiborCurve, DiscountCurve
@@ -47,7 +48,7 @@ class IRS(InterestRateTrade):
         floatDayCount = IRSConventions[index.name].value['FloatDayCount']
         fixedDayCount = IRSConventions[index.name].value['FixedDayCount']
 
-        self.swapDirection = swapDirection,
+        self.swapDirection = swapDirection
         if swapDirection == SwapDirection.PAYER:
             tradeDirection = TradeDirection.LONG
             ql_tradeDirection = ql.VanillaSwap.Payer

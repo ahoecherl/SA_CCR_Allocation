@@ -36,7 +36,7 @@ class OIS(InterestRateTrade):
         dateGeneration = OISConventions[index.name].value['DateGeneration']
         dayCount = OISConventions[index.name].value['DayCount']
 
-        self.swapDirection = swapDirection,
+        self.swapDirection = swapDirection
         if swapDirection == SwapDirection.PAYER:
             tradeDirection = TradeDirection.LONG
             ql_tradeDirection = ql.OvernightIndexedSwap.Payer
@@ -107,3 +107,5 @@ class OIS(InterestRateTrade):
                    index=self.index,
                    fixed_rate=self.get_fixed_rate()
                    )
+
+
