@@ -16,8 +16,7 @@ class OIS(InterestRateTrade):
                  timeToSwapEnd: ql.Period,
                  swapDirection: SwapDirection,
                  index: InterestRateIndex,
-                 fixed_rate: float = None,
-                 float_spread: float = 0
+                 fixed_rate: float = None
                  ):
         """
 
@@ -27,7 +26,6 @@ class OIS(InterestRateTrade):
         :param swapDirection:
         :param index:
         :param fixed_rate:
-        :param float_spread:
         """
 
         currency = OISConventions[index.name].value['Currency']
@@ -56,6 +54,8 @@ class OIS(InterestRateTrade):
             tradeType=TradeType.LINEAR
         )
         self.index = index
+        self.ql_timeToSwapStart = timeToSwapStart
+        self.ql_timeToSwapEnd = timeToSwapEnd
         settle_date = calendar.advance(today, timeToSwapStart, dateRoll, endOfMonth)
         maturity_date = calendar.advance(today, timeToSwapEnd, dateRoll, endOfMonth)
         schedule = ql.Schedule(settle_date, maturity_date, fixedPeriod, calendar, dateRoll, dateRoll, dateGeneration,
@@ -97,3 +97,13 @@ class OIS(InterestRateTrade):
 
     def get_simm_sensis(self):
         return self.get_simm_sensis_fx() + self.get_simm_sensis_ircurve()
+
+    def get_bumped_copy(self, rel_bump_size):
+        new_notional = self.notional * (1 + rel_bump_size)
+        return OIS(notional=new_notional,
+                   timeToSwapStart=self.ql_timeToSwapStart,
+                   timeToSwapEnd=self.ql_timeToSwapEnd,
+                   swapDirection=self.swapDirection,
+                   index=self.index,
+                   fixed_rate=self.get_fixed_rate()
+                   )

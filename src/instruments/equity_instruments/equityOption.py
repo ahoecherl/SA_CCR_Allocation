@@ -33,6 +33,7 @@ class EquityOption(EquityDerivative):
         self.underlying = underlying
         self.K = strike if strike != None else EquitySpotQuote[self.underlying.name].value.value()  # no K is given it is the current Spot
         self.currency = underlying.value['Currency']
+        self.ql_maturity = maturity
         super(EquityOption, self).__init__(
             assetClass=AssetClass.EQ,
             tradeType=tradeType,
@@ -100,3 +101,12 @@ class EquityOption(EquityDerivative):
                + self.get_simm_sensis_equityvol()
 
 
+    def get_bumped_copy(self, rel_bump_size):
+        new_notional = self.notional*(1+rel_bump_size)
+        return EquityOption(maturity=self.ql_maturity,
+                            tradeType=self.tradeType,
+                            tradeDirection=self.tradeDirection,
+                            underlying=self.underlying,
+                            notional=new_notional,
+                            strike=self.K
+                            )

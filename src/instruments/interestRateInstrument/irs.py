@@ -54,6 +54,8 @@ class IRS(InterestRateTrade):
         if swapDirection == SwapDirection.RECEIVER:
             tradeDirection = TradeDirection.SHORT
             ql_tradeDirection = ql.VanillaSwap.Receiver
+        self.ql_timeToSwapStart = timeToSwapStart
+        self.ql_timeToSwapEnd = timeToSwapEnd
         super(IRS, self).__init__(
             notional=notional,
             currency=currency,
@@ -73,6 +75,7 @@ class IRS(InterestRateTrade):
                                      dateGeneration, endOfMonth)
 
         pricing_engine = ql.DiscountingSwapEngine(LiborCurve[index.name].value)
+        self.float_spread = float_spread
 
         if fixed_rate is None:
             dummy_rate = 0.02
@@ -110,3 +113,13 @@ class IRS(InterestRateTrade):
 
     def get_simm_sensis(self):
         return self.get_simm_sensis_fx() + self.get_simm_sensis_ircurve()
+
+    def get_bumped_copy(self, rel_bump_size):
+        new_notional = self.notional*(1+rel_bump_size)
+        return IRS(notional = new_notional,
+                   timeToSwapStart=self.ql_timeToSwapStart,
+                   timeToSwapEnd=self.ql_timeToSwapEnd,
+                   swapDirection=self.swapDirection,
+                   index=self.index,
+                   fixed_rate=self.get_fixed_rate(),
+                   float_spread=self.float_spread)

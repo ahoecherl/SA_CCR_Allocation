@@ -105,3 +105,6 @@ class Trade():
         sensiList.append(sensiDict)
 
         return sensiList
+
+    def get_bumped_copy(self, rel_bump_size):
+        pass

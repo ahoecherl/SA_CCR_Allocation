@@ -18,7 +18,7 @@ from utilities.timeUtilities import convert_period_to_days
 class Swaption(InterestRateTrade):
 
     def __init__(self,
-                 underlyingSwap: InterestRateTrade,
+                 underlyingSwap: IRS,
                  optionMaturity: ql.Period,
                  tradeDirection: TradeDirection = TradeDirection.LONG):
         if underlyingSwap.tradeDirection == TradeDirection.LONG:
@@ -39,6 +39,7 @@ class Swaption(InterestRateTrade):
         self.underlying_swap = underlyingSwap
         self.ql_underlying_swap = underlyingSwap.ql_instrument
         self.S = self.ql_underlying_swap.fairRate()
+        self.ql_optionMaturity = optionMaturity
 
         exerciseDate = today + optionMaturity
         exercise = ql.EuropeanExercise(exerciseDate)
@@ -67,7 +68,6 @@ class Swaption(InterestRateTrade):
         vega = fd_simple_quotes(quotes, self)
         return vega
 
-
     def get_simm_sensis_ircurve(self):
         discCurve = DiscountCurve[self.currency.name].value
         sensiList = []
@@ -75,7 +75,6 @@ class Swaption(InterestRateTrade):
         sensiList += super(Swaption, self).get_simm_sensis_ircurve(forwardCurve)
         sensiList += super(Swaption, self).get_simm_sensis_ircurve(discCurve)
         return sensiList
-
 
     def get_simm_sensis_irvol(self):
         sensiList = []
@@ -87,7 +86,7 @@ class Swaption(InterestRateTrade):
             volQuotes = swvolquotes[optionTenor]
             amount = 0
             for volQuote in volQuotes:
-                amount += volQuote.value()*fd_simple_quotes([volQuote], self)
+                amount += volQuote.value() * fd_simple_quotes([volQuote], self)
             sensiDict = self.simmBaseDict.copy()
             sensiDict[CrifColumn.Amount.value] = '%.10f' % amount
             sensiDict[CrifColumn.RiskType.value] = RiskType.Risk_IRVol.value
@@ -98,6 +97,18 @@ class Swaption(InterestRateTrade):
 
         return sensiList
 
-
     def get_simm_sensis(self):
         return self.get_simm_sensis_fx() + self.get_simm_sensis_ircurve() + self.get_simm_sensis_irvol()
+
+    def get_bumped_copy(self, rel_bump_size):
+        new_ul_notional = self.underlying_swap.notional * (1 + rel_bump_size)
+        new_ul_swap = IRS(notional=new_ul_notional,
+                          timeToSwapStart=self.underlying_swap.ql_timeToSwapStart,
+                          timeToSwapEnd=self.underlying_swap.ql_timeToSwapEnd,
+                          swapDirection=self.underlying_swap.swapDirection,
+                          index=self.underlying_swap.index,
+                          fixed_rate=self.underlying_swap.get_fixed_rate(),
+                          float_spread=self.underlying_swap.float_spread)
+        return Swaption(underlyingSwap=new_ul_swap,
+                        optionMaturity=self.ql_optionMaturity,
+                        tradeDirection=self.tradeDirection)
