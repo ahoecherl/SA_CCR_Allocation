@@ -1,5 +1,5 @@
-from tradeContainerInterface import TradeContainerInterface
+from genericRiskMeasureModel import GenericRiskMeasureModel
 
 
-class MarginModel(TradeContainerInterface):
+class MarginModel(GenericRiskMeasureModel):
     pass

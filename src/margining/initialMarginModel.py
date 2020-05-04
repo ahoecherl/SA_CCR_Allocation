@@ -28,3 +28,6 @@ class InitialMarginModel(MarginModel):
 
     def get_im_receive(self):
         pass
+
+    def get_risk_measure(self):
+        return self.get_im_receive()

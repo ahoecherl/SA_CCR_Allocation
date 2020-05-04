@@ -5,7 +5,7 @@ from typing import List, Union
 from instruments.Trade import Trade
 
 
-class TradeContainerInterface:
+class GenericRiskMeasureModel:
 
     def add_trades(self, trades: Union[Trade, List[Trade]]):
 
@@ -27,3 +27,6 @@ class TradeContainerInterface:
 
     def remove_all_trades(self):
         self.trades = []
+
+    def get_risk_measure(self):
+        pass

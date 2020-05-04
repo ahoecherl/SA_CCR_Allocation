@@ -6,13 +6,13 @@ from scipy.stats import norm
 
 from collateralAgreement.collateralAgreement import CollateralAgreement, Margining, Clearing, Tradecount, Dispute
 from instruments.Trade import Trade
-from tradeContainerInterface import TradeContainerInterface
+from genericRiskMeasureModel import GenericRiskMeasureModel
 from utilities.Enums import AssetClass, TradeType, TradeDirection, SubClass, MaturityBucket, EquitySubClass
 
 import os
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-class SA_CCR(TradeContainerInterface):
+class SA_CCR(GenericRiskMeasureModel):
 
     supervisory_parameter = read_csv(os.path.join(__location__, 'supervisory_parameters.csv'))
 
@@ -291,3 +291,6 @@ class SA_CCR(TradeContainerInterface):
         nica = ca.get_nica()
         result = max(v - c, th + mta - nica, 0)
         return result
+
+    def get_risk_measure(self):
+        return self.get_ead()
