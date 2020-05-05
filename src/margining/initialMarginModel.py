@@ -15,9 +15,8 @@ class InitialMarginModel(MarginModel):
         super().add_trades(trades)
         self.__resetCalculated__()
 
-    def remove_trades(self, trade_ids: Union[None, int, List[int]] = None,
-                      trades: Union[None, Trade, List[Trade]] = None):
-        super().remove_trades(trades=trades, trade_ids=trade_ids)
+    def remove_trades(self, trades: Union[None, Trade, List[Trade]] = None):
+        super().remove_trades(trades=trades)
         self.__resetCalculated__()
 
     def __resetCalculated__(self):

@@ -27,16 +27,15 @@ def test_setup_simm():
 def test_remove_single_trade(test_setup_simm):
     simm = test_setup_simm
     ref = simm.trades[1:]
-    id = simm.trades[0].id
-    simm.remove_trades(id)
+    simm.remove_trades(simm.trades[0])
     assert ref == simm.trades
 
 
 def test_remove_multiple_trades(test_setup_simm):
     simm = test_setup_simm
     ref = [simm.trades[0]]
-    ids = [t.id for t in simm.trades[1:]]
-    simm.remove_trades(ids)
+    trades = [t for t in simm.trades[1:]]
+    simm.remove_trades(trades)
     assert ref == simm.trades
 
 
@@ -50,8 +49,8 @@ def test_get_im(test_setup_simm):
     im1 = simm.get_im_receive()
     assert upload_id_1 == simm.upload_id
     assert simm.receive_calculated == True
-    trade_id = simm.trades[1].id
-    simm.remove_trades(trade_id)
+    trade = simm.trades[1]
+    simm.remove_trades(trade)
     assert simm.receive_calculated == False
     assert simm.im_receive is None
     im2 = simm.get_im_receive()

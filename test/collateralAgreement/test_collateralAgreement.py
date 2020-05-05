@@ -26,7 +26,8 @@ def test_adding_and_removing_trades():
     assert isinstance(im_model, SIMM)
     assert isinstance(vm_model, VariationMarginModel)
 
-    trade = IRS(notional=100,timeToSwapStart=ql.Period(2, ql.Days), timeToSwapEnd=ql.Period(1, ql.Years), swapDirection=SwapDirection.RECEIVER, index = InterestRateIndex.EURIBOR6M)
+    trade = IRS(notional=100, timeToSwapStart=ql.Period(2, ql.Days), timeToSwapEnd=ql.Period(1, ql.Years),
+                swapDirection=SwapDirection.RECEIVER, index=InterestRateIndex.EURIBOR6M)
 
     ca.add_trades(trade)
 
@@ -48,11 +49,32 @@ def test_adding_and_removing_trades():
     assert sa_ccr_model.trades == [trade2, trade3]
 
 
-def test_c_calculation():
-    trade1 = EquityOption(maturity=ql.Period(1, ql.Years), strike=EquitySpot.ADS.value.value()-5)
-    trade = IRS(notional=100,timeToSwapStart=ql.Period(2, ql.Days), timeToSwapEnd=ql.Period(1, ql.Years), swapDirection=SwapDirection.RECEIVER, index = InterestRateIndex.EURIBOR6M, fixed_rate=0.00)
+def test_adding_and_removing_trades_error_handling():
+    trade = IRS(notional=100, timeToSwapStart=ql.Period(2, ql.Days), timeToSwapEnd=ql.Period(1, ql.Years),
+                swapDirection=SwapDirection.RECEIVER, index=InterestRateIndex.EURIBOR6M)
+    trade2 = EquityOption(maturity=ql.Period(1, ql.Years))
+    trade3 = EquityOption(maturity=ql.Period(2, ql.Years))
+    ca = CollateralAgreement(margining=Margining.MARGINED, initialMargining=InitialMargining.SIMM)
+    ca.link_sa_ccr_instance(SA_CCR(collateralAgreement=ca))
+    ca.add_trades(trade)
+    with pytest.raises(Exception):
+        ca.add_trades(trade)
+    ca.add_trades(trade2)
+    with pytest.raises(Exception):
+        ca.add_trades([trade3, trade3])
+    ca.remove_trades(trade2)
+    with pytest.raises(Exception):
+        ca.add_trades([trade2, trade3, trade2])
+    ca.add_trades(trade2)
+    assert [trade, trade2] == ca.trades
 
-    ca_no_im = CollateralAgreement(margining=Margining.MARGINED)
+
+def test_c_calculation():
+    trade1 = EquityOption(maturity=ql.Period(1, ql.Years), strike=EquitySpot.ADS.value.value() - 5)
+    trade = IRS(notional=100, timeToSwapStart=ql.Period(2, ql.Days), timeToSwapEnd=ql.Period(1, ql.Years),
+                swapDirection=SwapDirection.RECEIVER, index=InterestRateIndex.EURIBOR6M, fixed_rate=0.00)
+
+    ca_no_im = CollateralAgreement(margining=Margining.MARGINED, initialMargining=InitialMargining.NO_IM)
     ca_no_im.link_sa_ccr_instance(SA_CCR(collateralAgreement=ca_no_im))
 
     ca_no_im.add_trades([trade1, trade])
@@ -63,9 +85,10 @@ def test_c_calculation():
 
     ca_simm.add_trades([trade1, trade])
     assert 0 != ca_simm.get_C() != ca_simm.get_vm_model().get_vm() != 0
-    assert ca_simm.get_C()-ca_simm.get_im_model().get_im_receive() == ca_simm.get_vm_model().get_vm()
+    assert ca_simm.get_C() - ca_simm.get_im_model().get_im_receive() == ca_simm.get_vm_model().get_vm()
 
-    ca_ccp = CollateralAgreement(margining=Margining.MARGINED,clearing=Clearing.CLEARED, initialMargining=InitialMargining.CCPIMM)
+    ca_ccp = CollateralAgreement(margining=Margining.MARGINED, clearing=Clearing.CLEARED,
+                                 initialMargining=InitialMargining.CCPIMM)
     ca_ccp.link_sa_ccr_instance(SA_CCR(collateralAgreement=ca_ccp))
 
     ca_ccp.add_trades([trade1, trade])
@@ -86,9 +109,9 @@ def test_syncing_and_desyncing():
 
     trade1 = EquityOption(maturity=ql.Period(1, ql.Years), strike=EquitySpot.ADS.value.value() - 5)
     trade2 = IRS(notional=100, timeToSwapStart=ql.Period(2, ql.Days), timeToSwapEnd=ql.Period(1, ql.Years),
-                swapDirection=SwapDirection.RECEIVER, index=InterestRateIndex.EURIBOR6M, fixed_rate=0.00)
+                 swapDirection=SwapDirection.RECEIVER, index=InterestRateIndex.EURIBOR6M, fixed_rate=0.00)
     trade3 = IRS(notional=100, timeToSwapStart=ql.Period(2, ql.Days), timeToSwapEnd=ql.Period(1, ql.Years),
-                swapDirection=SwapDirection.RECEIVER, index=InterestRateIndex.USDLIBOR3M, fixed_rate=0.01)
+                 swapDirection=SwapDirection.RECEIVER, index=InterestRateIndex.USDLIBOR3M, fixed_rate=0.01)
 
     ca.add_trades(trade1)
     ca.sync_im_model = False
@@ -149,13 +172,10 @@ def test_syncing_and_desyncing():
     assert test_value_2 != test_value_3
     assert local_sa_ccr_model.trades == [trade1, trade2]
     assert ca.vm_model.trades == [trade1, trade2]
-    assert ca.im_model.trades == [trade1,trade2]
+    assert ca.im_model.trades == [trade1, trade2]
     ca.add_trades(trade3)
     test_value_4 = local_sa_ccr_model.get_ead()
     assert test_value_4 != test_value_3
     assert local_sa_ccr_model.trades == [trade1, trade2, trade3]
     assert ca.vm_model.trades == [trade1, trade2, trade3]
-    assert ca.im_model.trades == [trade1,trade2, trade3]
-
-
-
+    assert ca.im_model.trades == [trade1, trade2, trade3]

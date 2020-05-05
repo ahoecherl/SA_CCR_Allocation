@@ -100,15 +100,15 @@ class CollateralAgreement(GenericRiskMeasureModel):
         if self.sync_vm_model:
             self.vm_model.add_trades(trades=trades)
 
-    def remove_trades(self, trade_ids: Union[None, int, List[int]] = None,
+    def remove_trades(self,
                       trades: Union[None, Trade, List[Trade]] = None):
-        super().remove_trades(trade_ids=trade_ids, trades=trades)
+        super().remove_trades(trades=trades)
         if self.sync_im_model:
-            self.im_model.remove_trades(trade_ids=trade_ids, trades=trades)
+            self.im_model.remove_trades(trades=trades)
         if self.sync_sa_ccr_model:
-            self.sa_ccr_model.remove_trades(trade_ids=trade_ids, trades=trades)
+            self.sa_ccr_model.remove_trades(trades=trades)
         if self.sync_vm_model:
-            self.vm_model.remove_trades(trade_ids=trade_ids, trades=trades)
+            self.vm_model.remove_trades(trades=trades)
 
     def remove_all_trades(self):
         super().remove_all_trades()

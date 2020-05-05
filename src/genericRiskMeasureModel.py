@@ -8,22 +8,21 @@ from instruments.Trade import Trade
 class GenericRiskMeasureModel:
 
     def add_trades(self, trades: Union[Trade, List[Trade]]):
+        if isinstance(trades, Trade):
+            trades = [trades]
+        if len(trades) > len(set(trades)):
+            raise(Exception('There are duplicates within the list of trades you want to add. No duplicates are allowed in the list of trades - you have to create individual objects.'))
+        s1 = set(self.trades)
+        s2 = set(trades)
+        if s1.intersection(s2):
+            raise (Exception(
+                'One or multiple of the trades you are trying to add are duplicates. This is forbidden.'))
+        self.trades += trades
 
-        if type(trades) == list:
-            self.trades += trades
-        else:
-            self.trades.append(trades)
-
-    def remove_trades(self, trade_ids: Union[None, int, List[int]] = None, trades: Union[None, Trade, List[Trade]] = None):
-
-        if trade_ids is not None:
-            if isinstance(trade_ids, int):
-                trade_ids = [trade_ids]
-            self.trades = [t for t in self.trades if t.id not in trade_ids]
-        if trades is not None:
-            if isinstance(trades, Trade):
-                trades = [trades]
-            self.trades = [t for t in self.trades if t not in trades]
+    def remove_trades(self, trades: Union[None, Trade, List[Trade]] = None):
+        if isinstance(trades, Trade):
+            trades = [trades]
+        self.trades = [t for t in self.trades if t not in trades]
 
     def remove_all_trades(self):
         self.trades = []

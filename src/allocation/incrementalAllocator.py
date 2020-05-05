@@ -16,7 +16,10 @@ class IncrementalAllocator(Allocator):
             raise (Exception(
                 'Model you are trying to allocate is probably not synced with the used Collateral Agreement. Please make sure that e.g. sync_im_model parameter of the collateral agreement is set to True before running the allocation'))
         for t in trades:
-            pre_measure = model.get_risk_measure()
+            if not model.trades: #Checking if the list is empty
+                pre_measure = 0
+            else:
+                pre_measure = model.get_risk_measure()
             self.ca.add_trades(t)
             post_measure = model.get_risk_measure()
             inc_measure = post_measure-pre_measure

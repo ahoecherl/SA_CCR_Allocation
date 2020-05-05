@@ -10,13 +10,14 @@ from genericRiskMeasureModel import GenericRiskMeasureModel
 from utilities.Enums import AssetClass, TradeType, TradeDirection, SubClass, MaturityBucket, EquitySubClass
 
 import os
+
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-class SA_CCR(GenericRiskMeasureModel):
 
+class SA_CCR(GenericRiskMeasureModel):
     supervisory_parameter = read_csv(os.path.join(__location__, 'supervisory_parameters.csv'))
 
-    def __init__(self, collateralAgreement = CollateralAgreement()):
+    def __init__(self, collateralAgreement=CollateralAgreement()):
         self.trades = []
         self.collateralAgreement = collateralAgreement
 
@@ -50,7 +51,6 @@ class SA_CCR(GenericRiskMeasureModel):
         :param floor: Regulatory floor for the multiplier. Set to 5% in paragraph 149
         :return: Multiplier for PFE calculation according to SA-CCR
         """
-
 
         return min(1, floor + (1 - floor) * exp((V - C) / (2 * (1 - floor) * addOn_aggregate)))
 
@@ -88,7 +88,7 @@ class SA_CCR(GenericRiskMeasureModel):
                 'SupervisoryOptionVolatility'].iloc[0]
         elif trade.subClass is not None:
             sigma = supervisory_parameter[(supervisory_parameter.AssetClass == trade.assetClass.value) & (
-                        supervisory_parameter.SubClass == trade.subClass.value)]['SupervisoryOptionVolatility'].iloc[0]
+                    supervisory_parameter.SubClass == trade.subClass.value)]['SupervisoryOptionVolatility'].iloc[0]
         return sigma
 
     def calculate_sa_ccr_delta(trade) -> float:
@@ -112,7 +112,8 @@ class SA_CCR(GenericRiskMeasureModel):
 
             lambda_factor = SA_CCR.__calculate_lambda__(trade)
 
-            d1 = (log((trade.S+lambda_factor) / (trade.K+lambda_factor)) + 0.5 * sigma ** 2 * trade.t) / (sigma * sqrt(trade.t))
+            d1 = (log((trade.S + lambda_factor) / (trade.K + lambda_factor)) + 0.5 * sigma ** 2 * trade.t) / (
+                        sigma * sqrt(trade.t))
 
             delta = n_mult * norm.cdf(d1_mult * d1)
             return delta
@@ -121,9 +122,8 @@ class SA_CCR(GenericRiskMeasureModel):
         lambda_factor = 0
         threshold = 0.001
         if trade.assetClass == AssetClass.IR:
-            lambda_factor = max(threshold-min(trade.S, trade.K),0)
+            lambda_factor = max(threshold - min(trade.S, trade.K), 0)
         return lambda_factor
-
 
     def margining_factor(trade: Trade, ca: CollateralAgreement) -> float:
         if ca.margining == Margining.UNMARGINED:
@@ -151,10 +151,11 @@ class SA_CCR(GenericRiskMeasureModel):
         sf = None
         if subClass is None:
             sf = \
-            supervisory_parameter[(supervisory_parameter.AssetClass == assetClass.value)]['Supervisory factor'].iloc[0]
+                supervisory_parameter[(supervisory_parameter.AssetClass == assetClass.value)][
+                    'Supervisory factor'].iloc[0]
         elif subClass is not None:
             sf = supervisory_parameter[(supervisory_parameter.AssetClass == assetClass.value) & (
-                        supervisory_parameter.SubClass == subClass.value)]['Supervisory factor'].iloc[0]
+                    supervisory_parameter.SubClass == subClass.value)]['Supervisory factor'].iloc[0]
         return sf
 
     def interest_rate_addOn(trades: List[Trade], ca: CollateralAgreement) -> float:
@@ -174,8 +175,9 @@ class SA_CCR(GenericRiskMeasureModel):
         for key, trades in bucketed_trades.items():
             effective_notional = 0
             for t in trades:
-                effective_notional += SA_CCR.calculate_sa_ccr_delta(t) * SA_CCR.trade_level_adjusted_notional(t) * SA_CCR.margining_factor(t,
-                                                                                                                      ca)
+                effective_notional += SA_CCR.calculate_sa_ccr_delta(t) * SA_CCR.trade_level_adjusted_notional(
+                    t) * SA_CCR.margining_factor(t,
+                                                 ca)
             en_cur_mat[key] = effective_notional
 
         for cur in currencies:
@@ -206,12 +208,14 @@ class SA_CCR(GenericRiskMeasureModel):
         for key, trades in bucketed_trades.items():
             effective_notional = 0
             for t in trades:
-                effective_notional += SA_CCR.calculate_sa_ccr_delta(t) * SA_CCR.trade_level_adjusted_notional(t) * SA_CCR.margining_factor(t,
-                                                                                                                      ca)
+                effective_notional += SA_CCR.calculate_sa_ccr_delta(t) * SA_CCR.trade_level_adjusted_notional(
+                    t) * SA_CCR.margining_factor(t,
+                                                 ca)
             en_eq[key] = effective_notional
 
         for eq in equities:
-            add_on_eq[eq] = SA_CCR.get_supervisory_factor(assetClass=AssetClass.EQ, subClass=EquitySubClass.SINGLE_NAME) * \
+            add_on_eq[eq] = SA_CCR.get_supervisory_factor(assetClass=AssetClass.EQ,
+                                                          subClass=EquitySubClass.SINGLE_NAME) * \
                             en_eq[eq]
 
         add_on_aggr = sqrt((0.5 * add_on_eq.sum()) ** 2 + (0.75 * add_on_eq ** 2).sum())
@@ -234,8 +238,9 @@ class SA_CCR(GenericRiskMeasureModel):
         for key, trades in bucketed_trades.items():
             effective_notional = 0
             for t in trades:
-                effective_notional += SA_CCR.calculate_sa_ccr_delta(t) * SA_CCR.trade_level_adjusted_notional(t) * SA_CCR.margining_factor(t,
-                                                                                                                      ca)
+                effective_notional += SA_CCR.calculate_sa_ccr_delta(t) * SA_CCR.trade_level_adjusted_notional(
+                    t) * SA_CCR.margining_factor(t,
+                                                 ca)
             en_cur[key] = effective_notional
 
         for cur in currencyPairs:
@@ -294,3 +299,30 @@ class SA_CCR(GenericRiskMeasureModel):
 
     def get_risk_measure(self):
         return self.get_ead()
+
+    def get_margining_factor(self, trade: Trade):
+        return SA_CCR.margining_factor(trade=trade, ca=self.collateralAgreement)
+
+    def get_interest_rate_addOn(self):
+        trades = [t for t in self.trades if t.assetClass==AssetClass.IR]
+        return SA_CCR.interest_rate_addOn(trades, self.collateralAgreement)
+
+    def get_equity_addOn(self):
+        trades = [t for t in self.trades if t.assetClass==AssetClass.EQ]
+        return SA_CCR.equity_addOn(trades, self.collateralAgreement)
+
+    def get_fx_addOn(self):
+        trades = [t for t in self.trades if t.assetClass == AssetClass.FX]
+        return SA_CCR.fx_addOn(trades, self.collateralAgreement)
+
+    def get_pfe(self):
+        return SA_CCR.calculate_pfe(self.trades, self.collateralAgreement)['PFE']
+
+    def get_rc(self):
+        return SA_CCR.calculate_rc(self.trades, self.collateralAgreement)
+
+    def get_aggregate_addOn(self):
+        return SA_CCR.calculate_pfe(self.trades, self.collateralAgreement)['AddOn_agg']
+
+    def get_multiplier(self):
+        return SA_CCR.calculate_pfe(self.trades, self.collateralAgreement)['multiplier']

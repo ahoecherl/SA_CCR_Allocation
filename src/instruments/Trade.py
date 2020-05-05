@@ -63,6 +63,8 @@ class Trade():
         self.simmBaseDict[CrifColumn.AmountCurrency.value] = self.currency.value
         self.simmBaseDict['tradeId'] = str(id(self))
         self.id = id(self)
+        self.lazy_simm_sensi_calculation = True
+        self.simm_sensis = None
 
 
     def __str__(self):
@@ -106,5 +108,5 @@ class Trade():
 
         return sensiList
 
-    def get_bumped_copy(self, rel_bump_size):
+    def get_bumped_copy(self, rel_bump_size: float = 0.00001):
         pass

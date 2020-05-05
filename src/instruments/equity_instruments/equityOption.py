@@ -95,12 +95,15 @@ class EquityOption(EquityDerivative):
         return sensis
 
     def get_simm_sensis(self):
-        return self.get_simm_sensis_fx() \
-               + self.get_simm_sensis_ircurve() \
-               + self.get_simm_sensis_equity() \
-               + self.get_simm_sensis_equityvol()
+        if self.lazy_simm_sensi_calculation and self.simm_sensis is not None:
+            return self.simm_sensis
+        self.simm_sensis = self.get_simm_sensis_fx() \
+                           + self.get_simm_sensis_ircurve() \
+                           + self.get_simm_sensis_equity() \
+                           + self.get_simm_sensis_equityvol()
+        return self.simm_sensis
 
-    def get_bumped_copy(self, rel_bump_size):
+    def get_bumped_copy(self, rel_bump_size: float = 0.00001):
         new_notional = self.notional * (1 + rel_bump_size)
         return EquityOption(maturity=self.ql_maturity,
                             tradeType=self.tradeType,

@@ -6,8 +6,8 @@ from genericRiskMeasureModel import GenericRiskMeasureModel
 
 class EulerAllocator(Allocator):
 
-    def __init__(self, collateralAgreement: CollateralAgreement):
-        super().__init__(collateralAgreement)
+    def __init__(self, collateralAgreement: CollateralAgreement, normalization=False):
+        super().__init__(collateralAgreement, normalization=normalization)
         self.rel_bumpsize = 0.00001
 
     def calculateTradeAllocation(self, model: GenericRiskMeasureModel, trade: Trade) -> float:
