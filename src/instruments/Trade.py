@@ -1,5 +1,6 @@
 from typing import Dict, List, Union
 
+from allocation.Enums import FdApproach
 from marketdata.fxConverter import fxConvert
 from marketdata.interestRateCurves import LiborCurve, OisCurve, InterestRateCurveQuotes
 from marketdata.util import today
@@ -108,5 +109,5 @@ class Trade():
 
         return sensiList
 
-    def get_bumped_copy(self, rel_bump_size: float = 0.00001):
+    def get_bumped_copy(self, rel_bump_size: float = 0.00001, abs_bump_size: float = 0.01, bump_approach: FdApproach = FdApproach.Relative):
         pass

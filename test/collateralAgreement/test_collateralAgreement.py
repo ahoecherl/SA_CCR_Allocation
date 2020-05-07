@@ -153,7 +153,6 @@ def test_syncing_and_desyncing():
 
     assert local_sa_ccr_model.get_ead() == 0
     ca.add_trades(trade1)
-    ca.sync_sa_ccr_model = False
     ca.sync_im_model = False
     ca.sync_vm_model = False
     test_value = local_sa_ccr_model.get_ead()
@@ -161,8 +160,6 @@ def test_syncing_and_desyncing():
     assert local_sa_ccr_model.trades == [trade1]
     ca.add_trades(trade2)
     test_value_2 = local_sa_ccr_model.get_ead()
-    assert approx(test_value, 0.000001) == test_value_2
-    assert local_sa_ccr_model.trades == [trade1]
     assert ca.vm_model.trades == [trade1]
     assert ca.im_model.trades == [trade1]
     ca.sync_vm_model = True

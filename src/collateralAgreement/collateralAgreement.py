@@ -8,6 +8,7 @@ from margining.noimm import NOIMM
 from margining.simm import SIMM
 from margining.variationMarginModel import NoVariationMargin, VariationMarginModel
 from genericRiskMeasureModel import GenericRiskMeasureModel
+from marketdata.fxConverter import fxConvert
 from utilities.Enums import Currency
 
 
@@ -130,6 +131,14 @@ class CollateralAgreement(GenericRiskMeasureModel):
 
     def get_C(self):
         return self.vm_model.get_vm() + self.get_nica()
+
+    def get_V(self):
+        if self.sync_sa_ccr_model == False:
+            raise(Exception('Dangerous to call get_V if SA_CCR and CA are not synced.'))
+        v=0
+        for t in self.trades:
+            v += fxConvert(fromCcy=t.currency, toCcy=self.margin_currency, amount=t.get_price())
+        return v
 
     def get_nica(self):
         return self.im_model.get_im_receive() - self.unsegregated_overcollateraliziation_posted + self.segregated_overcollateralization_received + self.unsegregated_overcollateralization_received

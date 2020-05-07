@@ -28,6 +28,7 @@ def init_ca():
     trade2 = IRS(fixed_rate=0.01)
     trade3 = Swaption()
     trade4 = EquityOption()
+    # trade4 = EquityOption()
     ca = CollateralAgreement()
     ca.link_sa_ccr_instance(SA_CCR(ca))
     ca.add_trades([trade1, trade2, trade3, trade4])

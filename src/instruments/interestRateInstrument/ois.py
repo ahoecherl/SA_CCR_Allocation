@@ -1,4 +1,6 @@
 import QuantLib as ql
+
+from allocation.Enums import FdApproach
 from marketdata.interestRateCurves import InterestRateCurveQuotes, OisCurve
 from marketdata.interestRateIndices import InterestRateIndex
 from utilities.Enums import SwapDirection, TradeDirection, TradeType
@@ -101,8 +103,14 @@ class OIS(InterestRateTrade):
         self.simm_sensis = self.get_simm_sensis_fx() + self.get_simm_sensis_ircurve()
         return self.simm_sensis
 
-    def get_bumped_copy(self, rel_bump_size: float = 0.00001):
-        new_notional = self.notional * (1 + rel_bump_size)
+    def get_bumped_copy(self, rel_bump_size: float = 0.00001, abs_bump_size: float = 0.01, bump_approach: FdApproach = FdApproach.Relative):
+        if bump_approach == FdApproach.Relative:
+            new_notional = self.notional * (1 + rel_bump_size)
+        elif bump_approach == FdApproach.Absolute:
+            new_notional = self.notional+abs_bump_size
+        else:
+            raise(Exception('Weird stuff is happening'))
+
         return OIS(notional=new_notional,
                    timeToSwapStart=self.ql_timeToSwapStart,
                    timeToSwapEnd=self.ql_timeToSwapEnd,

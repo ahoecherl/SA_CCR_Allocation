@@ -43,8 +43,9 @@
 		%\usepackage{jurabib}
 		
     %using subfiles
-    \usepackage[subpreambles=true]{standalone}
+    %\usepackage[subpreambles=true]{standalone}
     \usepackage{import}
+    \usepackage{subfiles}
 		
 
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
@@ -455,16 +456,24 @@
 \setcounter{page}{1}
 
 
-
 \begin{abstract}
 This will be the abstract.
 \end{abstract}
 
-\section{Introduction}
+\subfile{sections/abstract.tex}
+\subfile{sections/Introduction_motivation_overview.tex}
+\subfile{sections/Instruments_pricing_market_data.tex}
+\subfile{sections/ISDA-SIMM_and_Sensitivities.tex}
+\subfile{sections/SA_CCR}
+\subfile{sections/allocation_in_general.tex}
+\subfile{sections/allocation_of_SA_CCR_and_ISDA_SIMM.tex}
+\subfile{sections/architecture_blueprint_for_SA_CCR_allocation.tex}
+\subfile{sections/conclusion_and_outlook}
 
 \section{Establishing Background}
 \subsection{Bilateral initial margin}
 \subsubsection{Reducing counterparty credit risk with initial margin}
+
 Counterparty credit risk refers to the risk of a default of the counterparty of a derivative. Derivatives are contracts between two institutions which give raise to future cash flows dependent of the performance of its underlying. These future cash flows may be at risk if the counterparty defaults during the lifetime of the derivative. 
 
 Over the past decades several measures were established in the derivatives markets to mitigate counterparty credit risk.

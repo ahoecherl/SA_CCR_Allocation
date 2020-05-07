@@ -1,0 +1,23 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\graphicspath{{images/}{../images/}}
+
+\usepackage{blindtext}
+
+\usepackage{subfiles} % Best loaded last in the preamble
+
+\title{Subfile Example}
+\author{Team Learn Overleaf}
+\date{ }
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\subfile{sections/test_section.tex}
+
+\end{document}

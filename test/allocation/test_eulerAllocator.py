@@ -1,6 +1,8 @@
 import pytest
 import QuantLib as ql
+from pytest import approx
 
+from allocation.Enums import FdApproach
 from allocation.eulerAllocator import EulerAllocator
 from collateralAgreement.collateralAgreement import CollateralAgreement
 from instruments.equity_instruments.equityOption import EquityOption
@@ -44,3 +46,22 @@ def test_exception(init_ca: CollateralAgreement):
         assert eulerAllocator.allocate_ead()
 
     asdf =1
+
+
+def test_allocate_arbitrary_function(init_ca: CollateralAgreement):
+    ca = init_ca
+    eulerAllocator = EulerAllocator(ca)
+    multiplierAllocation = eulerAllocator.allocate_arbitrary_function(ca.get_sa_ccr_model().get_multiplier)
+    asfd = 1
+
+
+def test_allocate_with_absolute_shift(init_ca: CollateralAgreement):
+    eA_abs = EulerAllocator(init_ca)
+    eA_abs.fdApproach = FdApproach.Absolute
+    ead_allocation_abs = eA_abs.allocate_ead()
+    assert approx(eA_abs.subadditivity_check_ead(ead_allocation_abs), abs = 0.01) == 0
+    eA_rel = EulerAllocator(init_ca)
+    eA_rel.fdApproach = FdApproach.Relative
+    ead_allocation_rel = eA_abs.allocate_ead()
+    assert approx(eA_abs.subadditivity_check_ead(ead_allocation_abs), abs = 0.01) == 0
+

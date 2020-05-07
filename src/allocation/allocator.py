@@ -39,3 +39,7 @@ class Allocator:
 
     def allocate_ead(self) -> Dict[Trade, float]:
         return self.allocatePortfolio(self.ca.sa_ccr_model)
+
+    def subadditivity_check_ead(self, allocation: Dict[Trade, float]):
+        return sum([v for v in allocation.values()]) - self.ca.sa_ccr_model.get_risk_measure()
+

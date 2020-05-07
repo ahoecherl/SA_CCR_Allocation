@@ -5,3 +5,5 @@
 *.out
 *.gz
 .tmp*
+*.fdb_latexmk
+*.fls

@@ -251,7 +251,6 @@ class SA_CCR(GenericRiskMeasureModel):
     def calculate_pfe(trades: List[Trade], ca: CollateralAgreement):
         ac_bucketing = {}
         addOns = Series()
-        V = 0
         for t in trades:
             if t.assetClass in ac_bucketing:
                 ac_bucketing[t.assetClass].append(t)
@@ -265,8 +264,7 @@ class SA_CCR(GenericRiskMeasureModel):
             elif ac == AssetClass.FX:
                 addOns[ac] = SA_CCR.fx_addOn(ac_trades, ca)
 
-        for t in trades:
-            V += t.get_price()
+        V = ca.get_V()
 
         C = ca.get_C()
         aggregate_addOn = addOns.sum()
@@ -287,9 +285,7 @@ class SA_CCR(GenericRiskMeasureModel):
         :param nica: Current net independent collateral amount (compare paragraph 143)
         :return: Replacement Cost as defined in paragraph 144
         """
-        v = 0
-        for t in trades:
-            v += t.get_price()
+        v = ca.get_V()
         c = ca.get_C()
         th = ca.threshold
         mta = ca.mta
