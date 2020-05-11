@@ -3,7 +3,18 @@
 \begin{document}
     \section{Introduction and motivation}
 
-    With increasing sophistication of risk, own capital and margining models the need for equally sophisticated tools for attributing these measures rises as well. For any risk metric that considers portfolio effects calculating the contribution of the individual trades is a challenge. As part of the Basel 3 reform regulators have updated the standardized models for market risk [TODO: ] 
+    With increasing sophistication of risk models, own capital models and margining models the need for equally sophisticated tools for allocating these measures rises as well. For any risk metric that considers portfolio effects calculating the contribution to the risk measure of individual trades is a challenge. As part of the Basel 3 reform, \todo{Add appropriate citation to Basel 3 or CRD 2} regulators have updated the standardized models for market risk own capital requirement and credit risk own capital requirements. The new standardized model for market risk own capital requirements is the FRTB-SA \todo{Citation to FRTB-SA needed} and the new standardized model for credit risk own capital requirements is the SA-CCR model \todo{Enter Citation of SA-CCR}. Both of these models are portfolio based risk models. Gregory \citep[Chapter~10.7]{gregory2015xva} states that three allocation approaches are used in practice:
+
+    \begin{itemize}
+        \item Incremental allocation for pre trade risk checks and for front office incentivization  
+        \item Marginal allocation for risk analytics of existing portfolios 
+        \item Pro rata allocation if trade contributions must not be negative, if risk sensitivity is not required or if the allocated risk measure does not take portfolio effects into account
+    \end{itemize}
+
+    These allocation approaches and their advantages and disadvantages are analyzed in further detail in section \ref{Allocation of Risk Measures}. Calculation of pro rata and incremental allocation is fairly straightforward and can generally be performed under any circumstances. Marginal allocation on the other hand is more challenging. This thesis will also include results for incremental and pro rata allocations for the sake of completeness but the main focus will be the analysis of marginal allocation.
+
+    Schulze \citep{schulze2018capital} has analytically calculated the marginal allocation for the FRTB-SA. However, marginal allocation of SA-CCR is still outstanding. This thesis intends to close this gap by 
+    
     \subsection{Literature review}
     \subsection{Overview}
 \end{document}
