@@ -7,8 +7,8 @@ from margining.ccpimm import CCPIMM
 from margining.noimm import NOIMM
 from margining.simm import SIMM
 from margining.variationMarginModel import NoVariationMargin, VariationMarginModel
-from genericRiskMeasureModel import GenericRiskMeasureModel
 from marketdata.fxConverter import fxConvert
+from portfolio import Portfolio
 from utilities.Enums import Currency
 
 
@@ -38,7 +38,7 @@ class Dispute(Enum):
     OUTSTANDING_DISPUTES = 'Disputes are outstanding between the counterparties'
 
 
-class CollateralAgreement(GenericRiskMeasureModel):
+class CollateralAgreement(Portfolio):
 
     def __init__(self,
                  margining: Margining = Margining.MARGINED,

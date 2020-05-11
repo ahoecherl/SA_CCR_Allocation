@@ -2,15 +2,21 @@ import os
 import re
 
 import plotly.graph_objects as go
+from traitlets import default
 from traitlets.config import Config
 import nbformat as nbf
 from nbconvert.exporters import LatexExporter
 from nbconvert.writers import FilesWriter
 
 targetDirectoryFull = r'C:\Oxford\Master Thesis\Allocation Thesis\SA_CCR_Allocation\LaTeX\JupyterNotebooksFull'
-targetDirectoryCore = r'C:\Oxford\Master Thesis\Allocation Thesis\SA_CCR_Allocation\LaTeX\JupyterNotebooksFull'
+targetDirectoryCore = r'C:\Oxford\Master Thesis\Allocation Thesis\SA_CCR_Allocation\LaTeX\JupyterNotebooksCore'
 graphicsFolder = r'C:\Oxford\Master Thesis\Allocation Thesis\SA_CCR_Allocation\LaTeX\Graphics\ '[:-1]
 latexFolder = r'C:\Oxford\Master Thesis\Allocation Thesis\SA_CCR_Allocation\LaTeX'
+
+class CustomLatexExporter(LatexExporter):
+    @default('template_file')
+    def _template_file_default(self):
+        return 'custom_latex.tplx'
 
 def exportPlotlyFigure(fig: go.Figure, name: str):
     fig.write_image(graphicsFolder + name + '.pdf')
@@ -47,7 +53,7 @@ def export(filename):
 
     writer = FilesWriter()
     writer.build_directory = targetDirectoryFull
-    test = writer.write(*LatexExporter(config=c).from_filename(filename), notebook_name=filename[:-6])
+    test = writer.write(*CustomLatexExporter(config=c).from_filename(filename), notebook_name=filename[:-6])
 
     createdFile = targetDirectoryFull+'\\' +filename[:-6] + '.tex'
     toBeCreatedFile = targetDirectoryCore+'\\' +filename[:-6] + '.tex'
@@ -68,7 +74,7 @@ def export(filename):
                 lines_to_write.append(line)
 
     lines_to_write = lines_to_write[1:-5]
-    with open(coreFileName, 'w+', encoding="utf8") as out_file:
+    with open(toBeCreatedFile, 'w+', encoding="utf8") as out_file:
         out_file.writelines(lines_to_write)
 
 

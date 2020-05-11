@@ -5,7 +5,7 @@ from allocation.Enums import FdApproach
 from allocation.allocator import Allocator
 from collateralAgreement.collateralAgreement import CollateralAgreement
 from instruments.Trade import Trade
-from genericRiskMeasureModel import GenericRiskMeasureModel
+from riskMeasureModel import RiskMeasureModel
 
 
 class EulerAllocator(Allocator):
@@ -16,7 +16,7 @@ class EulerAllocator(Allocator):
         self.abs_bumpsize = 0.01
         self.fdApproach = FdApproach.Relative
 
-    def calculateTradeAllocation(self, model: GenericRiskMeasureModel, trade: Trade) -> float:
+    def calculateTradeAllocation(self, model: RiskMeasureModel, trade: Trade) -> float:
         shifted_value = self.calculateShiftedValue(model, trade)
         if self.fdApproach == FdApproach.Relative:
             allocated_value = shifted_value / self.rel_bumpsize
@@ -24,7 +24,7 @@ class EulerAllocator(Allocator):
             allocated_value = trade.notional * (shifted_value / self.abs_bumpsize)
         return allocated_value
 
-    def calculateShiftedValue(self, model:GenericRiskMeasureModel, trade:Trade) -> float:
+    def calculateShiftedValue(self, model:RiskMeasureModel, trade:Trade) -> float:
         orig_value = model.get_risk_measure()
         self.ca.remove_trades(trades=trade)
         if trade in model.trades:
@@ -38,7 +38,7 @@ class EulerAllocator(Allocator):
         self.ca.add_trades(trade)
         return bumped_value-orig_value
 
-    def shiftPortfolio(self, model: GenericRiskMeasureModel) -> Dict[Trade, float]:
+    def shiftPortfolio(self, model: RiskMeasureModel) -> Dict[Trade, float]:
         shift = {}
         for t in model.trades:
             shift[t] = self.calculateShiftedValue(model, t)

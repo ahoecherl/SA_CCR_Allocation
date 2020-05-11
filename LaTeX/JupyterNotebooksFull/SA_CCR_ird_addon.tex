@@ -370,25 +370,6 @@
     
 
     
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{1}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{c+c1}{\PYZsh{}import cell}
-\PY{k+kn}{import} \PY{n+nn}{QuantLib} \PY{k}{as} \PY{n+nn}{ql}
-\PY{k+kn}{from} \PY{n+nn}{IPython}\PY{n+nn}{.}\PY{n+nn}{core}\PY{n+nn}{.}\PY{n+nn}{display} \PY{k+kn}{import} \PY{n}{display}\PY{p}{,} \PY{n}{Markdown}
-\PY{k+kn}{from} \PY{n+nn}{scipy} \PY{k+kn}{import} \PY{n}{optimize}
-\PY{k+kn}{from} \PY{n+nn}{collateralAgreement} \PY{k+kn}{import} \PY{n}{CollateralAgreement}
-\PY{k+kn}{from} \PY{n+nn}{instruments}\PY{n+nn}{.}\PY{n+nn}{interestRateInstrument}\PY{n+nn}{.}\PY{n+nn}{irs} \PY{k+kn}{import} \PY{n}{IRS}
-\PY{k+kn}{from} \PY{n+nn}{instruments}\PY{n+nn}{.}\PY{n+nn}{interestRateInstrument}\PY{n+nn}{.}\PY{n+nn}{swaption} \PY{k+kn}{import} \PY{n}{Swaption}
-\PY{k+kn}{from} \PY{n+nn}{jupyterUtils} \PY{k+kn}{import} \PY{n}{export}
-\PY{k+kn}{from} \PY{n+nn}{marketdata}\PY{n+nn}{.}\PY{n+nn}{fx\PYZus{}spot} \PY{k+kn}{import} \PY{n}{FxSpot}
-\PY{k+kn}{from} \PY{n+nn}{marketdata}\PY{n+nn}{.}\PY{n+nn}{interestRateIndices} \PY{k+kn}{import} \PY{n}{InterestRateIndex}
-\PY{k+kn}{from} \PY{n+nn}{sa\PYZus{}ccr}\PY{n+nn}{.}\PY{n+nn}{sa\PYZus{}ccr} \PY{k+kn}{import} \PY{n}{SA\PYZus{}CCR}
-\PY{k+kn}{from} \PY{n+nn}{utilities}\PY{n+nn}{.}\PY{n+nn}{Enums} \PY{k+kn}{import} \PY{n}{SwapDirection}\PY{p}{,} \PY{n}{TradeDirection}
-\PY{n}{asdf} \PY{o}{=}\PY{l+m+mi}{1}
-\end{Verbatim}
-\end{tcolorbox}
-
     \hypertarget{addon-for-interest-rate-derivatives}{%
 \subsection{AddOn for interest rate
 derivatives}\label{addon-for-interest-rate-derivatives}}
@@ -487,119 +468,8 @@ Fixed\strut
 To set up this exemplary portfolio we need to find fixed rates for the
 swaps and underlying swaps to match the desired market values.
 
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{2}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{k}{def} \PY{n+nf}{find\PYZus{}1}\PY{p}{(}\PY{n}{fixed\PYZus{}rate}\PY{p}{)}\PY{p}{:}
-    \PY{n}{target\PYZus{}value} \PY{o}{=} \PY{l+m+mi}{30000}
-    \PY{n}{swap} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{10000000}\PY{p}{,}
-               \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
-               \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-               \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,}
-               \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
-               \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-               \PY{p}{)}
-    \PY{k}{return} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{swap}\PY{o}{.}\PY{n}{get\PYZus{}price}\PY{p}{(}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n}{target\PYZus{}value}\PY{p}{)}
-
-\PY{k}{def} \PY{n+nf}{find\PYZus{}2}\PY{p}{(}\PY{n}{fixed\PYZus{}rate}\PY{p}{)}\PY{p}{:}
-    \PY{n}{target\PYZus{}value} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{20000}
-    \PY{n}{swap} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{10000000}\PY{p}{,}
-               \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
-               \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-               \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
-               \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
-               \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-               \PY{p}{)}
-    \PY{k}{return} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{swap}\PY{o}{.}\PY{n}{get\PYZus{}price}\PY{p}{(}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n}{target\PYZus{}value}\PY{p}{)}
-
-\PY{k}{def} \PY{n+nf}{find\PYZus{}3}\PY{p}{(}\PY{n}{fixed\PYZus{}rate}\PY{p}{)}\PY{p}{:}
-    \PY{n}{target\PYZus{}value} \PY{o}{=} \PY{l+m+mi}{50000}
-    \PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{5000000}\PY{o}{*}\PY{n}{FxSpot}\PY{o}{.}\PY{n}{USDEUR}\PY{o}{.}\PY{n}{value}
-    \PY{n}{swap} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{n}{notional}\PY{p}{,}
-               \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-               \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-               \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
-               \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{EURIBOR6M}\PY{p}{,}
-               \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-               \PY{p}{)}
-    \PY{n}{swaption} \PY{o}{=} \PY{n}{Swaption}\PY{p}{(}\PY{n}{underlyingSwap}\PY{o}{=}\PY{n}{swap}\PY{p}{,}
-                        \PY{n}{optionMaturity}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-                        \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
-    \PY{n}{price} \PY{o}{=} \PY{n}{swaption}\PY{o}{.}\PY{n}{get\PYZus{}price}\PY{p}{(}\PY{p}{)}\PY{o}{*}\PY{n}{FxSpot}\PY{o}{.}\PY{n}{EURUSD}\PY{o}{.}\PY{n}{value}
-    \PY{k}{return} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{price}\PY{o}{\PYZhy{}}\PY{n}{target\PYZus{}value}\PY{p}{)}
-
-\PY{k}{def} \PY{n+nf}{find\PYZus{}4}\PY{p}{(}\PY{n}{fixed\PYZus{}rate}\PY{p}{)}\PY{p}{:}
-    \PY{n}{target\PYZus{}value} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.27}
-    \PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{5000000}\PY{o}{*}\PY{n}{FxSpot}\PY{o}{.}\PY{n}{USDEUR}\PY{o}{.}\PY{n}{value}
-    \PY{n}{swap} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{n}{notional}\PY{p}{,}
-               \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-               \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-               \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
-               \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{EURIBOR6M}\PY{p}{,}
-               \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-               \PY{p}{)}
-    \PY{n}{swaption} \PY{o}{=} \PY{n}{Swaption}\PY{p}{(}\PY{n}{underlyingSwap}\PY{o}{=}\PY{n}{swap}\PY{p}{,}
-                        \PY{n}{optionMaturity}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-                        \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
-    \PY{n}{delta} \PY{o}{=} \PY{n}{SA\PYZus{}CCR}\PY{o}{.}\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{swaption}\PY{p}{)}
-    \PY{k}{return} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{delta}\PY{o}{\PYZhy{}}\PY{n}{target\PYZus{}value}\PY{p}{)}
-
-\PY{n}{result} \PY{o}{=} \PY{n}{optimize}\PY{o}{.}\PY{n}{minimize}\PY{p}{(}\PY{n}{find\PYZus{}1}\PY{p}{,} \PY{n}{x0}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{n}{tol}\PY{o}{=}\PY{l+m+mf}{0.0000000001}\PY{p}{)}
-\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}1} \PY{o}{=} \PY{n}{result}\PY{o}{.}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-\PY{n}{result} \PY{o}{=} \PY{n}{optimize}\PY{o}{.}\PY{n}{minimize}\PY{p}{(}\PY{n}{find\PYZus{}2}\PY{p}{,} \PY{n}{x0}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{n}{tol}\PY{o}{=}\PY{l+m+mf}{0.0000000001}\PY{p}{)}
-\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}2} \PY{o}{=} \PY{n}{result}\PY{o}{.}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-\PY{n}{result} \PY{o}{=} \PY{n}{optimize}\PY{o}{.}\PY{n}{minimize}\PY{p}{(}\PY{n}{find\PYZus{}3}\PY{p}{,} \PY{n}{x0}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{n}{constraints}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ineq}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fun}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{l+m+mf}{0.02}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{tol}\PY{o}{=}\PY{l+m+mf}{0.0000000001}\PY{p}{)}
-\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}3} \PY{o}{=} \PY{n}{result}\PY{o}{.}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-\PY{n}{result} \PY{o}{=} \PY{n}{optimize}\PY{o}{.}\PY{n}{minimize}\PY{p}{(}\PY{n}{find\PYZus{}4}\PY{p}{,} \PY{n}{x0}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{n}{constraints}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ineq}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fun}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{tol}\PY{o}{=}\PY{l+m+mf}{0.0000000001}\PY{p}{)}
-\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}4} \PY{o}{=} \PY{n}{result}\PY{o}{.}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-\end{Verbatim}
-\end{tcolorbox}
-
     Through optimization and using the market data of the 10th of May 2019
 the fixed rates to match the market values in Example 1 were identified.
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{3}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{trade\PYZus{}1} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{10000000}\PY{p}{,}
-             \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
-             \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-             \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,}
-             \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
-             \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}1}
-             \PY{p}{)}
-
-\PY{n}{trade\PYZus{}2} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{10000000}\PY{p}{,}
-              \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
-              \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-              \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
-              \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
-              \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}2}
-              \PY{p}{)}
-
-\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{5000000}\PY{o}{*}\PY{n}{FxSpot}\PY{o}{.}\PY{n}{USDEUR}\PY{o}{.}\PY{n}{value}
-\PY{n}{ul\PYZus{}swap} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{n}{notional}\PY{p}{,}
-              \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-              \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-              \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
-              \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{EURIBOR6M}\PY{p}{,}
-              \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}3}
-              \PY{p}{)}
-
-\PY{n}{trade\PYZus{}3} \PY{o}{=} \PY{n}{Swaption}\PY{p}{(}\PY{n}{underlyingSwap}\PY{o}{=}\PY{n}{ul\PYZus{}swap}\PY{p}{,}
-                   \PY{n}{optionMaturity}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-                   \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
-
-\PY{n}{test\PYZus{}portfolio} \PY{o}{=} \PY{p}{[}\PY{n}{trade\PYZus{}1}\PY{p}{,} \PY{n}{trade\PYZus{}2}\PY{p}{,} \PY{n}{trade\PYZus{}3}\PY{p}{]}
-\end{Verbatim}
-\end{tcolorbox}
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{4}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{display}\PY{p}{(}\PY{n}{Markdown}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{For trade 1 the matching fixed rate is }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+si}{\PYZpc{}\PYZpc{}}\PY{l+s+s1}{, for trade 1 it is }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+si}{\PYZpc{}\PYZpc{}}\PY{l+s+s1}{ and for the underlying swap of trade 3 it is }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+si}{\PYZpc{}\PYZpc{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{p}{(}\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}1}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{)}\PY{p}{,}\PY{p}{(}\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}2}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{)}\PY{p}{,}\PY{p}{(}\PY{n}{fixed\PYZus{}rate\PYZus{}trade\PYZus{}3}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-\end{Verbatim}
-\end{tcolorbox}
 
     For trade 1 the matching fixed rate is 2.3754\%, for trade 1 it is
 2.2108\% and for the underlying swap of trade 3 it is 0.1610\%
@@ -633,7 +503,7 @@ the fixed rates to match the market values in Example 1 were identified.
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
 \prompt{Out}{outcolor}{5}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-296732.72980308026
+89019.81894092409
 \end{Verbatim}
 \end{tcolorbox}
         

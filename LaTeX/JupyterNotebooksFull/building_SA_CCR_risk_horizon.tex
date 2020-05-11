@@ -415,13 +415,11 @@ derivatives without exchange of variation margin or initial margin.
 \PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}
         \PY{n}{margining}\PY{o}{=}\PY{n}{Margining}\PY{o}{.}\PY{n}{UNMARGINED}\PY{p}{,}
         \PY{n}{clearing}\PY{o}{=}\PY{n}{Clearing}\PY{o}{.}\PY{n}{UNCLEARED}\PY{p}{,}
+        \PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{NO\PYZus{}IM}\PY{p}{,}
         \PY{n}{tradecount}\PY{o}{=}\PY{n}{Tradecount}\PY{o}{.}\PY{n}{UNDER\PYZus{}FIVE\PYZus{}THOUSAND}\PY{p}{,}
         \PY{n}{dispute}\PY{o}{=}\PY{n}{Dispute}\PY{o}{.}\PY{n}{NO\PYZus{}OUTSTANDING\PYZus{}DISPUTES}\PY{p}{,}
         \PY{n}{threshold}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,}      \PY{c+c1}{\PYZsh{}Threshold to trigger a margin call}
-        \PY{n}{mta}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,}            \PY{c+c1}{\PYZsh{}Minimum transfer amount for a margin call}
-        \PY{n}{vm}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,}             \PY{c+c1}{\PYZsh{}Variation margin balance}
-        \PY{n}{posted\PYZus{}im}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,}      \PY{c+c1}{\PYZsh{}posted initial margin}
-        \PY{n}{received\PYZus{}im}\PY{o}{=}\PY{l+m+mf}{0.0}     \PY{c+c1}{\PYZsh{}received initial margin}
+        \PY{n}{mta}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,}            \PY{c+c1}{\PYZsh{}received initial margin}
         \PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}

@@ -5,8 +5,8 @@ from pandas import read_csv, Series
 from scipy.stats import norm
 
 from collateralAgreement.collateralAgreement import CollateralAgreement, Margining, Clearing, Tradecount, Dispute
+from riskMeasureModel import RiskMeasureModel
 from instruments.Trade import Trade
-from genericRiskMeasureModel import GenericRiskMeasureModel
 from utilities.Enums import AssetClass, TradeType, TradeDirection, SubClass, MaturityBucket, EquitySubClass
 
 import os
@@ -14,7 +14,7 @@ import os
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 
-class SA_CCR(GenericRiskMeasureModel):
+class SA_CCR(RiskMeasureModel):
     supervisory_parameter = read_csv(os.path.join(__location__, 'supervisory_parameters.csv'))
 
     def __init__(self, collateralAgreement=CollateralAgreement()):

@@ -2,7 +2,7 @@ from typing import Dict
 
 from collateralAgreement.collateralAgreement import CollateralAgreement
 from instruments.Trade import Trade
-from genericRiskMeasureModel import GenericRiskMeasureModel
+from riskMeasureModel import RiskMeasureModel
 
 
 class Allocator:
@@ -11,7 +11,7 @@ class Allocator:
         self.ca = collateralAgreement
         self.normalization = normalization
 
-    def allocatePortfolio(self, model: GenericRiskMeasureModel) -> Dict[Trade, float]:
+    def allocatePortfolio(self, model: RiskMeasureModel) -> Dict[Trade, float]:
         allocation = {}
         for t in model.trades:
             allocation[t] = self.calculateTradeAllocation(model, t)
@@ -28,7 +28,7 @@ class Allocator:
             allocation[key] = val * factor
         return allocation
 
-    def calculateTradeAllocation(self, model: GenericRiskMeasureModel, trade: Trade) -> float:
+    def calculateTradeAllocation(self, model: RiskMeasureModel, trade: Trade) -> float:
         pass
 
     def allocate_vm(self) -> Dict[Trade, float]:

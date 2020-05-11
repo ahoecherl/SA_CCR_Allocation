@@ -1,0 +1,18 @@
+    
+
+    
+    However, the approach of SA-CCR to use the Black-Scholes for interest
+rate derivatives does have a significant flaw.
+
+Obviously, \(\ln\left(P_i / K_i \right)\) is not defined, if \(P_i/K_i\)
+is negative. This has, however been very commonplace in recent years,
+especially for Euro swaptions. One can always set the fixed rate of the
+underlying swap and therefore \(K_i\) as a negative value. But based on
+the market data of the 10th of May 2019 it is even possible to yield
+negative par rates for the underlying swap.
+
+As an example we are plotting the zero and the 6M forward curve for the
+EURIBOR 6M index below. When zooming further in, we can see that that
+the 6M forward curve crosses 0 on the 15th of November 2021.
+
+

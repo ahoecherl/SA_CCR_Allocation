@@ -1,5 +1,5 @@
-from genericRiskMeasureModel import GenericRiskMeasureModel
+from riskMeasureModel import RiskMeasureModel
 
 
-class MarginModel(GenericRiskMeasureModel):
+class MarginModel(RiskMeasureModel):
     pass

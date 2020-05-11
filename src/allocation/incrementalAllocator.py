@@ -1,13 +1,13 @@
 from typing import Dict
 
 from allocation.allocator import Allocator
-from genericRiskMeasureModel import GenericRiskMeasureModel
+from riskMeasureModel import RiskMeasureModel
 from instruments.Trade import Trade
 
 
 class IncrementalAllocator(Allocator):
 
-    def allocatePortfolio(self, model: GenericRiskMeasureModel) -> Dict[Trade, float]:
+    def allocatePortfolio(self, model: RiskMeasureModel) -> Dict[Trade, float]:
         allocation = {}
         trades = self.ca.trades
         self.ca.remove_all_trades()

@@ -371,7 +371,7 @@
 
     
     \hypertarget{addon-calculation}{%
-\section{AddOn calculation}\label{addon-calculation}}
+\subsubsection{AddOn calculation}\label{addon-calculation}}
 
 Most of the SA-CCR logic is hidden inside the AddOn calculation. At
 first it is important to define the following four data parameters:
@@ -423,10 +423,12 @@ to it. This is calculated differently for the different asset classes.
 \paragraph{Interest rate and credit
 derivatives}\label{interest-rate-and-credit-derivatives}}
 
+\begin{quote}
 The notional of the trade is usually a well defined value in domestic
 currency for interest rate and credit derivatives. It is multiplied by a
 supervisory duration factor. The basic idea is, that the value of the
 derivative can change more the longer the remaining
+\end{quote}
 
 \begin{align*}
 d_i &= \text{Notional}_i * SD_i \\
@@ -437,24 +439,30 @@ d_i &= \text{Notional}_i * SD_i \\
 \hypertarget{fx-derivatives}{%
 \paragraph{FX derivatives}\label{fx-derivatives}}
 
+\begin{quote}
 While the wording in the BCBS paper is a bit more specific we will just
 assume that every FX traded derivative has a USD leg and set the
 notional equal the to USD notional.
+\end{quote}
 
 \hypertarget{equity-and-commodity-derivatives}{%
 \paragraph{Equity and commodity
 derivatives}\label{equity-and-commodity-derivatives}}
 
+\begin{quote}
 The notional is defined as the price of the underlying. Therefore, it
 fluctuates over time.
+\end{quote}
 
 \hypertarget{notional-of-exotic-derivatives}{%
 \paragraph{Notional of exotic
 derivatives}\label{notional-of-exotic-derivatives}}
 
+\begin{quote}
 For more exotic derivatives which do have adjustable notionals,
 resetting notionals etc. detailed handling of the notional is defined in
 paragraph 158.
+\end{quote}
 
     Within this thesis we investigate only equity and interest rate
 derivatives. For these we can make a few exemplary calculations of the
@@ -528,9 +536,9 @@ Maturity data of the underlying swap\strut
 \bottomrule
 \end{longtable}
 
-    \hypertarget{supervisory-delta-adjustments-delta_i}{%
-\subsection{\texorpdfstring{Supervisory delta adjustments:
-\(\delta_i\)}{Supervisory delta adjustments: \textbackslash{}delta\_i}}\label{supervisory-delta-adjustments-delta_i}}
+    \hypertarget{supervisory-delta-adjustments}{%
+\subsection{Supervisory delta
+adjustments}\label{supervisory-delta-adjustments}}
 
 For linear derivatives \(\delta\) is 1 for long derivatives and -1 for
 short derivatives.
@@ -620,7 +628,7 @@ underlying (i.e.~the NPV of the swap is 0) that is set up as follows:
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
 \prompt{Out}{outcolor}{9}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
--0.5987063256828626
+-0.5987063256829928
 \end{Verbatim}
 \end{tcolorbox}
         
