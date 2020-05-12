@@ -13,8 +13,21 @@
 
     These allocation approaches and their advantages and disadvantages are analyzed in further detail in section \ref{Allocation of Risk Measures}. Calculation of pro rata and incremental allocation is fairly straightforward and can generally be performed under any circumstances. Marginal allocation on the other hand is more challenging. This thesis will also include results for incremental and pro rata allocations for the sake of completeness but the main focus will be the analysis of marginal allocation.
 
-    Schulze \citep{schulze2018capital} has analytically calculated the marginal allocation for the FRTB-SA. However, marginal allocation of SA-CCR is still outstanding. This thesis intends to close this gap by 
+    Schulze \citep{schulze2018capital} has analytically calculated the marginal allocation for the FRTB-SA. However, an approach to marginal allocation of SA-CCR has not been published yet. This thesis intends to close this gap by showcasing a numerical marginal allocation approach for SA-CCR. A particular challenge in the allocation of SA-CCR is its consideration of margining. This makes the allocation of SA-CCR dependent on margin models which can themselves be significantly more complex than the SA-CCR model itself.
+
+    The goal of this thesis is to find an approach for allocating SA-CCR while considering margining. Particular focus is put on the allocation of SA-CCR under consideration of variation margin an an internal initial margin model. 
     
     \subsection{Literature review}
     \subsection{Overview}
+
+    Throughout this document a small but diverse selection of derivatives is used for exemplary calculations and to explore edge cases of the different models. Section \ref{Instruments, pricing and market data} does briefly introduce these instruments and the financial models and market data that is used to price them.
+    
+    Since margining is an integral part of the SA-CCR model, section \ref{Margining} will afterwards introduce different margin types and typical counterparty relations and margin models observed in the market. Section \ref{Margining} will also establish why out of the different margin models, the ISDA-SIMM model needs to be investigated the closest for the purpose of this thesis.
+
+    Section \ref{ISDA SIMM} introduces the ISDA SIMM which is the most commonly used model for initial margin calculation of uncleared derivatives. As the ISDA SIMM is based on first order sensitivities, section \ref{ISDA SIMM} also describes how to calculate \gls{ISDA SIMM} compliant sensitivities for the financial instruments introduced in section \ref{Instruments, pricing and market data}.
+
+    After the different margin components have been introduced, section \ref{SA CCR} presents the SA CCR model that is used for the calculation of \gls{EAD} of derivatives.
+
+
+
 \end{document}

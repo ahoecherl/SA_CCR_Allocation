@@ -7,3 +7,8 @@
 .tmp*
 *.fdb_latexmk
 *.fls
+*.glg
+*.glo
+*.ist
+*.gls
+*.sta

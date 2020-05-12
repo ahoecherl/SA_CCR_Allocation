@@ -151,6 +151,8 @@
                                 % normalem makes italics be italics, not underlines
     \usepackage{mathrsfs}
     
+    % Glossary
+    \usepackage[automake]{glossaries}
 
     
     % Colors for the hyperref package
@@ -448,6 +450,8 @@
     
 
 
+\makeglossaries
+\loadglsentries{glossary}
 
 \begin{document}
 
@@ -459,8 +463,12 @@
 \setcounter{page}{1}
 
 \subfile{sections/abstract.tex}
+
+\printglossaries
+
 \subfile{sections/Introduction_motivation_overview.tex}
 \subfile{sections/Instruments_pricing_market_data.tex}
+\subfile{sections/Margining}
 \subfile{sections/ISDA_SIMM_and_Sensitivities.tex}
 \subfile{sections/SA_CCR.tex}
 \subfile{sections/allocation_in_general.tex}
