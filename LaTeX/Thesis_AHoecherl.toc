@@ -3,56 +3,57 @@
 \contentsline {section}{\numberline {1.2}Literature review}{2}{section.1.2}
 \contentsline {section}{\numberline {1.3}Structure of the thesis}{2}{section.1.3}
 \contentsline {chapter}{\numberline {2}Applied models and methods}{4}{chapter.2}
-\contentsline {section}{\numberline {2.1}Instruments, pricing and market data}{5}{section.2.1}
-\contentsline {subsection}{\numberline {2.1.1}European Equity Option}{5}{subsection.2.1.1}
-\contentsline {subsubsection}{\numberline {2.1.1.1}Market data}{5}{subsubsection.2.1.1.1}
-\contentsline {subsubsection}{\numberline {2.1.1.2}Pricing}{5}{subsubsection.2.1.1.2}
-\contentsline {subsection}{\numberline {2.1.2}Overnight indexed swap}{5}{subsection.2.1.2}
-\contentsline {subsubsection}{\numberline {2.1.2.1}Market data}{5}{subsubsection.2.1.2.1}
-\contentsline {subsubsection}{\numberline {2.1.2.2}Pricing}{5}{subsubsection.2.1.2.2}
-\contentsline {subsection}{\numberline {2.1.3}Interest rate swap}{5}{subsection.2.1.3}
-\contentsline {subsubsection}{\numberline {2.1.3.1}Market data}{5}{subsubsection.2.1.3.1}
-\contentsline {subsubsection}{\numberline {2.1.3.2}Pricing}{5}{subsubsection.2.1.3.2}
-\contentsline {subsection}{\numberline {2.1.4}Swaption}{5}{subsection.2.1.4}
-\contentsline {subsubsection}{\numberline {2.1.4.1}Market data}{5}{subsubsection.2.1.4.1}
-\contentsline {subsubsection}{\numberline {2.1.4.2}Pricing}{5}{subsubsection.2.1.4.2}
-\contentsline {section}{\numberline {2.2}Margining}{5}{section.2.2}
-\contentsline {section}{\numberline {2.3}ISDA SIMM}{5}{section.2.3}
-\contentsline {subsection}{\numberline {2.3.1}Reducing counterparty credit risk with initial margin}{5}{subsection.2.3.1}
-\contentsline {subsubsection}{\numberline {2.3.1.1}Market structure and regulatory background}{7}{subsubsection.2.3.1.1}
-\contentsline {subsection}{\numberline {2.3.2}Regulatory requirements for an internal initial margin model}{8}{subsection.2.3.2}
+\contentsline {section}{\numberline {2.1}Instruments, pricing and market data}{4}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}European Equity Option}{6}{subsection.2.1.1}
+\contentsline {subsubsection}{\numberline {2.1.1.1}Market data}{6}{subsubsection.2.1.1.1}
+\contentsline {subsubsection}{\numberline {2.1.1.2}Pricing}{6}{subsubsection.2.1.1.2}
+\contentsline {subsection}{\numberline {2.1.2}Overnight indexed swap}{6}{subsection.2.1.2}
+\contentsline {subsubsection}{\numberline {2.1.2.1}Market data}{6}{subsubsection.2.1.2.1}
+\contentsline {subsubsection}{\numberline {2.1.2.2}Pricing}{6}{subsubsection.2.1.2.2}
+\contentsline {subsection}{\numberline {2.1.3}Interest rate swap}{6}{subsection.2.1.3}
+\contentsline {subsubsection}{\numberline {2.1.3.1}Market data}{6}{subsubsection.2.1.3.1}
+\contentsline {subsubsection}{\numberline {2.1.3.2}Pricing}{6}{subsubsection.2.1.3.2}
+\contentsline {subsection}{\numberline {2.1.4}Swaption}{6}{subsection.2.1.4}
+\contentsline {subsubsection}{\numberline {2.1.4.1}Market data}{6}{subsubsection.2.1.4.1}
+\contentsline {subsubsection}{\numberline {2.1.4.2}Pricing}{6}{subsubsection.2.1.4.2}
+\contentsline {section}{\numberline {2.2}Margining}{6}{section.2.2}
+\contentsline {section}{\numberline {2.3}ISDA SIMM}{6}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Reducing counterparty credit risk with initial margin}{6}{subsection.2.3.1}
+\contentsline {subsubsection}{\numberline {2.3.1.1}Market structure and regulatory background}{8}{subsubsection.2.3.1.1}
+\contentsline {subsection}{\numberline {2.3.2}Regulatory requirements for an internal initial margin model}{9}{subsection.2.3.2}
 \contentsline {subsection}{\numberline {2.3.3}The ISDA-SIMM model}{9}{subsection.2.3.3}
-\contentsline {subsection}{\numberline {2.3.4}Calculation of ISDA SIMM compliant sensitivities}{9}{subsection.2.3.4}
-\contentsline {section}{\numberline {2.4}SA CCR}{9}{section.2.4}
-\contentsline {subsection}{\numberline {2.4.1}Capital requirements for counterparty credit risk}{9}{subsection.2.4.1}
-\contentsline {subsection}{\numberline {2.4.2}Calculation of SA CCR}{9}{subsection.2.4.2}
-\contentsline {paragraph}{Relation of RC and PFE}{10}{section*.9}
-\contentsline {paragraph}{Definition of Potential Future Exposure (PFE)}{11}{section*.10}
-\contentsline {subsubsection}{\numberline {2.4.2.1}AddOn calculation}{11}{subsubsection.2.4.2.1}
-\contentsline {subparagraph}{\(M_i\)}{11}{section*.11}
-\contentsline {subparagraph}{\(S_i\)}{12}{section*.12}
-\contentsline {subparagraph}{\(E_i\)}{12}{section*.13}
-\contentsline {subparagraph}{\(T_i\)}{12}{section*.14}
-\contentsline {subsection}{\numberline {2.4.3}Trade level adjusted notional}{12}{subsection.2.4.3}
-\contentsline {paragraph}{Interest rate and credit derivatives}{12}{section*.15}
-\contentsline {paragraph}{FX derivatives}{13}{section*.16}
-\contentsline {paragraph}{Equity and commodity derivatives}{13}{section*.17}
-\contentsline {paragraph}{Notional of exotic derivatives}{13}{section*.18}
-\contentsline {subsection}{\numberline {2.4.4}Supervisory delta adjustments}{14}{subsection.2.4.4}
-\contentsline {subsubsection}{\numberline {2.4.4.1}Risk Horizon}{18}{subsubsection.2.4.4.1}
-\contentsline {subsection}{\numberline {2.4.5}AddOn for interest rate derivatives}{20}{subsection.2.4.5}
-\contentsline {paragraph}{Step 1 - calculation of effective notional \(D_{jk}^{IR}\)}{20}{section*.19}
-\contentsline {section}{\numberline {2.5}Allocation of Risk Measures}{21}{section.2.5}
-\contentsline {subsection}{\numberline {2.5.1}Incremental allocation}{22}{subsection.2.5.1}
-\contentsline {subsection}{\numberline {2.5.2}Marginal allocation}{23}{subsection.2.5.2}
-\contentsline {chapter}{\numberline {3}Results}{24}{chapter.3}
-\contentsline {section}{\numberline {3.1}Allocation of initial margin}{24}{section.3.1}
-\contentsline {section}{\numberline {3.2}Allocation of SA-CCR}{24}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Allocation without margining}{24}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Allocation under VM collateralization}{24}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Allocation under VM and IM collateralization}{24}{subsection.3.2.3}
-\contentsline {chapter}{\numberline {4}Outlook and conclusion}{25}{chapter.4}
-\contentsline {section}{\numberline {4.1}Outlook}{25}{section.4.1}
-\contentsline {section}{\numberline {4.2}Conclusion}{25}{section.4.2}
-\contentsline {chapter}{Appendix \numberline {A}Architectural blueprint for SA-CCR allocation}{26}{Appendix.a.A}
-\contentsline {chapter}{Bibliography}{26}{Appendix.a.A}
+\contentsline {subsection}{\numberline {2.3.4}Calculation of ISDA SIMM compliant sensitivities}{10}{subsection.2.3.4}
+\contentsline {section}{\numberline {2.4}SA-CCR}{10}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Capital requirements for counterparty credit risk}{10}{subsection.2.4.1}
+\contentsline {subsection}{\numberline {2.4.2}Calculation of SA-CCR}{10}{subsection.2.4.2}
+\contentsline {paragraph}{Relation of RC and PFE}{11}{section*.7}
+\contentsline {paragraph}{Definition of Potential Future Exposure (PFE)}{11}{section*.8}
+\contentsline {subsubsection}{\numberline {2.4.2.1}AddOn calculation}{13}{subsubsection.2.4.2.1}
+\contentsline {subparagraph}{\(M_i\)}{13}{section*.9}
+\contentsline {subparagraph}{\(S_i\)}{13}{section*.10}
+\contentsline {subparagraph}{\(E_i\)}{13}{section*.11}
+\contentsline {subparagraph}{\(T_i\)}{13}{section*.12}
+\contentsline {subsection}{\numberline {2.4.3}Trade level adjusted notional}{13}{subsection.2.4.3}
+\contentsline {paragraph}{Interest rate and credit derivatives}{13}{section*.13}
+\contentsline {paragraph}{FX derivatives}{14}{section*.14}
+\contentsline {paragraph}{Equity and commodity derivatives}{14}{section*.15}
+\contentsline {paragraph}{Notional of exotic derivatives}{14}{section*.16}
+\contentsline {subsection}{\numberline {2.4.4}Supervisory delta adjustments}{15}{subsection.2.4.4}
+\contentsline {subsubsection}{\numberline {2.4.4.1}Risk Horizon}{19}{subsubsection.2.4.4.1}
+\contentsline {subsection}{\numberline {2.4.5}AddOn for interest rate derivatives}{21}{subsection.2.4.5}
+\contentsline {paragraph}{Step 1 - calculation of effective notional \(D_{jk}^{IR}\)}{21}{section*.17}
+\contentsline {section}{\numberline {2.5}Allocation of Risk Measures}{22}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}Incremental allocation}{23}{subsection.2.5.1}
+\contentsline {subsection}{\numberline {2.5.2}Marginal allocation}{24}{subsection.2.5.2}
+\contentsline {chapter}{\numberline {3}Results}{25}{chapter.3}
+\contentsline {section}{\numberline {3.1}Allocation of initial margin}{25}{section.3.1}
+\contentsline {section}{\numberline {3.2}Allocation of SA-CCR}{25}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Allocation without margining}{25}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Allocation under VM collateralization}{25}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Allocation under VM and IM collateralization}{25}{subsection.3.2.3}
+\contentsline {chapter}{\numberline {4}Outlook and conclusion}{26}{chapter.4}
+\contentsline {section}{\numberline {4.1}Outlook}{26}{section.4.1}
+\contentsline {section}{\numberline {4.2}Conclusion}{26}{section.4.2}
+\contentsline {chapter}{Appendix \numberline {A}Architectural blueprint for SA-CCR allocation}{27}{Appendix.a.A}
+\contentsline {chapter}{Glossary}{28}{section*.19}
+\contentsline {chapter}{Bibliography}{28}{table.4.1}

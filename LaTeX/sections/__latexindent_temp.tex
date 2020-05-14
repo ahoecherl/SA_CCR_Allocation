@@ -1,5 +1,43 @@
 \documentclass[../Thesis_AHoecherl.tex]{subfiles}
 
 \begin{document}
-    \chapter{Architectural blueprint for SA-CCR allocation}\label{Architectural blueprint for SA-CCR allocation}
+    \section{Instruments, pricing and market data}\label{Instruments, pricing and market data}
+    For the analysis presented in chapter \ref{Results} a small but diverse set of financial instruments is required. Due to the structure of the \gls{ISDA SIMM} and the \gls{SA-CCR} model the set of financial instruments should meet the following criteria:
+
+    \begin{enumerate}
+        \item The instruments should range across multiple asset classes
+        \item Non-linear instruments should be included
+        \item The instruments should range across multiple currencies
+        \item The instruments should be commonly traded as bilateral, uncleared derivatives to be relevant for \gls{ISDA SIMM} \label{uncleared}
+        \item Pricing and sensitivity calculation should be possible without implementation of simulation approaches \label{easy_to_price}
+        \item Inferring market data objects required for pricing from market quotes of traded instruments must be simple \label{link_to_market_quotes}   
+    \end{enumerate}
+    
+    Items \ref{uncleared} and \ref{easy_to_price} of the above list are slightly conflicting. Bilaterally traded derivatives are usually more complex than cleared derivatives. Due to this increased complexity many of them have to be priced with a Monte Carlo simulation since an analytical solution is not possible.
+
+    Item \ref{link_to_market_quotes} rises from the requirement of the \gls{ISDA SIMM} model to calculate all sensitivities against market quotes. This means for example, that interest rate sensitivities mustn't be calculated with regard to a movement of the interest rate curve used as a pricing input but with regard to the price of the traded instrument that is used to build the interest rate curve in the first place. In the case of interest rate curves the process to build an interest rate curve is commonly referred to as \emph{bootstrapping} and has to be performed again whenever a sensitivity is calculated to be compliant with \gls{ISDA SIMM}. Designing a pricing framework that can handle this required interdependence of market quotes, market data objects such as curves and priced instruments is a steep task even for deceptively simple instruments such as plain vanilla interest rate swaps. For this reason the implementation was based on QuantLib which offers an excellent and proven framework to monitor these interdepencies with ease. Calculation of \gls{ISDA SIMM} compliant sensitivities of the instruments introduced in this section is the topic of section \ref{Calculation of ISDA SIMM compliant sensitivities}.
+
+    Careful consideration of the criteria listed above and the available market data lead to the following set of financial instruments that will be used for analysis:
+
+    \begin{itemize}
+        \item European equity options
+        \item Overnight indexed swaps
+        \item Interest rate swaps
+        \item Swaptions
+    \end{itemize}
+
+
+
+    \subsection{European Equity Option}
+    \subsubsection{Market data}
+    \subsubsection{Pricing}
+    \subsection{Overnight indexed swap}
+    \subsubsection{Market data}
+    \subsubsection{Pricing}
+    \subsection{Interest rate swap}
+    \subsubsection{Market data}
+    \subsubsection{Pricing} 
+    \subsection{Swaption}
+    \subsubsection{Market data}
+    \subsubsection{Pricing}
 \end{document}
