@@ -3,7 +3,7 @@
 \begin{document}
     \section{Introduction and motivation}
 
-    With increasing sophistication of risk models, own capital models and margining models the need for equally sophisticated tools for allocating these measures rises as well. For any risk metric that considers portfolio effects calculating the contribution to the risk measure of individual trades is a challenge. As part of the Basel 3 reform, \todo{Add appropriate citation to Basel 3 or CRD 2} regulators have updated the standardized models for market risk own capital requirement and credit risk own capital requirements. The new standardized model for market risk own capital requirements is the FRTB-SA \todo{Citation to FRTB-SA needed} and the new standardized model for credit risk own capital requirements is the SA-CCR model \todo{Enter Citation of SA-CCR}. Both of these models are portfolio based risk models. Gregory \citep[Chapter~10.7]{gregory2015xva} states that three allocation approaches are used in practice:
+    With increasing sophistication of risk models, own capital models and margining models the need for equally sophisticated tools for allocating these measures rises as well. For any risk metric that considers portfolio effects calculating the contribution to the risk measure of individual trades is a challenge. As part of the Basel 3 reform, \todo{Add appropriate citation to Basel 3 or CRD 2} regulators have updated the standardized models for market risk own capital requirement and credit risk own capital requirements. The new standardized model for market risk own capital requirements is the FRTB-SA \todo{Citation to FRTB-SA needed} and the new standardized model for credit risk own capital requirements is the SA-CCR model \todo{Enter Citation of SA-CCR}. Both of these models are portfolio based risk models. Gregory \cite[Chapter~10.7]{gregory2015xva} states that three allocation approaches are used in practice:
 
     \begin{itemize}
         \item Incremental allocation for pre trade risk checks and for front office incentivization  
@@ -13,7 +13,7 @@
 
     These allocation approaches and their advantages and disadvantages are analyzed in further detail in section \ref{Allocation of Risk Measures}. Calculation of pro rata and incremental allocation is fairly straightforward and can generally be performed under any circumstances. Marginal allocation on the other hand is more challenging. This thesis will also include results for incremental and pro rata allocations for the sake of completeness but the main focus will be the analysis of marginal allocation.
 
-    Schulze \citep{schulze2018capital} has analytically calculated the marginal allocation for the FRTB-SA. However, an approach to marginal allocation of SA-CCR has not been published yet. This thesis intends to close this gap by showcasing a numerical marginal allocation approach for SA-CCR. A particular challenge in the allocation of SA-CCR is its consideration of margining. This makes the allocation of SA-CCR dependent on margin models which can themselves be significantly more complex than the SA-CCR model itself.
+    Schulze \cite{schulze2018capital} has analytically calculated the marginal allocation for the FRTB-SA. However, an approach to marginal allocation of SA-CCR has not been published yet. This thesis intends to close this gap by showcasing a numerical marginal allocation approach for SA-CCR. A particular challenge in the allocation of SA-CCR is its consideration of margining. This makes the allocation of SA-CCR dependent on margin models which can themselves be significantly more complex than the SA-CCR model itself.
 
     The goal of this thesis is to find an approach for allocating SA-CCR while considering margining. Particular focus is put on the allocation of SA-CCR under consideration of variation margin an an internal initial margin model. 
     
@@ -34,8 +34,10 @@
 
     As the received initial margin is a subcomponent of SA-CCR it might be necessary to also allocate initial margin. Due to the complexity of initial margin models allocation of this subcomponent is investigated separately. Section \ref{Allocation of initial margin} establishes numerical approaches for marginal and incremental allocation of initial margin figures.
 
-    Finally, section \ref{Allocation of SA-CCR} uses the results of all previous sections as the basis to analyse the marginal and incremental allocation of SA-CCR. The prerequisites for marginal allocation are higher than those for incremental allocation. Therefore, the section investigates in detail under which circumstances marginal allocation of SA-CCR is possible
+    Finally, section \ref{Allocation of SA-CCR} uses the results of all previous sections as the basis to analyze the marginal and incremental allocation of SA-CCR. The prerequisites for marginal allocation are higher than those for incremental allocation. Therefore, the section investigates in detail under which circumstances marginal allocation of SA-CCR is possible and examines portfolios that represent edge cases.
+    
+    Section \ref{Outlook} provides an outlook to adjacent topics and other use cases of SA-CCR allocation which might yield different challenges. Section \ref{Conclusion} concludes.
 
-
+    For the interested reader, Appendix \ref{Architectural blueprint for SA-CCR allocation} showcases an architecture blueprint for the implementation of SA-CCR and initial margin allocation as presented in this thesis.
 
 \end{document}

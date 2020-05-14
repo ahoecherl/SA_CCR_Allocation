@@ -1,14 +1,5 @@
-\documentclass[12pt,a4paper]{article}
-%   Standards
-    \usepackage[latin1]{inputenc}
-    \usepackage{fontenc}
-%   Bibliography style
-%    \usepackage{chicago}
+\documentclass[12pt]{ociamthesis}
 
-% German language support
-  % \usepackage{german}
-  % \usepackage{bibgerm}
-	 \usepackage[english]{babel}
 
 %   Mathematics
     \usepackage{amsmath}
@@ -17,33 +8,10 @@
     \usepackage{amscd}
     \usepackage{amsfonts}
 
+%   TODOs
     \usepackage{xargs}
     \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
 
-%   Formatting
-	\usepackage{url}
-    \usepackage{graphicx}   %Graphics
-    \usepackage{booktabs}   %Tables
-    \usepackage{a4}         %Page setting
-    \usepackage{fancyhdr}   %Headers and footers
-    \usepackage{longtable}  %Tabellen l\"{a}nger als eine Seite
-    \usepackage{subfigure}
-    \usepackage{textcomp}   %For Trademark Symbol
-    \usepackage{enumerate}
-    \usepackage{epsfig}
-    \usepackage{layout}
-    \usepackage{tabularx}
-    \usepackage{array}
-    \usepackage{wasysym}
-    \usepackage{fancybox}
-    \usepackage{color}
-		\usepackage{mathtools}
-    \usepackage{rotating}
-   % \usepackage{slashbox}% kann in Tabelle diagonalen Strich darstellen
-    \usepackage{multirow}
-    \usepackage{natbib}		% Anpassung
-		\usepackage{pdfpages}
-		%\usepackage{jurabib}
 		
     %using subfiles
     %\usepackage[subpreambles=true]{standalone}
@@ -52,40 +20,13 @@
 		
 
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
-
-    %Calculation: 1Inch = 2.54 cm
-        \setlength{\topmargin}{0.0in}
-				\setlength{\oddsidemargin}{0.33in}
-				\setlength{\textheight}{9.0in}
-				\setlength{\textwidth}{6.0in}
 				
-
-    %Chapter pages
-        \pagestyle{headings}
-%        \pagestyle{fancy}
-%        \lhead{\emph{COLLATERALIZED DEBT OBLIGATIONS}}
-%        \chead{}
-%        \rhead{\thepage}
-%        \lfoot{}
-%        \cfoot{}
-%        \rfoot{}
-%        \renewcommand{\headrulewidth}{0pt}
-%        \renewcommand{\footrulewidth}{0pt}
-
-    % Chapter title pages
-        \renewcommand{\baselinestretch}{1.25}
-				\let\footnoteOld\footnote		% Zeilenabstand in der Fussnote wird zurückgesetzt
-				\renewcommand{\footnote}[1]{\linespread{1.0}\footnoteOld{#1}\linespread{1.2}}		% Zeilenabstand in der Fußnote wird gesetzt
-				
-
-
-\renewcommand{\baselinestretch}{1.25}
 
 
 \title{SA CCR Allocation under consideration of ISDA-SIMM, Master Thesis}
 \author{Candidate Number: 1018756}
 
-
+%   The lenghty following preamble is for the inclusion and rendering of Jupyter notebooks converted to Latex with nb-convert. 
     \usepackage[breakable]{tcolorbox}
     \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
     
@@ -482,6 +423,7 @@
 \bibliography{Thesis_Bib}
 \newpage
 \begin{appendix}
+\subfile{sections/architecture_blueprint.tex}
 \end{appendix}
 \newpage \thispagestyle{empty}
 
