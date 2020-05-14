@@ -75,9 +75,10 @@
     \usepackage{mathrsfs}
 
 % Colors for the hyperref package
-\definecolor{urlcolor}{rgb}{0,.145,.698}
-\definecolor{linkcolor}{rgb}{.71,0.21,0.01}
-\definecolor{citecolor}{rgb}{.12,.54,.11}
+
+\definecolor{urlcolor}{rgb}{0,0,0}
+\definecolor{linkcolor}{rgb}{0,0,0}
+\definecolor{citecolor}{rgb}{0,0,0}
 
 % ANSI colors
 \definecolor{ansi-black}{HTML}{3E424D}
@@ -361,20 +362,23 @@
       linkcolor=linkcolor,
       citecolor=citecolor,
       }
-% This Concludes the preamble for inclusion of jupyter notebooks.    
+% This Concludes the preamble for inclusion of jupyter notebooks.
 
+% Get rid of first page which is blank for inexplicable reasons
+\usepackage{atbegshi}% http://ctan.org/pkg/atbegshi
+\AtBeginDocument{\AtBeginShipoutNext{\AtBeginShipoutDiscard}}
 
 % Glossary
 \usepackage[automake]{glossaries}
 
-\title{SA CCR Allocation under\\
-        consideration of margining}
+\title{SA CCR Allocation under consideration of margining}
 \author{Andreas H\"ocherl}
 \college{Christ Church College}
 \degree{Master of Science}
 \degreedate{Trinity 2020}
 
-
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
 
 \makeglossaries
 \loadglsentries{glossary}
