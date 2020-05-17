@@ -1,0 +1,6 @@
+,Associated CCR,MPoR,IM posted,IM received,VM
+Exchange trades derivatives,The bank has no direct counterparty credit risk. It may however suffer losses to its clearing fund contribution if another Member of the CCP defaults.,<5 days,Calculated by the CCP using a proprietary internal initial margin model,Always zero - In line with the assumption that the CCP can not default the CCP does not post IM to its clearing members,The daily PnL of the portfolio is exchanged as VM between the CCP and the Bank
+Cleared OTC derivatives,,5 days,,,
+Uncollateralized bilateral derivatives,Very high - the entire MtM of the portfolio is at risk,Maturity of the derivative,Always zero,Always zero,Always zero
+VM-collateralzed bilateral derivatives,Significant - When the counterparty defaults the bank can suffer unmitigated losses for a couple of days until it can rebuild its position,at least 10 days are mandated by the regulator,Always zero,Always zero,"VM exchange is subject to contract parameters such as threshold, exchange frquency etc"
+VM and IM collateralized bilateral derivatives,Very low - ,,IM is calculated with an internal or standardized bilateral initial margin model. Posted and received IM are recalculated daily.,,

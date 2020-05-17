@@ -23,6 +23,22 @@
     %\usepackage[subpreambles=true]{standalone}
     \usepackage{import}
     \usepackage{subfiles}
+
+    \usepackage{nameref}
+
+    %make it possible to reference description by name instead of number if prefereable
+    \makeatletter
+    \let\orgdescriptionlabel\descriptionlabel
+    \renewcommand*{\descriptionlabel}[1]{%
+    \let\orglabel\label
+    \let\label\@gobble
+    \phantomsection
+    \edef\@currentlabel{#1\unskip}%
+    %\edef\@currentlabelname{#1}%
+    \let\label\orglabel
+    \orgdescriptionlabel{#1}%
+    }
+    \makeatother
 		
 
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}

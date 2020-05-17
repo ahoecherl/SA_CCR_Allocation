@@ -17,31 +17,30 @@
 \contentsline {subsubsection}{\numberline {2.1.4.1}Market data}{6}{subsubsection.2.1.4.1}
 \contentsline {subsubsection}{\numberline {2.1.4.2}Pricing}{6}{subsubsection.2.1.4.2}
 \contentsline {section}{\numberline {2.2}Margining}{6}{section.2.2}
-\contentsline {section}{\numberline {2.3}ISDA SIMM}{6}{section.2.3}
-\contentsline {subsection}{\numberline {2.3.1}Reducing counterparty credit risk with initial margin}{6}{subsection.2.3.1}
-\contentsline {subsubsection}{\numberline {2.3.1.1}Market structure and regulatory background}{8}{subsubsection.2.3.1.1}
-\contentsline {subsection}{\numberline {2.3.2}Regulatory requirements for an internal initial margin model}{9}{subsection.2.3.2}
-\contentsline {subsection}{\numberline {2.3.3}The ISDA-SIMM model}{9}{subsection.2.3.3}
-\contentsline {subsection}{\numberline {2.3.4}Calculation of ISDA SIMM compliant sensitivities}{10}{subsection.2.3.4}
+\contentsline {subsection}{\numberline {2.2.1}Market structure and associated margining approaches}{8}{subsection.2.2.1}
+\contentsline {section}{\numberline {2.3}ISDA SIMM}{9}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Regulatory requirements for an internal initial margin model}{9}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}The ISDA-SIMM model}{10}{subsection.2.3.2}
+\contentsline {subsection}{\numberline {2.3.3}Calculation of ISDA SIMM compliant sensitivities}{10}{subsection.2.3.3}
 \contentsline {section}{\numberline {2.4}SA-CCR}{10}{section.2.4}
 \contentsline {subsection}{\numberline {2.4.1}Capital requirements for counterparty credit risk}{10}{subsection.2.4.1}
-\contentsline {subsection}{\numberline {2.4.2}Calculation of SA-CCR}{10}{subsection.2.4.2}
-\contentsline {paragraph}{Relation of RC and PFE}{11}{section*.7}
-\contentsline {paragraph}{Definition of Potential Future Exposure (PFE)}{11}{section*.8}
-\contentsline {subsubsection}{\numberline {2.4.2.1}AddOn calculation}{13}{subsubsection.2.4.2.1}
-\contentsline {subparagraph}{\(M_i\)}{13}{section*.9}
-\contentsline {subparagraph}{\(S_i\)}{13}{section*.10}
-\contentsline {subparagraph}{\(E_i\)}{13}{section*.11}
-\contentsline {subparagraph}{\(T_i\)}{13}{section*.12}
-\contentsline {subsection}{\numberline {2.4.3}Trade level adjusted notional}{13}{subsection.2.4.3}
-\contentsline {paragraph}{Interest rate and credit derivatives}{13}{section*.13}
-\contentsline {paragraph}{FX derivatives}{14}{section*.14}
-\contentsline {paragraph}{Equity and commodity derivatives}{14}{section*.15}
-\contentsline {paragraph}{Notional of exotic derivatives}{14}{section*.16}
+\contentsline {subsection}{\numberline {2.4.2}Calculation of SA-CCR}{11}{subsection.2.4.2}
+\contentsline {paragraph}{Relation of RC and PFE}{11}{section*.15}
+\contentsline {paragraph}{Definition of Potential Future Exposure (PFE)}{12}{section*.16}
+\contentsline {subsubsection}{\numberline {2.4.2.1}AddOn calculation}{12}{subsubsection.2.4.2.1}
+\contentsline {subparagraph}{\(M_i\)}{13}{section*.17}
+\contentsline {subparagraph}{\(S_i\)}{13}{section*.18}
+\contentsline {subparagraph}{\(E_i\)}{13}{section*.19}
+\contentsline {subparagraph}{\(T_i\)}{13}{section*.20}
+\contentsline {subsection}{\numberline {2.4.3}Trade level adjusted notional}{14}{subsection.2.4.3}
+\contentsline {paragraph}{Interest rate and credit derivatives}{14}{section*.21}
+\contentsline {paragraph}{FX derivatives}{14}{section*.22}
+\contentsline {paragraph}{Equity and commodity derivatives}{14}{section*.23}
+\contentsline {paragraph}{Notional of exotic derivatives}{14}{section*.24}
 \contentsline {subsection}{\numberline {2.4.4}Supervisory delta adjustments}{15}{subsection.2.4.4}
-\contentsline {subsubsection}{\numberline {2.4.4.1}Risk Horizon}{19}{subsubsection.2.4.4.1}
+\contentsline {subsubsection}{\numberline {2.4.4.1}Risk Horizon}{20}{subsubsection.2.4.4.1}
 \contentsline {subsection}{\numberline {2.4.5}AddOn for interest rate derivatives}{21}{subsection.2.4.5}
-\contentsline {paragraph}{Step 1 - calculation of effective notional \(D_{jk}^{IR}\)}{21}{section*.17}
+\contentsline {paragraph}{Step 1 - calculation of effective notional \(D_{jk}^{IR}\)}{21}{section*.25}
 \contentsline {section}{\numberline {2.5}Allocation of Risk Measures}{22}{section.2.5}
 \contentsline {subsection}{\numberline {2.5.1}Incremental allocation}{23}{subsection.2.5.1}
 \contentsline {subsection}{\numberline {2.5.2}Marginal allocation}{24}{subsection.2.5.2}
@@ -55,5 +54,5 @@
 \contentsline {section}{\numberline {4.1}Outlook}{26}{section.4.1}
 \contentsline {section}{\numberline {4.2}Conclusion}{26}{section.4.2}
 \contentsline {chapter}{Appendix \numberline {A}Architectural blueprint for SA-CCR allocation}{27}{Appendix.a.A}
-\contentsline {chapter}{Glossary}{28}{section*.19}
+\contentsline {chapter}{Glossary}{28}{section*.27}
 \contentsline {chapter}{Bibliography}{28}{table.4.1}
