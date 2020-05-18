@@ -23,19 +23,19 @@
 \contentsline {subsection}{\numberline {2.3.2}The ISDA-SIMM model}{10}{subsection.2.3.2}
 \contentsline {subsection}{\numberline {2.3.3}Calculation of ISDA SIMM compliant sensitivities}{10}{subsection.2.3.3}
 \contentsline {section}{\numberline {2.4}SA-CCR}{10}{section.2.4}
-\contentsline {subsection}{\numberline {2.4.1}Calculation of SA-CCR}{11}{subsection.2.4.1}
-\contentsline {section}{\numberline {2.5}Allocation of Risk Measures}{12}{section.2.5}
-\contentsline {subsection}{\numberline {2.5.1}Incremental allocation}{13}{subsection.2.5.1}
-\contentsline {subsection}{\numberline {2.5.2}Marginal allocation}{14}{subsection.2.5.2}
-\contentsline {chapter}{\numberline {3}Results}{15}{chapter.3}
-\contentsline {section}{\numberline {3.1}Allocation of initial margin}{15}{section.3.1}
-\contentsline {section}{\numberline {3.2}Allocation of SA-CCR}{15}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Allocation without margining}{15}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Allocation under VM collateralization}{15}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Allocation under VM and IM collateralization}{15}{subsection.3.2.3}
-\contentsline {chapter}{\numberline {4}Outlook and conclusion}{16}{chapter.4}
-\contentsline {section}{\numberline {4.1}Outlook}{16}{section.4.1}
-\contentsline {section}{\numberline {4.2}Conclusion}{16}{section.4.2}
-\contentsline {chapter}{Appendix \numberline {A}Architectural blueprint for SA-CCR allocation}{17}{Appendix.a.A}
-\contentsline {chapter}{Glossary}{18}{section*.20}
-\contentsline {chapter}{Bibliography}{18}{table.4.1}
+\contentsline {subsection}{\numberline {2.4.1}Consideration of margining in SA-CCR}{11}{subsection.2.4.1}
+\contentsline {section}{\numberline {2.5}Allocation of Risk Measures}{13}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}Incremental allocation}{14}{subsection.2.5.1}
+\contentsline {subsection}{\numberline {2.5.2}Marginal allocation}{15}{subsection.2.5.2}
+\contentsline {chapter}{\numberline {3}Results}{16}{chapter.3}
+\contentsline {section}{\numberline {3.1}Allocation of initial margin}{16}{section.3.1}
+\contentsline {section}{\numberline {3.2}Allocation of SA-CCR}{16}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Allocation without margining}{16}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Allocation under VM collateralization}{16}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Allocation under VM and IM collateralization}{16}{subsection.3.2.3}
+\contentsline {chapter}{\numberline {4}Outlook and conclusion}{17}{chapter.4}
+\contentsline {section}{\numberline {4.1}Outlook}{17}{section.4.1}
+\contentsline {section}{\numberline {4.2}Conclusion}{17}{section.4.2}
+\contentsline {chapter}{Appendix \numberline {A}Architectural blueprint for SA-CCR allocation}{18}{Appendix.a.A}
+\contentsline {chapter}{Glossary}{19}{section*.22}
+\contentsline {chapter}{Bibliography}{19}{table.4.1}

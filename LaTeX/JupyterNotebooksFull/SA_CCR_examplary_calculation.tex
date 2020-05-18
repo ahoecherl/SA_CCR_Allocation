@@ -1,0 +1,1419 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for grffile with XeLaTeX
+    \def\Gread@@xetex#1{%
+      \IfFileExists{"\Gin@base".bb}%
+      {\Gread@eps{\Gin@base.bb}}%
+      {\Gread@@xetex@aux#1}%
+    }
+    \makeatother
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{SA\_CCR\_examplary\_calculation}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        \ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{sa-ccr}{%
+\section{SA-CCR}\label{sa-ccr}}
+
+    When using \emph{SA-CCR} the exposure at default (EAD) has to be
+calculated as:
+
+\begin{align*}
+EAD &= \alpha * (RC + PFE)\\
+\\
+\text{where} \qquad \alpha&=1.4 \\
+RC&: \text{Replacement Cost} \\
+PFE&: \text{Potential Future Exposure}
+\end{align*}
+
+Let's set this relationship up in Python
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}hidden}
+
+\PY{c+c1}{\PYZsh{} Imports}
+\PY{k+kn}{from} \PY{n+nn}{datetime} \PY{k+kn}{import} \PY{n}{datetime}\PY{p}{,} \PY{n}{timedelta}
+\PY{k+kn}{from} \PY{n+nn}{enum} \PY{k+kn}{import} \PY{n}{Enum}
+\PY{k+kn}{from} \PY{n+nn}{math} \PY{k+kn}{import} \PY{n}{exp}\PY{p}{,} \PY{n}{log}\PY{p}{,} \PY{n}{sqrt}
+\PY{k+kn}{from} \PY{n+nn}{typing} \PY{k+kn}{import} \PY{n}{List}
+\PY{k+kn}{import} \PY{n+nn}{numpy}
+\PY{k+kn}{from} \PY{n+nn}{pandas} \PY{k+kn}{import} \PY{n}{read\PYZus{}csv}\PY{p}{,} \PY{n}{DataFrame}\PY{p}{,} \PY{n}{Series}
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k+kn}{import} \PY{n}{norm}
+\PY{k+kn}{from} \PY{n+nn}{utilities}\PY{n+nn}{.}\PY{n+nn}{Enums} \PY{k+kn}{import} \PY{n}{TradeType}\PY{p}{,} \PY{n}{TradeDirection}\PY{p}{,} \PY{n}{SwapDirection}\PY{p}{,} \PY{n}{AssetClass}\PY{p}{,} \PY{n}{MaturityBucket}\PY{p}{,} \PY{n}{SubClass}\PY{p}{,} \PY{n}{CreditSubClass}\PY{p}{,} \PYZbs{}
+    \PY{n}{EquitySubClass}\PY{p}{,} \PY{n}{Currency}\PY{p}{,} \PY{n}{CurrencyPair}\PY{p}{,} \PY{n}{Stock}
+\PY{k+kn}{from} \PY{n+nn}{collateralAgreement} \PY{k+kn}{import} \PY{n}{CollateralAgreement}\PY{p}{,} \PY{n}{Margining}\PY{p}{,} \PY{n}{Clearing}\PY{p}{,} \PY{n}{Tradecount}\PY{p}{,} \PY{n}{Dispute}
+\PY{k+kn}{from} \PY{n+nn}{instruments}\PY{n+nn}{.}\PY{n+nn}{Trade} \PY{k+kn}{import} \PY{n}{Trade}
+\PY{k+kn}{from} \PY{n+nn}{instruments}\PY{n+nn}{.}\PY{n+nn}{equity\PYZus{}instruments}\PY{n+nn}{.}\PY{n+nn}{equityForward} \PY{k+kn}{import} \PY{n}{EquityForward}
+\PY{k+kn}{from} \PY{n+nn}{instruments}\PY{n+nn}{.}\PY{n+nn}{fx\PYZus{}instruments}\PY{n+nn}{.}\PY{n+nn}{fxForward} \PY{k+kn}{import} \PY{n}{FxForward}
+\PY{k+kn}{from} \PY{n+nn}{instruments}\PY{n+nn}{.}\PY{n+nn}{fx\PYZus{}instruments}\PY{n+nn}{.}\PY{n+nn}{fxOption} \PY{k+kn}{import} \PY{n}{FxOption}
+
+\PY{k+kn}{from} \PY{n+nn}{marketdata}\PY{n+nn}{.}\PY{n+nn}{init\PYZus{}marketdata} \PY{k+kn}{import} \PY{n}{today}
+\PY{n}{today}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        ---------------------------------------------------------------------------
+
+        ModuleNotFoundError                       Traceback (most recent call last)
+
+        <ipython-input-1-eba5627208cd> in <module>
+          9 from pandas import read\_csv, DataFrame, Series
+         10 from scipy.stats import norm
+    ---> 11 from utilities.Enums import TradeType, TradeDirection, SwapDirection, AssetClass, MaturityBucket, SubClass, CreditSubClass, \textbackslash{}
+         12     EquitySubClass, Currency, CurrencyPair, Stock
+         13 from collateralAgreement import CollateralAgreement, Margining, Clearing, Tradecount, Dispute
+    
+
+        ModuleNotFoundError: No module named 'utilities'
+
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}ead}\PY{p}{(}\PY{n}{rc}\PY{p}{:}\PY{n+nb}{float} \PY{p}{,} \PY{n}{pfe}\PY{p}{:} \PY{n+nb}{float}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Calculate EAD of SA\PYZhy{}CCR as defined in paragraph 186.}
+\PY{l+s+sd}{               }
+\PY{l+s+sd}{    :param rc: Replacement Cost}
+\PY{l+s+sd}{    :param pfe: Potential Future Exposure}
+\PY{l+s+sd}{    :return: Exposure at default according to SA\PYZhy{}CCR}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+
+    \PY{n}{alpha} \PY{o}{=} \PY{l+m+mf}{1.4} \PY{c+c1}{\PYZsh{}Carried over from alpha used for IMM}
+    \PY{k}{return} \PY{n}{alpha}\PY{o}{*}\PY{p}{(}\PY{n}{rc}\PY{o}{+}\PY{n}{pfe}\PY{p}{)}
+
+\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}ead}\PY{p}{(}\PY{l+m+mf}{10.0}\PY{p}{,}\PY{l+m+mf}{15.0}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    SA-CCR differentiates between the following asset classes:
+
+\begin{itemize}
+\tightlist
+\item
+  Interest rate derivatives
+\item
+  Foreign exchange derivatives
+\item
+  Credit derivatives
+\item
+  Equity derivatives
+\item
+  Commodity derivatives
+\end{itemize}
+
+Each of these asset classes is differentiated again into different
+hedging sets - Netting of expsoure is only possible within a common
+hedging set. The definition of a hedging set depends on the asset class.
+For FX derivatives derivatives based on the same currency pair form a
+hedging set. For Equity derivatives on the other hand all trades are in
+a common hedging set. For all asset classes, derivatives that have a
+basis as an underlying and volatility derivatives form two seperate
+hedging sets.
+
+This should be moving
+
+    \hypertarget{relation-of-rc-and-pfe}{%
+\subsubsection{Relation of RC and PFE}\label{relation-of-rc-and-pfe}}
+
+The purpose of the RC is to assess the imidiate loss suffered by the
+default of a counterparty. It is based on the current MtM of the
+derivative less the accessible collateral. If a bank has posted
+collateral to non-segregated accounts of a counterparty this collateral
+is also assumed to be lost in case of a default which increases the
+replacement cost.
+
+The potential future exposure (PFE) on the other hand assesses how the
+RC might develop in the future. The future being defined as during the
+next year. If the RC today is 0 but is likely to be larger than 0 in the
+near future the estimated EAD should take this expected increase in RC
+into account.
+
+See also Paragraph 130 and 131 of BCBS(2014):
+
+Paragraph 130 - case without margining:
+
+\begin{quote}
+For unmargined transactions, the \emph{RC} intends to caputre the loss
+that would occur if a counterparty were to default and were closed out
+of its transactions immediately. The \emph{PFE} add-on represents a
+potential conversative increase in expousre over a one-year time horizon
+from the present date (i.e.~the calculation date).
+\end{quote}
+
+Paragraph 131 - case with margining:
+
+\begin{quote}
+For margined trades, the \emph{RC} intends to capture the loss that
+would occur if a counterparty were to default at the present or at a
+future time, assuming that the closeout and replacement of transactions
+occur instantaneously. However, there may be a period (the margin period
+of risk) between the last exchange of collateral before default and
+replacement of the trades in the market. The \emph{PFE} add-on
+represents the potential change in value of the trades during this time
+period.
+\end{quote}
+
+    \hypertarget{definition-of-potential-future-exposure-pfe}{%
+\subsection{Definition of Potential Future Exposure
+(PFE)}\label{definition-of-potential-future-exposure-pfe}}
+
+\begin{align*}
+PFE &= \text{multiplier} * AddOn^{\text{aggregate}} \\
+\\
+\text{where} \qquad AddOn^{\text{aggregate}} &: \text{aggregate add-on component} \\
+\text{multiplier} &: f(V,C,AddOn^{\text{aggregate}})
+\end{align*}
+
+\(AddOn\) is calculated differently for each asset \(a\) class. Since no
+netting is allowed between asset classes the aggregate is calculated as:
+
+\[AddOn^{\text{aggregate}} = \sum_{a}AddOn^{a}\]
+
+Collateralization is taken into account of the PFE calculation through
+the multiplier that uses the collateral held as an input. As
+overcollateralization e.g.~through IM increases, the multiplier
+decreases. However, the multiplier is floored at 5\%.
+
+\begin{align*}
+\text{multiplier} &= \min \left\{ 1; Floor + (1-Floor) \exp\left(\frac{V-C}{2(1-Floor)AddOn^{\text{aggregate}}}\right) \right\} \\
+\text{where} \qquad Floor &= 5\%
+\end{align*}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{multiplier}\PY{p}{(}\PY{n}{v}\PY{p}{:}\PY{n+nb}{float}\PY{p}{,}\PY{n}{c}\PY{p}{:}\PY{n+nb}{float}\PY{p}{,} \PY{n}{addOn\PYZus{}aggregate}\PY{p}{:}\PY{n+nb}{float}\PY{p}{,} \PY{n}{floor}\PY{p}{:}\PY{n+nb}{float} \PY{o}{=} \PY{l+m+mf}{0.05}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Multiplier calculation for SA\PYZhy{}CCR}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    :param v: Current value of the derivative transactions in the netting set}
+\PY{l+s+sd}{    :param c: Haircut value of the net collateral held}
+\PY{l+s+sd}{    :param addOn\PYZus{}aggregate: Aggregated (summed up) AddOn over all asset classes}
+\PY{l+s+sd}{    :param floor: Regulatory floor for the multiplier. Set to 5\PYZpc{} in paragraph 149}
+\PY{l+s+sd}{    :return: Multiplier for PFE calculation according to SA\PYZhy{}CCR}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{k}{return} \PY{n+nb}{min}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{floor}\PY{o}{+}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{floor}\PY{p}{)}\PY{o}{*}\PY{n}{exp}\PY{p}{(}\PY{p}{(}\PY{n}{v}\PY{o}{\PYZhy{}}\PY{n}{c}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{floor}\PY{p}{)}\PY{o}{*}\PY{n}{addOn\PYZus{}aggregate}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{addon-calculation}{%
+\section{AddOn calculation}\label{addon-calculation}}
+
+Most of the SA-CCR logic is hidden inside the AddOn calculation. At
+first it is important to define the following four data parameters:
+
+\hypertarget{m_i}{%
+\paragraph{\texorpdfstring{\(M_i\)}{M\_i}}\label{m_i}}
+
+\begin{quote}
+Maturity of the derivative contract. If the underlying of a derivative
+is another derivative - e.g.~in the case of a swaption the maturity date
+of the underlying needs to be chosen.
+\end{quote}
+
+\hypertarget{s_i}{%
+\paragraph{\texorpdfstring{\(S_i\)}{S\_i}}\label{s_i}}
+
+\begin{quote}
+For interest rate and credit derivatives the start date of the time
+periodreferenced by an interst rate or credit contract. If the
+derivtives underlying is another interest rate or credit intsrument (eg
+swaption or bond option) \(S_i\) is the start date of the underlying
+instead.
+\end{quote}
+
+\hypertarget{e_i}{%
+\paragraph{\texorpdfstring{\(E_i\)}{E\_i}}\label{e_i}}
+
+\begin{quote}
+Defined as \(S_i\) but referencing the end date instead of the start
+date.
+\end{quote}
+
+\hypertarget{t_i}{%
+\paragraph{\texorpdfstring{\(T_i\)}{T\_i}}\label{t_i}}
+
+\begin{quote}
+For options across all asset classes this is the latest contractual
+exercise date.
+\end{quote}
+
+    Let's set up some trades at this point:
+
+\begin{itemize}
+\tightlist
+\item
+  An Equity Option that is defined by a strike, maturity and current
+  value of the underlying. Additional characteristics e.g.~if it is an
+  american or european option are irrelevant for SA-CCR calculations
+\item
+  A running intere rate swap
+\item
+  A forward starting interest rate swap
+\item
+  A swaption with the previous swap as underlying
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{instruments}\PY{n+nn}{.}\PY{n+nn}{equity\PYZus{}instruments}\PY{n+nn}{.}\PY{n+nn}{equityOption} \PY{k+kn}{import} \PY{n}{EquityOption}
+\PY{k+kn}{from} \PY{n+nn}{instruments}\PY{n+nn}{.}\PY{n+nn}{interestRateInstrument}\PY{n+nn}{.}\PY{n+nn}{interestRateSwap} \PY{k+kn}{import} \PY{n}{InterestRateSwap}
+\PY{k+kn}{from} \PY{n+nn}{instruments}\PY{n+nn}{.}\PY{n+nn}{interestRateInstrument}\PY{n+nn}{.}\PY{n+nn}{swaption} \PY{k+kn}{import} \PY{n}{Swaption}
+
+\PY{n}{eq\PYZus{}option} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{35}\PY{p}{,} \PY{n}{mat\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{720}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{eq\PYZus{}option}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{swap} \PY{o}{=} \PY{n}{InterestRateSwap}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{2000000}\PY{p}{,} \PY{n}{currency} \PY{o}{=} \PY{n}{Currency}\PY{o}{.}\PY{n}{EUR}\PY{p}{,} \PY{n}{timeToSwapStart\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{timeToSwapEnd\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{4}\PY{o}{*}\PY{l+m+mi}{360}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{)}
+
+\PY{n}{fw\PYZus{}swap} \PY{o}{=} \PY{n}{InterestRateSwap}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,}\PY{n}{currency} \PY{o}{=} \PY{n}{Currency}\PY{o}{.}\PY{n}{USD}\PY{p}{,} \PY{n}{timeToSwapStart\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{1}\PY{o}{*}\PY{l+m+mi}{360}\PY{p}{,} \PY{n}{timeToSwapEnd\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{3}\PY{o}{*}\PY{l+m+mi}{360}\PY{p}{,} \PY{n}{swapDirection} \PY{o}{=} \PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{fw\PYZus{}swap}\PY{p}{)}
+
+\PY{n}{swaption} \PY{o}{=} \PY{n}{Swaption}\PY{p}{(}\PY{n}{underlyingSwap}\PY{o}{=}\PY{n}{fw\PYZus{}swap}\PY{p}{,}
+                    \PY{n}{optionMaturity\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{1}\PY{o}{*}\PY{l+m+mi}{360}\PY{p}{,}
+                    \PY{n}{tradeDirection} \PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{SHORT}\PY{p}{,}
+                    \PY{n}{strikeFixedRate} \PY{o}{=} \PY{l+m+mf}{0.014}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{swaption}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{trade-level-adjusted-notional}{%
+\subsection{Trade level adjusted
+notional}\label{trade-level-adjusted-notional}}
+
+Each trade \(i\) has a trade level adjusted notional \(d_i^a\) assigned
+to it. This is calculated differently for the different asset classes.
+
+\hypertarget{interest-rate-and-credit-derivatives}{%
+\paragraph{Interest rate and credit
+derivatives}\label{interest-rate-and-credit-derivatives}}
+
+The notional of the trade is usually a well defined value in domestic
+currency for interest rate and credit derivatives. It is multiplied by a
+supervisory duration factor. The basic idea is, that the value of the
+derivative can change more the longer the remaining
+
+\begin{align*}
+d_i &= \text{Notional}_i * SD_i \\
+\\
+\text{where} \qquad SD_i &=\frac{\exp\left(-0.05 * S_i\right)-\exp\left(-0.05 * E_i\right)}{0.05}
+\end{align*}
+
+\hypertarget{fx-derivatives}{%
+\paragraph{FX derivatives}\label{fx-derivatives}}
+
+While the wording in the BCBS paper is a bit more specific we will just
+assume that every FX traded derivative has a USD leg and set the
+notional equal the to USD notional.
+
+\hypertarget{equity-and-commodity-derivatives}{%
+\paragraph{Equity and commodity
+derivatives}\label{equity-and-commodity-derivatives}}
+
+The notional is defined as the price of the underlying. Therefore, it
+fluctuates over time.
+
+\hypertarget{notional-of-exotic-derivatives}{%
+\paragraph{Notional of exotic
+derivatives}\label{notional-of-exotic-derivatives}}
+
+For more exotic derivatives which do have adjustable notionals,
+resetting notionals etc. detailed handling of the notional is defined in
+paragraph 158.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{trade\PYZus{}level\PYZus{}adjusted\PYZus{}notional}\PY{p}{(}\PY{n}{trade}\PY{p}{:} \PY{n}{Trade}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Calculates the trade level adjusted notional as defined in paragraph 157}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    :param trade: Trade object for which the adjusted notional should be calculated}
+\PY{l+s+sd}{    :param underlying\PYZus{}price: }
+\PY{l+s+sd}{        required for FX trades (exchange rate to domestic currency)}
+\PY{l+s+sd}{        required for EQ trades (current price of one share)}
+\PY{l+s+sd}{        required for CO trades (current price of fone unit of commodity)}
+\PY{l+s+sd}{        not required for IR trades and CR trades}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    :return: adjusted notional as defined in paragraph 157}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{k}{if} \PY{n}{trade}\PY{o}{.}\PY{n}{assetClass} \PY{o+ow}{in} \PY{p}{(}\PY{n}{AssetClass}\PY{o}{.}\PY{n}{IR}\PY{p}{,} \PY{n}{AssetClass}\PY{o}{.}\PY{n}{CR}\PY{p}{)}\PY{p}{:}
+        \PY{n}{sd} \PY{o}{=} \PY{p}{(}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.05}\PY{o}{*}\PY{n}{trade}\PY{o}{.}\PY{n}{s}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.05}\PY{o}{*}\PY{n}{trade}\PY{o}{.}\PY{n}{e}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{l+m+mf}{0.05}
+        \PY{k}{return} \PY{n}{trade}\PY{o}{.}\PY{n}{notional}\PY{o}{*}\PY{n}{sd}
+    
+    \PY{c+c1}{\PYZsh{} This assumes that trade.Notional is defined as quantity of underlying shares for equity and foreign currency notional for FX}
+    \PY{k}{if} \PY{n}{trade}\PY{o}{.}\PY{n}{assetClass} \PY{o}{==} \PY{n}{AssetClass}\PY{o}{.}\PY{n}{EQ}\PY{p}{:}
+        \PY{k}{return} \PY{n}{trade}\PY{o}{.}\PY{n}{notional}\PY{o}{*}\PY{n}{trade}\PY{o}{.}\PY{n}{S}
+    
+    \PY{k}{if} \PY{n}{trade}\PY{o}{.}\PY{n}{assetClass} \PY{o}{==} \PY{n}{AssetClass}\PY{o}{.}\PY{n}{FX}\PY{p}{:}
+        \PY{k}{return} \PY{n}{trade}\PY{o}{.}\PY{n}{notional}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{supervisory-delta-adjustments-delta_i}{%
+\subsection{\texorpdfstring{Supervisory delta adjustments:
+\(\delta_i\)}{Supervisory delta adjustments: \textbackslash{}delta\_i}}\label{supervisory-delta-adjustments-delta_i}}
+
+For linear derivatives \(\delta\) is 1 for long derivatives and -1 for
+short derivatives.
+
+For options \(\delta\) is defined as under Black-Scholes:
+
+\begin{align*}
+\delta_{\text{long Call}} &= +\Phi\left(\frac{\ln\left(P_i / K_i \right) + 0.5 * \sigma_i^2 * T_i}{\sigma_i * \sqrt{T_i}}\right) \\
+\\
+\text{where} \qquad \Phi &: \text{standard normal cdf} \\
+\sigma_i &: \text{supervisory volatility as defined in Table 2 in paragraph 183}
+\end{align*}
+
+This delta is multiplied by -1 in case of a long Put option or a short
+Call option.
+
+No detail is given at this point on the delta calculation of CDO
+tranches as these are not in the scope of this thesis.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{get\PYZus{}supervisory\PYZus{}volatility}\PY{p}{(}\PY{n}{trade}\PY{p}{:} \PY{n}{Trade}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+    \PY{n}{supervisory\PYZus{}parameter} \PY{o}{=} \PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{supervisory\PYZus{}parameters.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{sigma} \PY{o}{=} \PY{k+kc}{None}
+    \PY{k}{if} \PY{n}{trade}\PY{o}{.}\PY{n}{subClass} \PY{o+ow}{is} \PY{k+kc}{None}\PY{p}{:}
+        \PY{n}{sigma} \PY{o}{=} \PY{n}{supervisory\PYZus{}parameter}\PY{p}{[}\PY{p}{(}\PY{n}{supervisory\PYZus{}parameter}\PY{o}{.}\PY{n}{AssetClass} \PY{o}{==} \PY{n}{trade}\PY{o}{.}\PY{n}{assetClass}\PY{o}{.}\PY{n}{value}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SupervisoryOptionVolatility}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{k}{elif} \PY{n}{trade}\PY{o}{.}\PY{n}{subClass} \PY{o+ow}{is} \PY{o+ow}{not} \PY{k+kc}{None}\PY{p}{:}
+        \PY{n}{sigma} \PY{o}{=} \PY{n}{supervisory\PYZus{}parameter}\PY{p}{[}\PY{p}{(}\PY{n}{supervisory\PYZus{}parameter}\PY{o}{.}\PY{n}{AssetClass} \PY{o}{==} \PY{n}{trade}\PY{o}{.}\PY{n}{assetClass}\PY{o}{.}\PY{n}{value}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{supervisory\PYZus{}parameter}\PY{o}{.}\PY{n}{SubClass} \PY{o}{==} \PY{n}{trade}\PY{o}{.}\PY{n}{subClass}\PY{o}{.}\PY{n}{value}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SupervisoryOptionVolatility}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{k}{return} \PY{n}{sigma}
+
+\PY{k}{def} \PY{n+nf}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{trade}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+    \PY{k}{if} \PY{p}{(}\PY{n}{trade}\PY{o}{.}\PY{n}{tradeType} \PY{o}{==} \PY{n}{TradeType}\PY{o}{.}\PY{n}{LINEAR}\PY{p}{)} \PY{o+ow}{and} \PY{p}{(}\PY{n}{trade}\PY{o}{.}\PY{n}{tradeDirection} \PY{o}{==} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{1}
+    \PY{k}{elif} \PY{p}{(}\PY{n}{trade}\PY{o}{.}\PY{n}{tradeType} \PY{o}{==} \PY{n}{TradeType}\PY{o}{.}\PY{n}{LINEAR}\PY{p}{)} \PY{o+ow}{and} \PY{p}{(}\PY{n}{trade}\PY{o}{.}\PY{n}{tradeDirection} \PY{o}{==} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{SHORT}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+    \PY{k}{elif} \PY{n}{trade}\PY{o}{.}\PY{n}{tradeType} \PY{o+ow}{in} \PY{p}{(}\PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL}\PY{p}{,} \PY{n}{TradeType}\PY{o}{.}\PY{n}{PUT}\PY{p}{)}\PY{p}{:}
+        \PY{n}{d1\PYZus{}mult} \PY{o}{=} \PY{o}{+}\PY{l+m+mi}{1} \PY{k}{if} \PY{n}{trade}\PY{o}{.}\PY{n}{tradeType} \PY{o}{==} \PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL} \PY{k}{else} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+        
+        \PY{k}{if} \PY{n}{trade}\PY{o}{.}\PY{n}{tradeType} \PY{o}{==} \PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL} \PY{o+ow}{and} \PY{n}{trade}\PY{o}{.}\PY{n}{tradeDirection} \PY{o}{==} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{:} \PY{n}{n\PYZus{}mult} \PY{o}{=} \PY{l+m+mi}{1}
+        \PY{k}{elif} \PY{n}{trade}\PY{o}{.}\PY{n}{tradeType} \PY{o}{==} \PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL} \PY{o+ow}{and} \PY{n}{trade}\PY{o}{.}\PY{n}{tradeDirection} \PY{o}{==} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{SHORT}\PY{p}{:} \PY{n}{n\PYZus{}mult} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+        \PY{k}{elif} \PY{n}{trade}\PY{o}{.}\PY{n}{tradeType} \PY{o}{==} \PY{n}{TradeType}\PY{o}{.}\PY{n}{PUT} \PY{o+ow}{and} \PY{n}{trade}\PY{o}{.}\PY{n}{tradeDirection} \PY{o}{==} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{:} \PY{n}{n\PYZus{}mult} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+        \PY{k}{else}\PY{p}{:} \PY{n}{n\PYZus{}mult} \PY{o}{=} \PY{o}{+}\PY{l+m+mi}{1}
+        
+        \PY{n}{sigma} \PY{o}{=} \PY{n}{get\PYZus{}supervisory\PYZus{}volatility}\PY{p}{(}\PY{n}{trade}\PY{p}{)}
+        
+        \PY{n}{d1} \PY{o}{=} \PY{p}{(}\PY{n}{log}\PY{p}{(}\PY{n}{trade}\PY{o}{.}\PY{n}{S}\PY{o}{/}\PY{n}{trade}\PY{o}{.}\PY{n}{K}\PY{p}{)} \PY{o}{+} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{trade}\PY{o}{.}\PY{n}{t}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n}{sigma}\PY{o}{*}\PY{n}{sqrt}\PY{p}{(}\PY{n}{trade}\PY{o}{.}\PY{n}{t}\PY{p}{)}\PY{p}{)}
+        
+        \PY{n}{delta} \PY{o}{=} \PY{n}{n\PYZus{}mult}\PY{o}{*}\PY{n}{norm}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{n}{d1\PYZus{}mult}\PY{o}{*}\PY{n}{d1}\PY{p}{)}
+        \PY{k}{return} \PY{n}{delta}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Let's try if our delta function works for the different trade types we
+have set up.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  An equity option
+\item
+  An interest rate swap
+\item
+  A forward starting interest rate swap
+\item
+  A swaption
+\end{enumerate}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{eq\PYZus{}option}\PY{p}{)}
+\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{eq\PYZus{}option}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{swap}\PY{p}{)}
+\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{swap}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{fw\PYZus{}swap}\PY{p}{)}
+\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{fw\PYZus{}swap}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{swaption}\PY{p}{)}
+\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{swaption}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    The formula used for the regulatory delta is equivalent to the
+Black-Scholes formula for delta under the assumption of a risk free rate
+of 0. As a sanity check we can check if the Delta of a long call is
+about 0.5 if the call is just about to mature.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eq\PYZus{}option2} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{20}\PY{p}{,} \PY{n}{K} \PY{o}{=} \PY{l+m+mi}{42}\PY{p}{,} \PY{n}{mat\PYZus{}in\PYZus{}days} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{tradeType}\PY{o}{=}\PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL}\PY{p}{,} \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{eq\PYZus{}option2}\PY{p}{)}
+\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{eq\PYZus{}option2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Trying to validate methodology by replicating Example 1 of Annex 4a.
+Setting up trades:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{trade1} \PY{o}{=} \PY{n}{InterestRateSwap}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{10000000}\PY{p}{,} \PY{n}{currency}\PY{o}{=}\PY{n}{Currency}\PY{o}{.}\PY{n}{USD}\PY{p}{,} \PY{n}{timeToSwapStart\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{timeToSwapEnd\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{10}\PY{o}{*}\PY{l+m+mi}{360}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{)}
+\PY{n}{trade2} \PY{o}{=} \PY{n}{InterestRateSwap}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{10000000}\PY{p}{,} \PY{n}{currency}\PY{o}{=}\PY{n}{Currency}\PY{o}{.}\PY{n}{USD}\PY{p}{,} \PY{n}{timeToSwapStart\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{timeToSwapEnd\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{4}\PY{o}{*}\PY{l+m+mi}{360}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{)}
+\PY{n}{trade3\PYZus{}ul} \PY{o}{=} \PY{n}{InterestRateSwap}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{5000000}\PY{p}{,} \PY{n}{currency}\PY{o}{=}\PY{n}{Currency}\PY{o}{.}\PY{n}{EUR}\PY{p}{,} \PY{n}{timeToSwapStart\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{1}\PY{o}{*}\PY{l+m+mi}{360}\PY{p}{,} \PY{n}{timeToSwapEnd\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{11}\PY{o}{*}\PY{l+m+mi}{360}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{)}
+\PY{n}{trade3} \PY{o}{=} \PY{n}{Swaption}\PY{p}{(}\PY{n}{underlyingSwap}\PY{o}{=}\PY{n}{trade3\PYZus{}ul}\PY{p}{,} \PY{n}{optionMaturity\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{1}\PY{o}{*}\PY{l+m+mi}{360}\PY{p}{,} \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{,} \PY{n}{strikeFixedRate}\PY{o}{=}\PY{l+m+mf}{0.05}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Calculating trade level adjusted notional and supervisory delta. Should
+be the following:
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+Trade & Adjusted notional (thousands) & Supervisory delta\tabularnewline
+\midrule
+\endhead
+Trade 1 & 78694 & 1\tabularnewline
+Trade 2 & 36254 & -1\tabularnewline
+Trade 3 & 37428 & -0.27\tabularnewline
+\bottomrule
+\end{longtable}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ind} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Trade 1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Trade 2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Trade 3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{data} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adjusted notional (thousands)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{n+nb}{round}\PY{p}{(}\PY{n}{trade\PYZus{}level\PYZus{}adjusted\PYZus{}notional}\PY{p}{(}\PY{n}{trade1}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{1000}\PY{p}{)}\PY{p}{,}
+                                          \PY{n+nb}{round}\PY{p}{(}\PY{n}{trade\PYZus{}level\PYZus{}adjusted\PYZus{}notional}\PY{p}{(}\PY{n}{trade2}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{1000}\PY{p}{)}\PY{p}{,}
+                                          \PY{n+nb}{round}\PY{p}{(}\PY{n}{trade\PYZus{}level\PYZus{}adjusted\PYZus{}notional}\PY{p}{(}\PY{n}{trade3}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{1000}\PY{p}{)}\PY{p}{]}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Supervisory delta}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{n+nb}{round}\PY{p}{(}\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{trade1}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+                              \PY{n+nb}{round}\PY{p}{(}\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{trade2}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+                              \PY{n+nb}{round}\PY{p}{(}\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{trade3}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{]}\PY{p}{\PYZcb{}}
+\PY{n}{df} \PY{o}{=} \PY{n}{DataFrame}\PY{p}{(}\PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{,} \PY{n}{index} \PY{o}{=} \PY{n}{ind}\PY{p}{)}
+\PY{n}{df}
+\end{Verbatim}
+\end{tcolorbox}
+
+    The implemented formulas correctly replicate the results given in the
+first Example of Annex 4a.
+
+    SA-CCR uses the same Black-Scholes based formula for Swaps as it uses
+for Equities. It differentiates options in two dimensions. Whether they
+are \emph{bought} or \emph{sold} and whether they are \emph{Call} or
+\emph{Put} options (Compare paragraph 159).
+
+SA-CCR defines an option as a call option if it rises in value as the
+underlying rises in value. A fixed payer swap rises in value as the
+underlying interest rate rises in value. Therefore, an option to buy a
+fixed payer swap at a predetermined strike also rises in value as the
+underlying interest rate rises in value. Therefore, a swaption on a
+payer swap is considered a \emph{Call} under SA-CCR, while a swaption on
+a receiver swap is considered a \emph{Put}.
+
+    \hypertarget{risk-horizon}{%
+\subsection{Risk horizon}\label{risk-horizon}}
+
+For unmargined transaction the margining factor is
+
+\[MF^{\text{unmargined}}_i = \sqrt{\frac{\min\left(M_i;1\text{ year}\right)}{1\text{ year}}}\]
+
+This factor can be used to scale down a risk weight calibrated for a 1
+year horizon to a shorter period.
+
+With margining the margin period of risk (MPOR) is:
+
+\begin{itemize}
+\tightlist
+\item
+  10 business days for small, uncleared OTC portfolios
+\item
+  5 business days for cleared derivatives
+\item
+  20 business days for netting sets with more than 5000 transactions
+  that are not with a central counterparty
+\item
+  and doubling this period for portfolios with outstanding disputes
+\end{itemize}
+
+The margining factor is then
+
+\[ MF^{\text{margined}}_i = \frac{3}{2}\sqrt{\frac{MPOR_i}{1\text{ year}}} \]
+
+    At this point we need to introduce a collateral agreement object. For
+simplicities sake we will not differentiate between collateral and
+netting sets in this thesis. All trades that are covered by the same
+collateral agreement are also admissible for netting with each other.
+(Also refer to the introduction of close out netting above)
+
+The default properties of a collateral agreement are displayed below:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ca}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        ---------------------------------------------------------------------------
+
+        NameError                                 Traceback (most recent call last)
+
+        <ipython-input-1-ec8bb2860cd7> in <module>
+    ----> 1 ca = CollateralAgreement()
+          2 print(ca)
+          3 
+    
+
+        NameError: name 'CollateralAgreement' is not defined
+
+    \end{Verbatim}
+
+    And they may be changed at the initialization of the collateral
+agreement or afterwards. The latter case is displayed in the next cell:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca}\PY{o}{.}\PY{n}{margining}\PY{o}{=} \PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}
+\PY{n}{ca}\PY{o}{.}\PY{n}{clearing}\PY{o}{=} \PY{n}{Clearing}\PY{o}{.}\PY{n}{CLEARED}
+\PY{n}{ca}\PY{o}{.}\PY{n}{vm} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{3000}
+\PY{n}{ca}\PY{o}{.}\PY{n}{posted\PYZus{}im} \PY{o}{=} \PY{l+m+mi}{1000}
+\PY{n}{ca}\PY{o}{.}\PY{n}{received\PYZus{}im} \PY{o}{=} \PY{l+m+mi}{1000}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ca}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    With this collateral set object we can define a function for calculation
+the margining factor:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{margining\PYZus{}factor}\PY{p}{(}\PY{n}{trade} \PY{p}{:} \PY{n}{Trade}\PY{p}{,} \PY{n}{ca} \PY{p}{:} \PY{n}{CollateralAgreement}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+    \PY{k}{if} \PY{n}{ca}\PY{o}{.}\PY{n}{margining} \PY{o}{==} \PY{n}{Margining}\PY{o}{.}\PY{n}{UNMARGINED}\PY{p}{:}
+        \PY{n}{floored\PYZus{}maturity} \PY{o}{=} \PY{n+nb}{max}\PY{p}{(}\PY{l+m+mi}{10}\PY{o}{/}\PY{l+m+mi}{250}\PY{p}{,} \PY{n}{trade}\PY{o}{.}\PY{n}{m}\PY{p}{)} \PY{c+c1}{\PYZsh{}as Everything is measured in years 10/250 is equal to 10 business days.}
+        \PY{n}{mf\PYZus{}unmargined} \PY{o}{=} \PY{n}{sqrt}\PY{p}{(}\PY{n+nb}{min}\PY{p}{(}\PY{n}{floored\PYZus{}maturity}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{1}\PY{p}{)}
+        \PY{k}{return} \PY{n}{mf\PYZus{}unmargined}
+    \PY{k}{if} \PY{n}{ca}\PY{o}{.}\PY{n}{margining} \PY{o}{==} \PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} Compare paragraph 164 to see how MPOR needs to be set for margined trades.}
+        \PY{k}{if} \PY{n}{ca}\PY{o}{.}\PY{n}{clearing}\PY{o}{==}\PY{n}{Clearing}\PY{o}{.}\PY{n}{CLEARED}\PY{p}{:}
+            \PY{n}{MPOR} \PY{o}{=} \PY{l+m+mi}{5}
+        \PY{k}{elif} \PY{n}{ca}\PY{o}{.}\PY{n}{tradecount}\PY{o}{==}\PY{n}{Tradecount}\PY{o}{.}\PY{n}{OVER\PYZus{}FIVE\PYZus{}THOUSAND}\PY{p}{:}
+            \PY{n}{MPOR} \PY{o}{=} \PY{l+m+mi}{20}
+        \PY{k}{else}\PY{p}{:} \PY{n}{MPOR} \PY{o}{=} \PY{l+m+mi}{10}
+        \PY{k}{if} \PY{n}{ca}\PY{o}{.}\PY{n}{dispute} \PY{o}{==} \PY{n}{Dispute}\PY{o}{.}\PY{n}{OUTSTANDING\PYZus{}DISPUTES}\PY{p}{:}
+            \PY{n}{MPOR} \PY{o}{=} \PY{n}{MPOR}\PY{o}{*}\PY{l+m+mi}{2}
+        
+        \PY{n}{mf\PYZus{}margined} \PY{o}{=} \PY{l+m+mi}{3}\PY{o}{/}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{sqrt}\PY{p}{(}\PY{n}{MPOR}\PY{o}{/}\PY{l+m+mi}{250}\PY{p}{)} \PY{c+c1}{\PYZsh{}Since MPOR above is defined in Business days and not year fractions division by 250 is necessary.}
+        \PY{k}{return} \PY{n}{mf\PYZus{}margined}
+\end{Verbatim}
+\end{tcolorbox}
+
+    For trades of differing maturity let's compare the margining factor for
+the three most common scenarios:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  No margining
+\item
+  Bilateral uncleared
+\item
+  Centrally cleared
+\end{enumerate}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{one\PYZus{}day} \PY{o}{=} \PY{n}{InterestRateSwap}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,} \PY{n}{currency} \PY{o}{=} \PY{n}{Currency}\PY{o}{.}\PY{n}{USD}\PY{p}{,} \PY{n}{timeToSwapStart\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{timeToSwapEnd\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{)}
+\PY{n}{two\PYZus{}weeks} \PY{o}{=} \PY{n}{InterestRateSwap}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,} \PY{n}{currency} \PY{o}{=} \PY{n}{Currency}\PY{o}{.}\PY{n}{USD}\PY{p}{,} \PY{n}{timeToSwapStart\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{timeToSwapEnd\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{)}
+\PY{n}{six\PYZus{}months} \PY{o}{=} \PY{n}{InterestRateSwap}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,} \PY{n}{currency} \PY{o}{=} \PY{n}{Currency}\PY{o}{.}\PY{n}{USD}\PY{p}{,} \PY{n}{timeToSwapStart\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{timeToSwapEnd\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{125}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{)}
+\PY{n}{one\PYZus{}year} \PY{o}{=} \PY{n}{InterestRateSwap}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,} \PY{n}{currency} \PY{o}{=} \PY{n}{Currency}\PY{o}{.}\PY{n}{USD}\PY{p}{,} \PY{n}{timeToSwapStart\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{timeToSwapEnd\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{250}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{)}
+\PY{n}{ten\PYZus{}years} \PY{o}{=} \PY{n}{InterestRateSwap}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,} \PY{n}{currency} \PY{o}{=} \PY{n}{Currency}\PY{o}{.}\PY{n}{USD}\PY{p}{,} \PY{n}{timeToSwapStart\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{timeToSwapEnd\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{2500}\PY{p}{,} \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{)}
+
+\PY{n}{no\PYZus{}margining} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{p}{)}
+\PY{n}{bilateral\PYZus{}margining} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{margining} \PY{o}{=} \PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}\PY{p}{)}
+\PY{n}{central\PYZus{}clearing} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{margining} \PY{o}{=} \PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}\PY{p}{,} \PY{n}{clearing} \PY{o}{=} \PY{n}{Clearing}\PY{o}{.}\PY{n}{CLEARED}\PY{p}{)}
+
+\PY{n}{trades} \PY{o}{=} \PY{p}{[}\PY{n}{one\PYZus{}day}\PY{p}{,} \PY{n}{two\PYZus{}weeks}\PY{p}{,} \PY{n}{six\PYZus{}months}\PY{p}{,} \PY{n}{one\PYZus{}year}\PY{p}{,} \PY{n}{ten\PYZus{}years}\PY{p}{]}
+\PY{n}{cas} \PY{o}{=} \PY{p}{[}\PY{n}{no\PYZus{}margining}\PY{p}{,} \PY{n}{bilateral\PYZus{}margining}\PY{p}{,} \PY{n}{central\PYZus{}clearing}\PY{p}{]}
+\PY{n}{ar} \PY{o}{=} \PY{n}{numpy}\PY{o}{.}\PY{n}{empty}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+\PY{n}{i} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{trades}\PY{p}{:}
+    \PY{n}{j} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{k}{for} \PY{n}{ca} \PY{o+ow}{in} \PY{n}{cas}\PY{p}{:}
+        \PY{n}{ar}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{margining\PYZus{}factor}\PY{p}{(}\PY{n}{t}\PY{p}{,}\PY{n}{ca}\PY{p}{)}
+        \PY{n}{j} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+    \PY{n}{i} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+
+\PY{n}{DataFrame}\PY{p}{(}\PY{n}{index}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{No margining}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bilateral uncleared}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Centrally cleared}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+          \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{One day}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Two weeks}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Six months}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{One year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ten years}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+          \PY{n}{data} \PY{o}{=} \PY{n}{ar}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{addon-for-interest-rate-derivatives}{%
+\subsection{AddOn for interest rate
+derivatives}\label{addon-for-interest-rate-derivatives}}
+
+\hypertarget{step-1---calculation-of-effective-notional-d_jkir}{%
+\paragraph{\texorpdfstring{Step 1 - calculation of effective notional
+\(D_{jk}^{IR}\)}{Step 1 - calculation of effective notional D\_\{jk\}\^{}\{IR\}}}\label{step-1---calculation-of-effective-notional-d_jkir}}
+
+\begin{align*}
+D_{jk}^{IR} &= \sum_{i\in\left\{Ccy_j, MB_k\right\}}{\delta_i*d_i^{IR}*MF_i}
+\end{align*}
+
+Here, the notation \(i\in\left\{Ccy_j, MB_k\right\}\) refers to trades
+whose underlying is the interest rate of a common currency \(j\) and
+which mature in a common maturity bucket \(k\)
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{get\PYZus{}supervisory\PYZus{}factor}\PY{p}{(}\PY{n}{assetClass}\PY{p}{:} \PY{n}{AssetClass}\PY{p}{,} \PY{n}{subClass}\PY{p}{:} \PY{n}{SubClass} \PY{o}{=} \PY{k+kc}{None}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+    \PY{n}{supervisory\PYZus{}parameter} \PY{o}{=} \PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{supervisory\PYZus{}parameters.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{sf} \PY{o}{=} \PY{k+kc}{None}
+    \PY{k}{if} \PY{n}{subClass} \PY{o+ow}{is} \PY{k+kc}{None}\PY{p}{:}
+        \PY{n}{sf} \PY{o}{=} \PY{n}{supervisory\PYZus{}parameter}\PY{p}{[}\PY{p}{(}\PY{n}{supervisory\PYZus{}parameter}\PY{o}{.}\PY{n}{AssetClass} \PY{o}{==} \PY{n}{assetClass}\PY{o}{.}\PY{n}{value}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Supervisory factor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{k}{elif} \PY{n}{subClass} \PY{o+ow}{is} \PY{o+ow}{not} \PY{k+kc}{None}\PY{p}{:}
+        \PY{n}{sf} \PY{o}{=} \PY{n}{supervisory\PYZus{}parameter}\PY{p}{[}\PY{p}{(}\PY{n}{supervisory\PYZus{}parameter}\PY{o}{.}\PY{n}{AssetClass} \PY{o}{==} \PY{n}{assetClass}\PY{o}{.}\PY{n}{value}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{supervisory\PYZus{}parameter}\PY{o}{.}\PY{n}{SubClass} \PY{o}{==} \PY{n}{subClass}\PY{o}{.}\PY{n}{value}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Supervisory factor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{k}{return} \PY{n}{sf}
+
+\PY{k}{def} \PY{n+nf}{interest\PYZus{}rate\PYZus{}addOn}\PY{p}{(}\PY{n}{trades}\PY{p}{:} \PY{n}{List}\PY{p}{[}\PY{n}{Trade}\PY{p}{]}\PY{p}{,} \PY{n}{ca}\PY{p}{:} \PY{n}{CollateralAgreement}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+    \PY{n}{bucketed\PYZus{}trades} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+    \PY{n}{en\PYZus{}cur\PYZus{}mat} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+    \PY{n}{add\PYZus{}on\PYZus{}cur} \PY{o}{=} \PY{n}{Series}\PY{p}{(}\PY{p}{)}
+    \PY{n}{currencies} \PY{o}{=} \PY{n+nb}{set}\PY{p}{(}\PY{p}{)}
+    
+    \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{trades}\PY{p}{:}
+        \PY{n}{key} \PY{o}{=} \PY{p}{(}\PY{n}{t}\PY{o}{.}\PY{n}{currency}\PY{p}{,} \PY{n}{t}\PY{o}{.}\PY{n}{get\PYZus{}maturity\PYZus{}bucket}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+        \PY{n}{currencies}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{t}\PY{o}{.}\PY{n}{currency}\PY{p}{)}
+        \PY{k}{if} \PY{n}{key} \PY{o+ow}{in} \PY{n}{bucketed\PYZus{}trades}\PY{p}{:}
+            \PY{n}{bucketed\PYZus{}trades}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{t}\PY{p}{)}
+        \PY{k}{else}\PY{p}{:}
+            \PY{n}{bucketed\PYZus{}trades}\PY{p}{[}\PY{n}{key}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{n}{t}\PY{p}{]}
+    
+    \PY{k}{for} \PY{n}{key}\PY{p}{,} \PY{n}{trades} \PY{o+ow}{in} \PY{n}{bucketed\PYZus{}trades}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+        \PY{n}{effective\PYZus{}notional} \PY{o}{=} \PY{l+m+mi}{0}
+        \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{trades}\PY{p}{:}
+            \PY{n}{effective\PYZus{}notional} \PY{o}{+}\PY{o}{=} \PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{trade\PYZus{}level\PYZus{}adjusted\PYZus{}notional}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{margining\PYZus{}factor}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{ca}\PY{p}{)}
+        \PY{n}{en\PYZus{}cur\PYZus{}mat}\PY{p}{[}\PY{n}{key}\PY{p}{]} \PY{o}{=} \PY{n}{effective\PYZus{}notional}
+        
+    \PY{k}{for} \PY{n}{cur} \PY{o+ow}{in} \PY{n}{currencies}\PY{p}{:}
+        \PY{n}{d\PYZus{}1} \PY{o}{=} \PY{n}{en\PYZus{}cur\PYZus{}mat}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{p}{(}\PY{n}{cur}\PY{p}{,} \PY{n}{MaturityBucket}\PY{o}{.}\PY{n}{ONE}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}
+        \PY{n}{d\PYZus{}2} \PY{o}{=} \PY{n}{en\PYZus{}cur\PYZus{}mat}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{p}{(}\PY{n}{cur}\PY{p}{,} \PY{n}{MaturityBucket}\PY{o}{.}\PY{n}{TWO}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}
+        \PY{n}{d\PYZus{}3} \PY{o}{=} \PY{n}{en\PYZus{}cur\PYZus{}mat}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{p}{(}\PY{n}{cur}\PY{p}{,} \PY{n}{MaturityBucket}\PY{o}{.}\PY{n}{THREE}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}
+        
+        \PY{n}{en\PYZus{}cur} \PY{o}{=} \PY{n}{sqrt}\PY{p}{(}\PY{n}{d\PYZus{}1}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{d\PYZus{}2}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{d\PYZus{}3}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{l+m+mf}{1.4}\PY{o}{*}\PY{n}{d\PYZus{}1} \PY{o}{*}\PY{n}{d\PYZus{}2} \PY{o}{+} \PY{l+m+mf}{1.4}\PY{o}{*}\PY{n}{d\PYZus{}2}\PY{o}{*}\PY{n}{d\PYZus{}3} \PY{o}{+} \PY{l+m+mf}{0.6}\PY{o}{*}\PY{n}{d\PYZus{}1}\PY{o}{*}\PY{n}{d\PYZus{}3}\PY{p}{)}
+        
+        \PY{n}{add\PYZus{}on\PYZus{}cur}\PY{p}{[}\PY{n}{cur}\PY{p}{]} \PY{o}{=} \PY{n}{get\PYZus{}supervisory\PYZus{}factor}\PY{p}{(}\PY{n}{assetClass} \PY{o}{=} \PY{n}{AssetClass}\PY{o}{.}\PY{n}{IR}\PY{p}{)} \PY{o}{*} \PY{n}{en\PYZus{}cur}
+
+    \PY{k}{return} \PY{n}{add\PYZus{}on\PYZus{}cur}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    For a quick sanity check we can again check against the example 1 in
+Appendix 4a. The \(AddOn_{IR}\) should be 347 thousand USD.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{round}\PY{p}{(}\PY{n}{interest\PYZus{}rate\PYZus{}addOn}\PY{p}{(}\PY{p}{[}\PY{n}{trade1}\PY{p}{,} \PY{n}{trade2}\PY{p}{,} \PY{n}{trade3}\PY{p}{]}\PY{p}{,} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{1000}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Next, we are setting up a function to calculate the \(AddOn\) for
+derivatives from the FX asset class. The approach is a little simpler
+than that for the IR asset class as no differentiaten between time
+buckets is necessary. All derivatives on a common currency pair can be
+set off against each other.
+
+\begin{align*}
+AddOn^{FX} &= \sum_j{AddOn_{HS_j}^{FX}} \\
+AddOn^{FX}_{HS_j} &= SF_j^{FX} * | \text{EffectiveNotional}_j^{FX} | \\
+\text{EffectiveNotional}_j^{FX} &= \sum_{i \in HS_j}{\delta_i * d_i^{FX} * MF_i^{type}}
+\end{align*}
+
+With the hedging sets \(i \in HS\) referencing all derivatives on a
+common currency pair.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{fx\PYZus{}addOn}\PY{p}{(}\PY{n}{trades}\PY{p}{:} \PY{n}{List}\PY{p}{[}\PY{n}{Trade}\PY{p}{]}\PY{p}{,} \PY{n}{ca}\PY{p}{:} \PY{n}{CollateralAgreement}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+    \PY{n}{bucketed\PYZus{}trades} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+    \PY{n}{en\PYZus{}cur} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+    \PY{n}{add\PYZus{}on\PYZus{}cur} \PY{o}{=} \PY{n}{Series}\PY{p}{(}\PY{p}{)}
+    \PY{n}{currencyPairs} \PY{o}{=} \PY{n+nb}{set}\PY{p}{(}\PY{p}{)}
+    
+    \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{trades}\PY{p}{:}
+        \PY{n}{key} \PY{o}{=} \PY{p}{(}\PY{n}{t}\PY{o}{.}\PY{n}{currencyPair}\PY{p}{)}
+        \PY{n}{currencyPairs}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{t}\PY{o}{.}\PY{n}{currencyPair}\PY{p}{)}
+        \PY{k}{if} \PY{n}{key} \PY{o+ow}{in} \PY{n}{bucketed\PYZus{}trades}\PY{p}{:}
+            \PY{n}{bucketed\PYZus{}trades}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{t}\PY{p}{)}
+        \PY{k}{else}\PY{p}{:}
+            \PY{n}{bucketed\PYZus{}trades}\PY{p}{[}\PY{n}{key}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{n}{t}\PY{p}{]}
+            
+    \PY{k}{for} \PY{n}{key}\PY{p}{,} \PY{n}{trades} \PY{o+ow}{in} \PY{n}{bucketed\PYZus{}trades}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+        \PY{n}{effective\PYZus{}notional} \PY{o}{=} \PY{l+m+mi}{0}
+        \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{trades}\PY{p}{:}
+            \PY{n}{effective\PYZus{}notional} \PY{o}{+}\PY{o}{=} \PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{trade\PYZus{}level\PYZus{}adjusted\PYZus{}notional}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{margining\PYZus{}factor}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{ca}\PY{p}{)}
+        \PY{n}{en\PYZus{}cur}\PY{p}{[}\PY{n}{key}\PY{p}{]} \PY{o}{=} \PY{n}{effective\PYZus{}notional}
+        
+    \PY{k}{for} \PY{n}{cur} \PY{o+ow}{in} \PY{n}{currencyPairs}\PY{p}{:}
+        
+        \PY{n}{add\PYZus{}on\PYZus{}cur}\PY{p}{[}\PY{n}{cur}\PY{p}{]} \PY{o}{=} \PY{n}{get\PYZus{}supervisory\PYZus{}factor}\PY{p}{(}\PY{n}{assetClass} \PY{o}{=} \PY{n}{AssetClass}\PY{o}{.}\PY{n}{FX}\PY{p}{)} \PY{o}{*} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{en\PYZus{}cur}\PY{p}{[}\PY{n}{cur}\PY{p}{]}\PY{p}{)}
+        
+    \PY{k}{return} \PY{n}{add\PYZus{}on\PYZus{}cur}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{fx\PYZus{}trade1} \PY{o}{=} \PY{n}{FxForward}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,} \PY{n}{currencyPair} \PY{o}{=} \PY{n}{CurrencyPair}\PY{o}{.}\PY{n}{GBPUSD}\PY{p}{,} \PY{n}{tradeDirection} \PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{,} \PY{n}{m}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{fx\PYZus{}trade2} \PY{o}{=} \PY{n}{FxOption}\PY{p}{(}\PY{n}{notional}\PY{o}{=} \PY{l+m+mi}{2000000}\PY{p}{,} \PY{n}{currencyPair} \PY{o}{=} \PY{n}{CurrencyPair}\PY{o}{.}\PY{n}{GBPUSD}\PY{p}{,} \PY{n}{tradeDirection} \PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{,} \PY{n}{tradeType} \PY{o}{=} \PY{n}{TradeType}\PY{o}{.}\PY{n}{PUT}\PY{p}{,} \PY{n}{m} \PY{o}{=} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{strike} \PY{o}{=} \PY{l+m+mf}{1.1}\PY{p}{,} \PY{n}{currentForwardFxRate}\PY{o}{=}\PY{l+m+mf}{1.07}\PY{p}{)}
+
+\PY{n}{fx\PYZus{}addOn}\PY{p}{(}\PY{p}{[}\PY{n}{fx\PYZus{}trade1}\PY{p}{,} \PY{n}{fx\PYZus{}trade2}\PY{p}{]}\PY{p}{,} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Since credit and commodity derivatives will not be regarded in this
+thesis the final \(AddOn\) component that we will set up is for the
+equity asset class. The formula is somwhat simplified since we're only
+considering single stock options and no index options. With this
+assumption we can always use the same correlation factor.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{equity\PYZus{}addOn}\PY{p}{(}\PY{n}{trades}\PY{p}{:} \PY{n}{List}\PY{p}{[}\PY{n}{Trade}\PY{p}{]}\PY{p}{,} \PY{n}{ca}\PY{p}{:} \PY{n}{CollateralAgreement}\PY{p}{)}\PY{p}{:}
+    \PY{n}{bucketed\PYZus{}trades} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+    \PY{n}{en\PYZus{}eq} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+    \PY{n}{add\PYZus{}on\PYZus{}eq} \PY{o}{=} \PY{n}{Series}\PY{p}{(}\PY{p}{)}
+    \PY{n}{equities} \PY{o}{=} \PY{n+nb}{set}\PY{p}{(}\PY{p}{)}
+    
+    \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{trades}\PY{p}{:}
+        \PY{n}{key} \PY{o}{=} \PY{p}{(}\PY{n}{t}\PY{o}{.}\PY{n}{underlying}\PY{p}{)}
+        \PY{n}{equities}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{t}\PY{o}{.}\PY{n}{underlying}\PY{p}{)}
+        \PY{k}{if} \PY{n}{key} \PY{o+ow}{in} \PY{n}{bucketed\PYZus{}trades}\PY{p}{:}
+            \PY{n}{bucketed\PYZus{}trades}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{t}\PY{p}{)}
+        \PY{k}{else}\PY{p}{:}
+            \PY{n}{bucketed\PYZus{}trades}\PY{p}{[}\PY{n}{key}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{n}{t}\PY{p}{]}
+            
+    \PY{k}{for} \PY{n}{key}\PY{p}{,} \PY{n}{trades} \PY{o+ow}{in} \PY{n}{bucketed\PYZus{}trades}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+        \PY{n}{effective\PYZus{}notional} \PY{o}{=} \PY{l+m+mi}{0}
+        \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{trades}\PY{p}{:}
+            \PY{n}{effective\PYZus{}notional} \PY{o}{+}\PY{o}{=} \PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}delta}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{trade\PYZus{}level\PYZus{}adjusted\PYZus{}notional}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{margining\PYZus{}factor}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{ca}\PY{p}{)}
+        \PY{n}{en\PYZus{}eq}\PY{p}{[}\PY{n}{key}\PY{p}{]} \PY{o}{=} \PY{n}{effective\PYZus{}notional}
+        
+    \PY{k}{for} \PY{n}{eq} \PY{o+ow}{in} \PY{n}{equities}\PY{p}{:}
+        
+        \PY{n}{add\PYZus{}on\PYZus{}eq}\PY{p}{[}\PY{n}{eq}\PY{p}{]} \PY{o}{=} \PY{n}{get\PYZus{}supervisory\PYZus{}factor}\PY{p}{(}\PY{n}{assetClass} \PY{o}{=} \PY{n}{AssetClass}\PY{o}{.}\PY{n}{EQ}\PY{p}{,} \PY{n}{subClass} \PY{o}{=} \PY{n}{EquitySubClass}\PY{o}{.}\PY{n}{SINGLE\PYZus{}NAME}\PY{p}{)} \PY{o}{*} \PY{n}{en\PYZus{}eq}\PY{p}{[}\PY{n}{eq}\PY{p}{]}
+    
+    \PY{n}{add\PYZus{}on\PYZus{}aggr} \PY{o}{=} \PY{n}{sqrt}\PY{p}{(} \PY{p}{(}\PY{l+m+mf}{0.5}\PY{o}{*}\PY{n}{add\PYZus{}on\PYZus{}eq}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{p}{(}\PY{l+m+mf}{0.75}\PY{o}{*}\PY{n}{add\PYZus{}on\PYZus{}eq}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{add\PYZus{}on\PYZus{}aggr}
+
+\PY{c+c1}{\PYZsh{} eq\PYZus{}trade\PYZus{}1 = EquityOption(notional = 20, S = 20 , K =18, m=3)}
+\PY{c+c1}{\PYZsh{} eq\PYZus{}trade\PYZus{}2 = EquityOption(notional = 30, S = 18, K = 19, m=3, underlying = Stock.DBK, tradeType=TradeType.PUT)}
+
+\PY{c+c1}{\PYZsh{} equity\PYZus{}addOn([eq\PYZus{}trade\PYZus{}1, eq\PYZus{}trade\PYZus{}2], CollateralAgreement())}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Equity add on calculation is validation with one example set in
+\texttt{test/equity\_addOn\_validation.xlsx}. The result in the excel is
+444.13 USD. Which as can be seen below is in line with the output of the
+function.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eq\PYZus{}trade1} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{20}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{91}\PY{p}{,} \PY{n}{mat\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{2}\PY{o}{*}\PY{l+m+mi}{360}\PY{p}{,} \PY{n}{tradeDirection}\PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{SHORT}\PY{p}{,} \PY{n}{underlying}\PY{o}{=} \PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{)}
+\PY{n}{eq\PYZus{}trade2} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{30}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{35}\PY{p}{,} \PY{n}{mat\PYZus{}in\PYZus{}days}\PY{o}{=}\PY{l+m+mi}{2}\PY{o}{*}\PY{l+m+mi}{360}\PY{p}{,} \PY{n}{tradeType} \PY{o}{=} \PY{n}{TradeType}\PY{o}{.}\PY{n}{PUT}\PY{p}{,} \PY{n}{tradeDirection} \PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{,} \PY{n}{underlying} \PY{o}{=} \PY{n}{Stock}\PY{o}{.}\PY{n}{DBK}\PY{p}{)}
+\PY{n}{eq\PYZus{}trade3} \PY{o}{=} \PY{n}{EquityForward}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{30}\PY{p}{,} \PY{n}{m}\PY{o}{=}\PY{l+m+mf}{1.5}\PY{p}{,} \PY{n}{S}\PY{o}{=}\PY{l+m+mi}{28}\PY{p}{,} \PY{n}{tradeDirection} \PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{,} \PY{n}{underlying} \PY{o}{=} \PY{n}{Stock}\PY{o}{.}\PY{n}{DBK}\PY{p}{)}
+
+\PY{n}{equity\PYZus{}addOn}\PY{p}{(}\PY{p}{[}\PY{n}{eq\PYZus{}trade1}\PY{p}{,} \PY{n}{eq\PYZus{}trade2}\PY{p}{,} \PY{n}{eq\PYZus{}trade3}\PY{p}{]}\PY{p}{,} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Finally we are able to define a function for the PFE that consumes
+trades and a collateral agreement.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{calculate\PYZus{}pfe}\PY{p}{(}\PY{n}{trades}\PY{p}{:} \PY{n}{List}\PY{p}{[}\PY{n}{Trade}\PY{p}{]}\PY{p}{,} \PY{n}{ca} \PY{p}{:} \PY{n}{CollateralAgreement}\PY{p}{)}\PY{p}{:}
+    \PY{n}{ac\PYZus{}bucketing} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+    \PY{n}{addOns} \PY{o}{=} \PY{n}{Series}\PY{p}{(}\PY{p}{)}
+    \PY{n}{V} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{trades}\PY{p}{:}
+        \PY{k}{if} \PY{n}{t}\PY{o}{.}\PY{n}{assetClass} \PY{o+ow}{in} \PY{n}{ac\PYZus{}bucketing}\PY{p}{:}
+            \PY{n}{ac\PYZus{}bucketing}\PY{p}{[}\PY{n}{t}\PY{o}{.}\PY{n}{assetClass}\PY{p}{]}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{t}\PY{p}{)}
+        \PY{k}{else}\PY{p}{:}
+            \PY{n}{ac\PYZus{}bucketing}\PY{p}{[}\PY{n}{t}\PY{o}{.}\PY{n}{assetClass}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{n}{t}\PY{p}{]}
+    \PY{k}{for} \PY{n}{ac}\PY{p}{,} \PY{n}{ac\PYZus{}trades} \PY{o+ow}{in} \PY{n}{ac\PYZus{}bucketing}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{n}{ac} \PY{o}{==} \PY{n}{AssetClass}\PY{o}{.}\PY{n}{EQ}\PY{p}{:}
+            \PY{n}{addOns}\PY{p}{[}\PY{n}{ac}\PY{p}{]} \PY{o}{=} \PY{n}{equity\PYZus{}addOn}\PY{p}{(}\PY{n}{ac\PYZus{}trades}\PY{p}{,} \PY{n}{ca}\PY{p}{)}
+        \PY{k}{elif} \PY{n}{ac} \PY{o}{==} \PY{n}{AssetClass}\PY{o}{.}\PY{n}{IR}\PY{p}{:}
+            \PY{n}{addOns}\PY{p}{[}\PY{n}{ac}\PY{p}{]} \PY{o}{=} \PY{n}{interest\PYZus{}rate\PYZus{}addOn}\PY{p}{(}\PY{n}{ac\PYZus{}trades}\PY{p}{,} \PY{n}{ca}\PY{p}{)}
+        \PY{k}{elif} \PY{n}{ac} \PY{o}{==} \PY{n}{AssetClass}\PY{o}{.}\PY{n}{FX}\PY{p}{:}
+            \PY{n}{addOns}\PY{p}{[}\PY{n}{ac}\PY{p}{]} \PY{o}{=} \PY{n}{fx\PYZus{}addOn}\PY{p}{(}\PY{n}{ac\PYZus{}trades}\PY{p}{,} \PY{n}{ca}\PY{p}{)}
+
+    \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{trades}\PY{p}{:}
+        \PY{n}{V} \PY{o}{+}\PY{o}{=} \PY{n}{t}\PY{o}{.}\PY{n}{get\PYZus{}price}\PY{p}{(}\PY{p}{)}
+    
+    \PY{n}{C} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}C}\PY{p}{(}\PY{p}{)}
+    \PY{n}{aggregate\PYZus{}addOn} \PY{o}{=} \PY{n}{addOns}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+    \PY{n}{multiplier\PYZus{}var} \PY{o}{=} \PY{n}{multiplier}\PY{p}{(}\PY{n}{V}\PY{p}{,} \PY{n}{C}\PY{p}{,} \PY{n}{aggregate\PYZus{}addOn}\PY{p}{)}
+    
+    \PY{n}{PFE} \PY{o}{=} \PY{n}{multiplier\PYZus{}var}\PY{o}{*}\PY{n}{aggregate\PYZus{}addOn}
+    \PY{k}{return} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PFE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{PFE}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{multiplier}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{multiplier\PYZus{}var}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AddOn\PYZus{}agg}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{aggregate\PYZus{}addOn}\PY{p}{\PYZcb{}}
+
+\PY{n}{calculate\PYZus{}pfe}\PY{p}{(}\PY{p}{[}\PY{n}{eq\PYZus{}trade1}\PY{p}{]}\PY{p}{,} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n}{calculate\PYZus{}pfe}\PY{p}{(}\PY{p}{[}\PY{n}{trade1}\PY{p}{,} \PY{n}{trade2}\PY{p}{,} \PY{n}{trade3}\PY{p}{]}\PY{p}{,} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{definition-of-replacement-cost-rc}{%
+\subsection{Definition of Replacement Cost
+(RC)}\label{definition-of-replacement-cost-rc}}
+
+The replacement cost for unmargined trades is defined as
+
+\begin{align*}
+RC &= \max\{V-C;0\} \\
+\\
+\text{where} \qquad V&: \text{Value of derivative transactions} \\
+C&: \text{Net collateral held according to NICA methodology}
+\end{align*}
+
+\hypertarget{rc-under-margining}{%
+\subsubsection{RC under margining}\label{rc-under-margining}}
+
+To consider margining RC is adjusted to be
+
+\begin{align*}
+RC &= \max\{V-C; TH+MTA-NICA;0\} \\
+\\
+\text{where} \qquad TH&: \text{Threshold} \\
+MTA&: \text{Minimum Transfer Amount} \\
+NICA&: \text{Net Independent Collateral Amount}
+\end{align*}
+
+Here, the term \(TH+MTA-NICA\) represents the maximum exposure that does
+not trigger a new variation margin call.
+
+While threshold and the minimum transfer amount are well established
+parameters of a collateral agreement (compare e.g.~Gregory - The XVA
+Challenge) the net independent collateral amount is a term coined for
+SA-CCR.
+
+\hypertarget{net-independendent-margin-amount---nica}{%
+\subsubsection{Net independendent margin amount -
+NICA}\label{net-independendent-margin-amount---nica}}
+
+Independent margin is margin that exceeds the current Variation Margin
+of the portfolio - this could be a voluntary or accidental
+overcollateralization or a mandated initial margin amount. If margin is
+posted to segregated accounts NICA can only become positive.
+
+Margin on a segregated account can surely be recovered if the
+counterparty to which the margin has been pledged defaults. Therefore
+this margin can not be lost through a default of the counterparty and
+can only be used by the counterparty to which it has been plegded in
+case of a default of the pledgor. Generally speaking VM is transferred
+to non-segregated accounts while IM is transferred to segregated
+accounts. It is important to note that over-collateralization or initial
+margin, sometimes also referred to as \emph{independent amount} that are
+deposited on an unsegregated account of the counterparty have to be
+deducted from the NICA.
+
+For bilateral initial margin calculation the regulator requires, that
+initial margin is payed to segregated accounts. In the case of a
+bilateral initial margin agreement the NICA would therefore be equal the
+the IM received from the counterparty i.e.
+\(NICA = IM_{received from Counterparty}\).
+
+On the other hand, there can also be voluntary, one-sided initial margin
+agreements in place between counterparties that differ drastically in
+size and default probability. Large investment banks can for example
+require hedge funds to post initial margin to an unsegregated account of
+the investment bank to reduce the counterparty credit risk from the
+investement banks point of view. In this case the NICA would be
+calculated as
+\(NICA_{\text{Investment Bank}} = IM_{\text{posted by Hedge Fund}}\)
+while the NICA of the hedge fund would be calculated as
+\$NICA\_\{\text{Hedge Fund}\} = - IM\_\{\text{posted by Hedge Fund}\}
+\$.
+
+If the hedge fund would instead post the IM on a segregated account the
+NICA of the investment bank remains unchanged while the NICA of the
+hedge fund would increase to 0.
+
+    Finally, let's set RC up in Python:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{calculate\PYZus{}rc}\PY{p}{(}\PY{n}{trades}\PY{p}{:} \PY{n}{List}\PY{p}{[}\PY{n}{Trade}\PY{p}{]}\PY{p}{,} \PY{n}{ca}\PY{p}{:} \PY{n}{CollateralAgreement}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    :param v: Current value of the derivative transactions in the netting set}
+\PY{l+s+sd}{    :param c: Haircut value of the net collateral held}
+\PY{l+s+sd}{    :param th: Threshold set in the collateral agreement}
+\PY{l+s+sd}{    :param mta: Minimum transfer amount set in the collateral agreement}
+\PY{l+s+sd}{    :param nica: Current net independent collateral amount (compare paragraph 143)}
+\PY{l+s+sd}{    :return: Replacement Cost as defined in paragraph 144}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{v} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{trades}\PY{p}{:}
+        \PY{n}{v} \PY{o}{+}\PY{o}{=} \PY{n}{t}\PY{o}{.}\PY{n}{get\PYZus{}price}\PY{p}{(}\PY{p}{)}
+    \PY{n}{c} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}C}\PY{p}{(}\PY{p}{)}
+    \PY{n}{th} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{threshold}
+    \PY{n}{mta} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{mta}
+    \PY{n}{nica} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}nica}\PY{p}{(}\PY{p}{)}
+    \PY{n}{result} \PY{o}{=} \PY{n+nb}{max}\PY{p}{(}\PY{n}{v}\PY{o}{\PYZhy{}}\PY{n}{c}\PY{p}{,} \PY{n}{th}\PY{o}{+}\PY{n}{mta}\PY{o}{\PYZhy{}}\PY{n}{nica}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}
+    \PY{k}{return} \PY{n}{result}
+
+\PY{n}{calculate\PYZus{}rc}\PY{p}{(}\PY{p}{[}\PY{n}{trade1}\PY{p}{,} \PY{n}{trade2}\PY{p}{,} \PY{n}{trade3}\PY{p}{]}\PY{p}{,} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    With all pieces in place we are now able to calculate the EAD according
+to SA-CCR given a list of trades and a collateral agreement that they
+are netted and margined under.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{trades} \PY{o}{=} \PY{p}{[}\PY{n}{trade1}\PY{p}{,} \PY{n}{trade2}\PY{p}{,} \PY{n}{trade3}\PY{p}{]}
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{p}{)}
+\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}ead}\PY{p}{(}\PY{n}{rc} \PY{o}{=} \PY{n}{calculate\PYZus{}rc}\PY{p}{(}\PY{n}{trades}\PY{p}{,} \PY{n}{ca}\PY{p}{)}\PY{p}{,} \PY{n}{pfe} \PY{o}{=} \PY{n}{calculate\PYZus{}pfe}\PY{p}{(}\PY{n}{trades}\PY{p}{,} \PY{n}{ca}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PFE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{jupyterUtils}
+
+\PY{n}{jupyterUtils}\PY{o}{.}\PY{n}{export}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SA\PYZus{}CCR\PYZus{}examplary\PYZus{}calculation.ipynb}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        ---------------------------------------------------------------------------
+
+        FileNotFoundError                         Traceback (most recent call last)
+
+        <ipython-input-1-461b9d2a39b6> in <module>
+          1 import jupyterUtils
+          2 
+    ----> 3 jupyterUtils.export("SA\_CCR\_examplary\_calculation.ipynb")
+    
+
+        C:\textbackslash{}Oxford\textbackslash{}Master\_Thesis\textbackslash{}Allocation\_Thesis\textbackslash{}SA\_CCR\_Allocation\textbackslash{}analysis\textbackslash{}jupyterUtils.py in export(filename)
+         75 
+         76     lines\_to\_write = lines\_to\_write[1:-5]
+    ---> 77     with open(toBeCreatedFile, 'w+', encoding="utf8") as out\_file:
+         78         out\_file.writelines(lines\_to\_write)
+         79 
+    
+
+        FileNotFoundError: [Errno 2] No such file or directory: 'C:\textbackslash{}\textbackslash{}Oxford\textbackslash{}\textbackslash{}Master Thesis\textbackslash{}\textbackslash{}Allocation Thesis\textbackslash{}\textbackslash{}SA\_CCR\_Allocation\textbackslash{}\textbackslash{}LaTeX\textbackslash{}\textbackslash{}JupyterNotebooksCore\textbackslash{}\textbackslash{}SA\_CCR\_examplary\_calculation.tex'
+
+    \end{Verbatim}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}

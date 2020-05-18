@@ -8,10 +8,10 @@ import nbformat as nbf
 from nbconvert.exporters import LatexExporter
 from nbconvert.writers import FilesWriter
 
-targetDirectoryFull = r'C:\Oxford\Master Thesis\Allocation Thesis\SA_CCR_Allocation\LaTeX\JupyterNotebooksFull'
-targetDirectoryCore = r'C:\Oxford\Master Thesis\Allocation Thesis\SA_CCR_Allocation\LaTeX\JupyterNotebooksCore'
-graphicsFolder = r'C:\Oxford\Master Thesis\Allocation Thesis\SA_CCR_Allocation\LaTeX\Graphics\ '[:-1]
-latexFolder = r'C:\Oxford\Master Thesis\Allocation Thesis\SA_CCR_Allocation\LaTeX'
+targetDirectoryFull = r'C:\Oxford\Master_Thesis\Allocation_Thesis\SA_CCR_Allocation\LaTeX\JupyterNotebooksFull'
+targetDirectoryCore = r'C:\Oxford\Master_Thesis\Allocation_Thesis\SA_CCR_Allocation\LaTeX\JupyterNotebooksCore'
+graphicsFolder = r'C:\Oxford\Master_Thesis\Allocation_Thesis\SA_CCR_Allocation\LaTeX\Graphics\ '[:-1]
+latexFolder = r'C:\Oxford\Master_Thesis\Allocation_Thesis\SA_CCR_Allocation\LaTeX'
 
 class CustomLatexExporter(LatexExporter):
     @default('template_file')
