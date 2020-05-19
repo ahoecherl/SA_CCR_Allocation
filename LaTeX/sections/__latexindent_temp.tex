@@ -1,192 +1,34 @@
 \documentclass[../Thesis_AHoecherl.tex]{subfiles}
 
 \begin{document}
-\section{SA-CCR}\label{SA-CCR}
+    \section{Bilateral initial margin}\label{Bilateral initial margin}
+    
+    After the 2008 financial crisis the G20 agreed to reduce systematic, counterparty and operational risk and as a result of this commitment has been put into effect by regulators worldwide. In Europe the European Market Infrastructure Regulation (EMIR) came into force in August 2012 and focused on promoting or mandating central clearing as the primary measure to reduce counterparty risk.
 
-Counterparty credit risk is considered to be a part of credit risk by the regulator. Risk weighted assets have to be calculated and need to be backed by own capital. The three main inputs for calculating credit risk are the probability of default (PD) the loss given default (LGD) and the exposure at default (EAD). Assuming the default of a counterparty over the course of the next year, the EAD is the current estimation of money indebted by the counterparty to the bank at the time of default. Estimating EAD for traditional credit instruments s.a. loans, credit cards, mortgages or bonds is relatively simple. Such instruments do often times have deterministic payment schedules making it easy to predict the exposure in one years time. Credit lines or credit cards behave less deterministic but it is still simple to determine an upper bound to the future exposure by assuming that the entire credit line is exhausted.
-The counterparty credit risk incurred by derivatives has first been regarded in regulatory capital calculation in Basel II \cite{basel2}. Due to the stochastic nature of derivatives EAD calculation for counterparty credit risk has always been regulated separately ever since. Consideration of \gls{CCR} in regulatory capital was overhauled as part of Basel III \todo{proper citation needed}. The regulation for the internal margin model (\gls{IMM}) approach was adjusted and the current exposure model (\gls{CEM}) that was introduced with Basel II as the standard approach for \gls{CCR} \gls{EAD} calculation was replaced with the \gls{SA-CCR} model and the simplified \gls{SA-CCR} model. \todo{Include timeline of SA-CCR regulatory documents}.
+    \subsection{The standard approach}\label{The standard approach}
 
-The \gls{SA-CCR} model was implemented for the analysis section of this thesis but will not be presented in a comprehensive fashion here. Instead the reader may refer to the latest regulatory documents \todo{CRD2 document} and \todo{latest EBA update} or the library developed for this thesis \cite{Hoecherl2020}.
-This section will highlight the aspects of the SA-CCR model and the simplified SA-CCR model that are of special interest within the scope of this thesis such as the consideration of margin. 
+    \todo{Is it called standard approach or standardized approach?}
 
-\subsection{Consideration of margining in SA-CCR}
+    The standard approach to calculate bilateral initial margin has been proposed by the bank for international settlement in \todo{Insert paragraph and paper of the IM standard approach} and has been implemented in European law in \todo{Section in CRD II that mandates the standard approach}. It is a schedule based approach that calculates an \gls{IM} contribution on a trade by trade basis multiplying the trades notional with a regulatory factor based on the asset class and term to maturity of the trade.
+    The resulting sum may be reduced by up to 60\% through the so called net-gross ratio, if the portfolio has a negative present value from the perspective of the calculating bank \todo{Check if negative is correct}.
+    For a detailed specification of the aggregation the reader may refer to \todo{insert again BIS and CRD definition of standardized approach}. The implementation if this approach is addressed in \ref{sec:ISDA SIMM implementation} 
+    
+    \subsection{The ISDA-SIMM model}
+    In December of 2013 the International Swap and Derivatives Association (ISDA) published a motivation and basic methodological outline of a common internal initial margin model called Standard Initial Margin Model (SIMM\texttrademark)\cite{ISDADec2013}. The goal of the model is to meet the model requirements to an internal model of all regulators, while being among others easy to replicate, quick to calculate and relatively cheap to operate, implement and validate.
 
-When using SA-CCR the exposure at default has to be
-calculated as:
+    SIMM is a Delta-Gamma VaR model using Delta and Vega sensitivities calculated by the banks themselves and risk weights and correlations provided and recalibrated annually by ISDA. ISDA provides member with a methodological paper \cite{SIMM} and a paper describing the input format of sensitivities \cite{RiskDataStandard}. Additionally, the authors of ISDA-SIMM have provided a 
 
-\begin{align}
-	\begin{split}
-		EAD &= \alpha * (RC + PFE)\\
-		\\
-		\text{where} \qquad \alpha&=1.4 \\
-		RC&: \text{Replacement Cost} \\
-		PFE&: \text{Potential Future Exposure}
-	\end{split}
-\end{align}
+    \subsubsection{Implementation}\label{sec:ISDA SIMM implementation}
+    As already pointed out, ISDA-SIMM is standardized despite being an internal model. Therefore, all market participants using an internal model for bilateral initial margin calculation are forced to calculate ISDA-SIMM compliant sensitivities, convert them into the CRIF format and to aggregate them to an initial margin figure using the ISDA-SIMM aggregation.
+    The process to create ISDA-SIMM compliant sensitivities is individual to each bank. Many vendor solutions for trading and risk have incorporated the creation of ISDA-SIMM compliant sensitivities and a CRIF into their products but the most suitable way to produce a CRIF still needs to be established on a bank to bank basis.
+    
+    Aggregation on the other hand is absolutely standardized. It uses a single file, the \gls{CRIF}, as input does not need any auxiliary market data and returns a single value, the IM. 
+    Considering this, Acadiasoft\footnote{\url{https://acadiasoft.com/}} decided to provide an open source implementation of the ISDA-SIMM aggregation \cite{simm-lib}. Acadiasoft is an ISDA-affiliated company who also offers a dispute resolution platform for bilateral initial margin that has become the market standard.
+    For the analysis shown in chapter \ref{Results}, this open source library was used for aggregation. 
+    Therefore, only the ISDA SIMM compliant sensitivities needed to be calculated and parsed into a CRIF entry minimizing potential sources of error and necessary testing effort. The open source library by Acadiasoft also offers functionality to calculate bilateral initial margin according to the standard approach presented in section \ref{The standard approach} using an extended \gls{CRIF} standard.
 
-The purpose of the RC is to assess the immediate loss suffered by the
-default of a counterparty. It is based on the current MtM of the
-derivative less the accessible collateral. If a bank has posted
-collateral to non-segregated accounts of a counterparty this collateral
-is also assumed to be lost in case of a default which increases the
-replacement cost.
-The potential future exposure (PFE) on the other hand assesses how the
-RC might develop in the future. The future being defined as during the
-next year. If the RC today is 0 but is likely to be larger than 0 in the
-near future the estimated EAD should take this expected increase in RC
-into account.
+    \subsubsection{Calculation of compliant sensitivities}\label{Calculation of ISDA SIMM compliant sensitivities}
 
-See also Paragraph 130 and 131 of \cite{SACCR}
-
-    Paragraph 130 - case without margining:
-
-\begin{quote}
-For unmargined transactions, the \emph{RC} intends to capture the loss
-that would occur if a counterparty were to default and were closed out
-of its transactions immediately. The \emph{PFE} add-on represents a
-potential conservative increase in exposure over a one-year time horizon
-from the present date (i.e.~the calculation date).
-\end{quote}
-
-Paragraph 131 - case with margining:
-
-\begin{quote}
-For margined trades, the \emph{RC} intends to capture the loss that
-would occur if a counterparty were to default at the present or at a
-future time, assuming that the closeout and replacement of transactions
-occur instantaneously. However, there may be a period (the margin period
-of risk) between the last exchange of collateral before default and
-replacement of the trades in the market. The \emph{PFE} add-on
-represents the potential change in value of the trades during this time
-period.
-\end{quote}
-
-The PFE is defined as
-\begin{align}
-	\begin{split}
-		PFE &= \text{multiplier} * AddOn^{\text{agg}} \\
-		\\
-		\text{where} \qquad AddOn^{\text{agg}} &: \text{aggregate add-on component} \\
-		\text{multiplier} &: f(V,C,AddOn^{\text{agg}})
-	\end{split}
-\end{align}
-
-\(AddOn\) is calculated differently for each asset \(a\) class. Since no
-netting is allowed between asset classes the aggregate is calculated as:
-
-\[AddOn^{\text{agg}} = \sum_{a}AddOn^{a}\]
-
-Collateralization is taken into account of the PFE calculation through
-the multiplier that uses the collateral held as an input. As
-overcollateralization increases, the multiplier
-decreases. The most important source of overcollateralization is initial margin. However, the multiplier is floored at 5\%.
-
-\begin{flalign}
-	\begin{split}
-		\text{multiplier} &= \min \left\{ 1; Floor + (1-Floor) \exp\left(\frac{V-C}{2(1-Floor)AddOn^{\text{agg}}}\right) \right\} \\
-		\text{where } Floor &= 5\%		
-	\end{split}
-	\label{eq:multiplier}
-\end{flalign}
-
-The RC is defined as
-\begin{align}
-	\begin{split}
-		RC &= \max\{V-C; TH+MTA-NICA;0\} \\
-		\\
-		\text{where} \qquad V&: \text{Current portfolio value}\\
-		C&: \text{Net collateral held}\\ 
-		TH&: \text{Threshold} \\
-		MTA&: \text{Minimum Transfer Amount} \\
-		NICA&: \text{Net Independent Collateral Amount}
-	\end{split}
-\end{align}
-
-\(C\) is defined according to the \emph{NICA} definition, which in accordance with paragraph 143 of \cite{SACCR}. By making assumption \todo{Could add reasoning to make this assumption} \ref{as:Collateral assumptions}
-
-\begin{assumption}\label{as:Collateral assumptions}
-Variation margin is posted in unsegregated accounts, initial margin is posted in segregated accounts and initial margin is the only form of overcollateralization.
-\end{assumption}
-
-the calculation of \(NICA\) and \(C\) simplifies to:
-
-\begin{align}
-	\begin{split}
-		C&= \text{Variation Margin balance} + NICA\\ 
-		NICA&= \text{Received initial margin}
-	\end{split}
-\end{align}
-
-Assuming also
-\begin{assumption}\label{as:IM larger than TH and MTA}
-		\(IM_{received}>TH+MTA \; \vert \; IM_{received} > 0\)
-\end{assumption}
-
-
-we do yield the following results for the five counterparty relation introduced in \ref{Margining}:
-
-
-% Table generated by Excel2LaTeX from sheet 'Sheet1'
-\begin{table}[htbp]
-	\centering
-	  \begin{tabular}{p{9.82em}|c|c|c}
-	  \multicolumn{1}{r|}{} & NICA  & C     & RC \\
-	  \midrule
-	  Uncollateralized\newline{}bilateral derivatives & 0     & 0     & V \\
-	  \midrule
-	  Bilateral derivatives\newline{}collateralized with VM & 0     & VM    & TH+MTA \\
-	  \midrule
-	  Bilateral derivatives\newline{}collateralized with VM\newline{}and IM & IM\_received & VM+IM\_received & 0 \\
-	  \midrule
-	  Cleared OTC \newline{}derivatives & 0     & VM    & Unclear \\
-	  \midrule
-	  Exchange traded\newline{}derivatives & 0     & VM    & Unclear \\
-	  \end{tabular}%
-	\label{tab:Margin in SA-CCR}%
-  \end{table}%
-\todo{Clarify RC under Clearing}
-
-The case that is analyzed the most in this thesis is \ref{itm:Bilateral derivatives collateralized with VM and IM}. It is important to note that \(RC\) is always floored at zero in this case and a change in VM or IM then only impacts the \gls{SA-CCR} \gls{EAD} through the use of \(C\) in the multiplier calculation of equation \ref{eq:multiplier}.
-The multiplier is therefore the central point of focus when analyzing the interaction between SA-CCR and margin. The multiplier function is plotted in figure \ref{fig:multiplier}.
-The multiplier is ceiled at one if \(C>V\), i.e.~if the portfolio is overcollateralized which under assumption \ref{as:Collateral assumptions} is the case when the bank receives \gls{IM}.
-
-% It is important to note that the multiplier can only be below 1 if
-% \(C>V\), i.e.~if the portfolio is overcollateralized. If the portfolio
-% is overcollateralized, the \emph{AddOn} comes into play. The idea behind
-% the \emph{AddOn} is related to the idea of value at risk. The higher the
-% \emph{AddOn} the faster the SA-CCR model expects the positions to lose
-% in value. Therefore, the higher the value, the higher the multiplier.
-
-% \input{../JupyterNotebooksCore/building_SA_CCR.tex}
-
-\begin{figure}
-	\centering
-	\includegraphics[scale=0.9]{Graphics/SACCR_Multiplier_Function.pdf}
-	\caption{}
-	\label{fig:multiplier}
-\end{figure}
-
-% \input{../JupyterNotebooksCore/building_SA_CCR_2.tex}
-
-% \input{../JupyterNotebooksCore/issue_regulatory_swaption_delta.tex}
-
-% \begin{figure}
-% 	\centering
-% 	\includegraphics[scale=0.95]{../Graphics/euribor6m_termstructure.pdf}
-%     \caption{}
-% \end{figure}
-
-% \begin{figure}
-% 	\centering
-% 	\includegraphics[scale=0.95]{../Graphics/euribor6m_termstructure_crossing_zero.pdf}
-%     \caption{}
-% \end{figure}
-
-% \input{../JupyterNotebooksCore/issue_regulatory_swaption_delta_2.tex}
-
-% \input{../JupyterNotebooksCore/building_SA_CCR_risk_horizon.tex}
-
-% \input{../JupyterNotebooksCore/SA_CCR_ird_addon.tex}
 
 
 \end{document}

@@ -1,16 +1,34 @@
 \documentclass[../Thesis_AHoecherl.tex]{subfiles}
 
 \begin{document}
-    \section{ISDA SIMM}\label{ISDA SIMM}
+    \section{Bilateral initial margin}\label{Bilateral initial margin}
     
-    \subsection{Regulatory requirements for an internal initial margin model}
     After the 2008 financial crisis the G20 agreed to reduce systematic, counterparty and operational risk and as a result of this commitment has been put into effect by regulators worldwide. In Europe the European Market Infrastructure Regulation (EMIR) came into force in August 2012 and focused on promoting or mandating central clearing as the primary measure to reduce counterparty risk.
 
+    \subsection{The standard approach}\label{The standard approach}
+
+    \todo{Is it called standard approach or standardized approach?}
+
+    The standard approach to calculate bilateral initial margin has been proposed by the bank for international settlement in \todo{Insert paragraph and paper of the IM standard approach} and has been implemented in European law in \todo{Section in CRD II that mandates the standard approach}. It is a schedule based approach that calculates an \gls{IM} contribution on a trade by trade basis multiplying the trades notional with a regulatory factor based on the asset class and term to maturity of the trade.
+    The resulting sum may be reduced by up to 60\% through the so called net-gross ratio, if the portfolio has a negative present value from the perspective of the calculating bank \todo{Check if negative is correct}.
+    For a detailed specification of the aggregation the reader may refer to \todo{insert again BIS and CRD definition of standardized approach}. The implementation if this approach is addressed in \ref{sec:ISDA SIMM implementation} 
     
     \subsection{The ISDA-SIMM model}
     In December of 2013 the International Swap and Derivatives Association (ISDA) published a motivation and basic methodological outline of a common internal initial margin model called Standard Initial Margin Model (SIMM\texttrademark)\cite{ISDADec2013}. The goal of the model is to meet the model requirements to an internal model of all regulators, while being among others easy to replicate, quick to calculate and relatively cheap to operate, implement and validate.
 
-    SIMM is a Delta-Gamma VaR model using Delta and Vega sensitivities calculated by the banks themselves and risk weights and correlations provided and recalibrated annually by ISDA. ISDA provides member with a methodological paper \cite{SIMM} and a paper describing the input format of sensitivities \cite{RiskDataStandard}.
+    SIMM is a Delta-Gamma VaR model using Delta and Vega sensitivities calculated by the banks themselves and risk weights and correlations provided and recalibrated annually by ISDA. ISDA provides member with a methodological paper \cite{SIMM} and a paper describing the input format of sensitivities \cite{RiskDataStandard}. Additionally, the authors of ISDA-SIMM have provided a 
 
-    \subsection{Calculation of ISDA SIMM compliant sensitivities}\label{Calculation of ISDA SIMM compliant sensitivities}
+    \subsubsection{Implementation}\label{sec:ISDA SIMM implementation}
+    As already pointed out, ISDA-SIMM is standardized despite being an internal model. Therefore, all market participants using an internal model for bilateral initial margin calculation are forced to calculate ISDA-SIMM compliant sensitivities, convert them into the CRIF format and to aggregate them to an initial margin figure using the ISDA-SIMM aggregation.
+    The process to create ISDA-SIMM compliant sensitivities is individual to each bank. Many vendor solutions for trading and risk have incorporated the creation of ISDA-SIMM compliant sensitivities and a CRIF into their products but the most suitable way to produce a CRIF still needs to be established on a bank to bank basis.
+    
+    Aggregation on the other hand is absolutely standardized. It uses a single file, the \gls{CRIF}, as input does not need any auxiliary market data and returns a single value, the IM. 
+    Considering this, Acadiasoft\footnote{\url{https://acadiasoft.com/}} decided to provide an open source implementation of the ISDA-SIMM aggregation \cite{simm-lib}. Acadiasoft is an ISDA-affiliated company who also offers a dispute resolution platform for bilateral initial margin that has become the market standard.
+    For the analysis shown in chapter \ref{Results}, this open source library was used for aggregation. 
+    Therefore, only the ISDA SIMM compliant sensitivities needed to be calculated and parsed into a CRIF entry minimizing potential sources of error and necessary testing effort. The open source library by Acadiasoft also offers functionality to calculate bilateral initial margin according to the standard approach presented in section \ref{The standard approach} using an extended \gls{CRIF} standard.
+
+    \subsubsection{Calculation of compliant sensitivities}\label{Calculation of ISDA SIMM compliant sensitivities}
+
+
+
 \end{document}

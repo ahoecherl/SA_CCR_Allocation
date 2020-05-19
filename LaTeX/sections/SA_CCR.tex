@@ -148,7 +148,9 @@ we do yield the following results for the five counterparty relation introduced 
 
 The case that is analyzed the most in this thesis is \ref{itm:Bilateral derivatives collateralized with VM and IM}. It is important to note that \(RC\) is always floored at zero in this case and a change in VM or IM then only impacts the \gls{SA-CCR} \gls{EAD} through the use of \(C\) in the multiplier calculation of equation \ref{eq:multiplier}.
 The multiplier is therefore the central point of focus when analyzing the interaction between SA-CCR and margin. The multiplier function is plotted in figure \ref{fig:multiplier}.
-The multiplier is ceiled at one if \(C>V\), i.e.~if the portfolio is overcollateralized which under assumption \ref{as:Collateral assumptions} is the case when the bank receives \gls{IM}.
+The multiplier is ceiled at one if \(C>V\), i.e.~if the portfolio is overcollateralized which under assumption \ref{as:Collateral assumptions} is the case when the bank receives \gls{IM}. With increasing overcollateralization the multiplier drops and approaches its floor of 5\%. The other factor that drives the multiplier is the portfolios \(AddOn\). 
+
+The $AddOn$ is a portfolio metric that is supposed to represent how quickly the value of the portfolio can rise within the \gls{MPoR}. The underlying idea is similar to a value at risk and to $AddOn$ is designed to be easy to compute while still being portfolio based and taking optionalities into account. Margining does not impact the calculated $AddOn$. Therefore, $AddOn$ calculation for SA-CCR is not presented in great detail at this point. The reader is referred to \todo{Cite AddOn Section of SA-CCR} and the library that was implemented for the purpose of this thesis \cite{Hoecherl2020}.
 
 % It is important to note that the multiplier can only be below 1 if
 % \(C>V\), i.e.~if the portfolio is overcollateralized. If the portfolio
