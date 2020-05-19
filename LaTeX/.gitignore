@@ -13,3 +13,5 @@
 *.gls
 *.sta
 RuthThesis/
+*/__latexindent_temp.tex
+__latexindent_temp.tex
