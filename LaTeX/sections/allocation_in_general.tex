@@ -56,6 +56,7 @@ Then, with $\mathbf{1}$ being a vector of ones, $\rho\left(X\left(\mathbf{1}\rig
 \end{definition}
 
 \begin{definition}
+    \label{def:pro rata allocation}
     Assuming that $\rho\left(X\right)$ is a risk measure, the \textbf{pro rata allocation} of an arbitrary trade $i$ can be calculated as
     \begin{gather}
         \text{with } u_{i} = 1 \text{ and } u_{\neq i} = 0\\
@@ -77,6 +78,37 @@ Then, with $\mathbf{1}$ being a vector of ones, $\rho\left(X\left(\mathbf{1}\rig
     \todo{Enter definition of Shapley allocation}
 \end{definition}
 
+The usefulness of any of the five allocation approaches listed above is dependent on the individual application of the allocation. Criteria by which the allocation approach is judged are also highly dependent of the application. However, the two criteria
+\begin{enumerate}
+    \item Native additivity
+    \item Risk sensitivity
+\end{enumerate}
+are usually regarded to be the most important one. They are for example the criteria by which Koyluoglu and Stoker \cite{koyluoglu2002risk} compare the different allocation approaches.
+
+A allocation algorithm $alloc$ exhibits native additivity if equation \ref{eq:native additivity} holds.
+
+\begin{align}
+    \sum_{i=1}^n{\rho_{alloc}\left(X|X_i\right)} = \rho\left(X\right)
+    \label{eq:native additivity}
+\end{align}
+
+Risk sensitivity means that $\rho_{alloc}\left(X|X_i\right)$ should indicate how the trade $i$ impacts the overall risk $\rho\left(X\right)$. As an example, the pro rata allocation defined in \ref{def:pro def:pro rata allocation} exhibits native additivity by design but is not risk sensitive. Even a trade that is hedging the portfolio will always have a positive allocation since $\rho\left(X\right) > 0$ for any $u$.
+
+Depending on the application of the allocation other criteria might be important such as
+\begin{itemize}
+    \item Non-negativity of allocations
+    \item The value allocated to a trade must not change through time
+    \item The allocated value needs to be independent from the order in which trades are entered 
+\end{itemize}
+Generally, such auxiliary requirements raise through operational or technical limitations. Some of the allocation algorithms presented above comply with them, while others do not. 
+Such requirements might be the reason that allocation algorithms that are dismissed as inappropriate in this thesis still find application in the field.
+
+The incremental allocation excels for use at the trading desk. It is well suited as an input when making investment decisions or for calculating the remuneration of traders and trading desks after entering a new trade.
+Both, Gregory \cite{gregory2015xva} and Koyluoglu and Stoker \cite{koyluoglu2002risk} state that incremental allocation is the best suited allocation for these purposes. It does, however, perform poorly for risk analysis of an existing portfolio. Incremental allocation is further investigated in section \ref{sec:Incremental alloaction}.
+
+Euler allocation on the other hand is well suited for analysis of an existing portfolio. It is well suited to identify concentration risk within an portfolio or for portfolio optimization purposes. In the literature, Euler allocation is generally regarded as the best allocation approach for such purposes as the allocations naturally sum up to the risk measure, 
+
+
 % Given a risk measure $\rho$, a portfolio $P$ and an individual trade  
 
 % Additionally \cite{koyluoglu2002risk}
@@ -88,7 +120,7 @@ Then, with $\mathbf{1}$ being a vector of ones, $\rho\left(X\left(\mathbf{1}\rig
 % \item Stable through time
 % \end{itemize}
 
-\subsection{Incremental allocation}
+\subsection{Incremental allocation\label{sec:Incremental alloaction}}
 Incremental allocation can only be applied when observing the development of a portfolio through time. Given a pre-existing portfolio $P$ consisting of $n$ trades $t_1$ through $t_n$ and a portfolio-based measure $M$ the incremental contribution of the first and second additional trade may be calculated as:
 \begin{align*}
 M_{\text{inc},t_{n+1}} & =M\left(t_1\dots t_{n+1}\right)- M\left(t_1\dots t_{n}\right) \\
@@ -117,12 +149,16 @@ It also cant be calculated deterministically a posteriori for a portfolio withou
 % An overview of these works and their potential pitfalls may be found in \cite{tibiletti2001incremental}. Since this work will rather focus on marginal than incremental allocation further details may be found in the referred paper. 
 % In the empirical analysis the incremental allocation will be calculated exactly.
 
-\subsection{Marginal allocation}
+\subsection{Euler allocation}
 
 Discrete marginal contribution vs continuous marginal contribution. The latter is Euler allocation. Widely used in banking for market risk refer to Jorion
 
 Closed form formulas for contribution derived for standard deviation based models, VaR models, conditional VaR models.
 
 Could show this for a single variance covariance submatrix of ISDA SIMM?!
+
+\subsection{Shapley allocation}
+
+\todo{Inclusion of this section optional}
 
 \end{document}
