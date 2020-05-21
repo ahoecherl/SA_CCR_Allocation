@@ -24,7 +24,7 @@
 \contentsline {subsubsection}{\numberline {2.3.2.1}Implementation}{10}{subsubsection.2.3.2.1}
 \contentsline {subsubsection}{\numberline {2.3.2.2}Calculation of compliant sensitivities}{11}{subsubsection.2.3.2.2}
 \contentsline {section}{\numberline {2.4}SA-CCR}{11}{section.2.4}
-\contentsline {subsection}{\numberline {2.4.1}Consideration of margining in SA-CCR}{11}{subsection.2.4.1}
+\contentsline {subsection}{\numberline {2.4.1}Consideration of margining in SA-CCR}{12}{subsection.2.4.1}
 \contentsline {section}{\numberline {2.5}Allocation of Risk Measures}{14}{section.2.5}
 \contentsline {subsection}{\numberline {2.5.1}Incremental allocation}{15}{subsection.2.5.1}
 \contentsline {subsection}{\numberline {2.5.2}Marginal allocation}{16}{subsection.2.5.2}

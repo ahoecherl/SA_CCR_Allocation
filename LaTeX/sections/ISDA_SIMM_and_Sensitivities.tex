@@ -11,12 +11,14 @@
 
     The standard approach to calculate bilateral initial margin has been proposed by the bank for international settlement in \todo{Insert paragraph and paper of the IM standard approach} and has been implemented in European law in \todo{Section in CRD II that mandates the standard approach}. It is a schedule based approach that calculates an \gls{IM} contribution on a trade by trade basis multiplying the trades notional with a regulatory factor based on the asset class and term to maturity of the trade.
     The resulting sum may be reduced by up to 60\% through the so called net-gross ratio, if the portfolio has a negative present value from the perspective of the calculating bank \todo{Check if negative is correct}.
-    For a detailed specification of the aggregation the reader may refer to \todo{insert again BIS and CRD definition of standardized approach}. The implementation if this approach is addressed in \ref{sec:ISDA SIMM implementation} 
+    For a detailed specification of the aggregation the reader may refer to \todo{insert again BIS and CRD definition of standardized approach}. The implementation of this approach is addressed in \ref{sec:ISDA SIMM implementation} 
     
     \subsection{The ISDA-SIMM model}
     In December of 2013 the International Swap and Derivatives Association (ISDA) published a motivation and basic methodological outline of a common internal initial margin model called Standard Initial Margin Model (SIMM\texttrademark)\cite{ISDADec2013}. The goal of the model is to meet the model requirements to an internal model of all regulators, while being among others easy to replicate, quick to calculate and relatively cheap to operate, implement and validate.
 
-    SIMM is a Delta-Gamma VaR model using Delta and Vega sensitivities calculated by the banks themselves and risk weights and correlations provided and recalibrated annually by ISDA. ISDA provides member with a methodological paper \cite{SIMM} and a paper describing the input format of sensitivities \cite{RiskDataStandard}. Additionally, the authors of ISDA-SIMM have provided a 
+    SIMM is a Delta-Gamma VaR model using Delta and Vega sensitivities calculated by the banks themselves and risk weights and correlations provided and recalibrated annually by ISDA. ISDA provides member with a methodological paper \cite{SIMM} and a paper describing the input format of sensitivities \cite{RiskDataStandard}.
+    Additionally, the authors of ISDA SIMM have provided a technical paper \cite{SIMM_technical_paper} that lays out the mathematical foundation of the model. 
+    The core idea of the model is to multiply sensitivities with risk weights and aggregate them with nested variance-covariance computations.
 
     \subsubsection{Implementation}\label{sec:ISDA SIMM implementation}
     As already pointed out, ISDA-SIMM is standardized despite being an internal model. Therefore, all market participants using an internal model for bilateral initial margin calculation are forced to calculate ISDA-SIMM compliant sensitivities, convert them into the CRIF format and to aggregate them to an initial margin figure using the ISDA-SIMM aggregation.
