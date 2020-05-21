@@ -5,19 +5,88 @@
 
 \section{Allocation of Risk Measures}\label{Allocation of Risk Measures}
 
-With increasing sophistication of risk, own capital and margining models the need for equally sophisticated tools for attributing these measures rises as well. Allocating the variation margin or the current exposure method (CEM) to individual trades is trivial as these measures may just be calculated for an individual trade and then added up across all trades to obtain the correct aggregate value. For measures which take portfolio effects into account such as a state of the art VaR model, ISDA-SIMM or SA-CCR however, this approach is not possible. The advent of portfolio based models for internal risk measurement in the late 1990s and for regulatory risk measurement in the late 2000s sparked research into how such measures should be reallocated. Gregory \cite[Chapter~10.7]{gregory2015xva} states that three approaches are used in practice: \begin{itemize}
+With increasing sophistication of risk, own capital and margining models the need for equally sophisticated tools for attributing these measures rises as well. Allocating the variation margin or models that disregard portfolio effect entirely such as the current exposure method (CEM) to individual trades is trivial as these measures may just be calculated for an individual trade and then added up across all trades to obtain the correct aggregate value. 
+For measures which take portfolio effects into account such as a \gls{VaR} model, \gls{ISDA SIMM} or \gls{SA-CCR} however, this approach is not possible. The advent of portfolio based models for internal risk measurement in the late 1990s and for regulatory risk measurement in the late 2000s sparked research into how such measures should be reallocated. Gregory \cite[Chapter~10.7]{gregory2015xva} states that three approaches are used in practice: 
+\begin{enumerate}
 \item Incremental allocation
-\item Marginal allocation 
+\item Marginal allocation which will be called Euler allocation in this thesis  
 \item Pro rata allocation
-\end{itemize}
-Additionally \cite{koyluoglu2002risk}
-Allocation properties
-\begin{itemize}
-\item Native additivity
-\item Risk sensitivity
-\item Independent of portfolio constellation
-\item Stable through time
-\end{itemize}
+\end{enumerate}
+
+Based on the paper of Koyluoglu and Stoker \cite{koyluoglu2002risk} the list of approaches can be complemented by:
+\begin{enumerate}[resume]
+    \item Discrete marginal allocation
+    \item Shapley value
+\end{enumerate}
+ 
+Unfortunately, naming conventions for the different allocation approaches are not consistent between the different publications.
+Therefore, a definition of the five approaches is following based on the notation used by Tasche \cite{tasche2007}. In the following we will always assume that $X_1, \dots, X_n$ are real valued random variables that are representing the profits and losses of the trades in a portfolio. $1, \dots, n$ represents the order in which the trades have been added to the portfolio. $X$ denotes the portfolio-wide \gls{PnL}, s.t.
+
+\begin{align}
+    X = \sum_{i=1}^n{X_i} \text{.}
+\end{align}
+
+$\rho(X)$ is a risk measure that is supposed to estimate the profit or loss of the portfolio at a certain quantile for a certain time period. 
+Both, the \gls{ISDA SIMM} model and the \gls{SA-CCR} model are in their core such risk measures.
+
+The allocation or contribution of trade $i$ to risk measure $\rho(X)$ is denoted as $\rho\left(X_i|X\right)$. Position sizes in the portfolio can be notated through a vector $u = (u_1,\dots, u_n)$:
+
+\begin{align}
+    X(u) = X(u_1, \dots, u_n) = \sum_{i=1}^{n}{u_iX_i}
+\end{align}
+
+Then, with $\mathbf{1}$ being a vector of ones, $\rho\left(X\left(\mathbf{1}\right)\right) = \rho\left(X\right)$.
+
+\begin{definition}
+    Assuming that $\rho\left(X\right)$ is a risk measure, the \textbf{incremental allocation} of trade $n$ can be calculated as
+    \begin{gather}
+        \begin{split}
+            \text{with } u_{i\neq n} = 1 \text{ and }u_n = 0\\
+            \rho_{inc}\left(X_n|X\right) = \rho\left(X\right) - \rho\left(X\left(u\right)\right)    
+        \end{split}
+    \end{gather}
+    The incremental allocation can only be calculated for trade $n$.
+\end{definition}
+
+\begin{definition}
+    Assuming that $\rho\left(X\right)$ is a risk measure that is homogeneous of degree one and continuously differentiable, the \textbf{Euler allocation} of an arbitrary trade $i$ can be calculated assume
+    \begin{gather}
+        \rho_{Euler}\left(X_i|X\right) = \frac{d\rho}{dh}\left(X+hX_i\right)|_{h\rightarrow0} = \frac{\partial \rho(X(\mathbf{1}))}{\partial u_i}
+    \end{gather}
+\end{definition}
+
+\begin{definition}
+    Assuming that $\rho\left(X\right)$ is a risk measure, the \textbf{pro rata allocation} of an arbitrary trade $i$ can be calculated as
+    \begin{gather}
+        \text{with } u_{i} = 1 \text{ and } u_{\neq i} = 0\\
+        \rho_{ProRata}\left(X_i|X\right) = \frac{\rho(X(u))}{\rho(X)}
+    \end{gather}
+\end{definition}
+
+\begin{definition}
+    Assuming that $\rho(X)$ is a risk measure, the \textbf{discrete marginal allocation} of an arbitrary trade $i$ can be calculated as
+    \begin{gather}
+        \begin{split}
+            \text{with } u_{i} = 0 \text{ and } u_{\neq i} = 1\\
+            \rho_{discrete}\left(X_n|X\right) = \rho\left(X\right) - \rho\left(X\left(u\right)\right)    
+        \end{split}
+    \end{gather}
+\end{definition}
+
+\begin{definition}
+    \todo{Enter definition of Shapley allocation}
+\end{definition}
+
+% Given a risk measure $\rho$, a portfolio $P$ and an individual trade  
+
+% Additionally \cite{koyluoglu2002risk}
+% Allocation properties
+% \begin{itemize}
+% \item Native additivity
+% \item Risk sensitivity
+% \item Independent of portfolio constellation
+% \item Stable through time
+% \end{itemize}
 
 \subsection{Incremental allocation}
 Incremental allocation can only be applied when observing the development of a portfolio through time. Given a pre-existing portfolio $P$ consisting of $n$ trades $t_1$ through $t_n$ and a portfolio-based measure $M$ the incremental contribution of the first and second additional trade may be calculated as:
@@ -35,10 +104,25 @@ M_{\text{inc},t_i}&= M(t_i)-M(t_{i-1}) \\
 M_{\text{inc},t_n}&= M(t_n) - M(t_{n-1})\\
 \sum_{i=1}^{n}{M_{\text{inc},i}} &= M(t_1)-M(t_1)+\dots+M(t_{n-1})-M(t_{n-1})+M(t_n) = M(t_n)
 \end{align*}
-The incremental allocation can be calculated as or before a new trade is added to the portfolio. It is a risk sensitive value when it is calculated as it accurately reflect how the additional trade changes the risk measure. If the trade is mitigating risk at the time of its inception according to $M$ its incremental allocation $M_{inc}$ is negative. If it increases the risk its $M_{inc}$ is positive. However, $M_{inc}$ does not adapt over time and is likely to loose its accurate risk depiction as additional trade are added to the portfolio. As a portfolio develops it may well be possible, that a trade for which a negative $M_{inc}$ was calculated at its inception may loose its risk mitigation. Due to this property $M_{inc}$ of a given trade should ideally only be used at or before trade inception. One such use case is the PnL calculation of a new trade to determine the performance of the trading desk or trader which initiated the trade. Another would be to use it prior to an investment decision \cite{tibiletti2001incremental}. It can however not be used to analyze an existing portfolio to e.g. identify trades which drive risk or determine how increases or decreases in a given position would impact the portfolio measure. It also cant be calculated deterministically a posteriori for a portfolio without knowing its composition through time.
+The incremental allocation can be calculated as or before a new trade is added to the portfolio. It is a risk sensitive value when it is calculated as it accurately reflect how the additional trade changes the risk measure. 
+If the trade is mitigating risk at the time of its inception according to $M$ its incremental allocation $M_{inc}$ is negative. If it increases the risk its $M_{inc}$ is positive. However, $M_{inc}$ does not adapt over time and is likely to loose its accurate risk depiction as additional trades are added to the portfolio. 
+As a portfolio develops it may well be possible, that a trade for which a negative $M_{inc}$ was calculated at its inception may loose its risk mitigation. 
+Due to this property $M_{inc}$ of a given trade should ideally only be used at or before trade inception. 
+One such use case is the PnL calculation of a new trade to determine the performance of the trading desk or trader which initiated the trade. 
+Another would be to use it prior to an investment decision \cite{tibiletti2001incremental}. 
+It can however not be used to analyze an existing portfolio to e.g. identify trades which drive risk or determine how increases or decreases in a given position would impact the portfolio measure. 
+It also cant be calculated deterministically a posteriori for a portfolio without knowing its composition through time.
 
-In the past, some academic work focused on approximating the incremental VaR as it requires a recalculation of the VaR for the entire portfolio. An overview of these works and their potential pitfalls may be found in \cite{tibiletti2001incremental}. Since this work will rather focus on marginal than incremental allocation further details may be found in the referred paper. In the empirical analysis the incremental allocation will be calculated exactly.
+% In the past, some academic work focused on approximating the incremental VaR as it requires a recalculation of the VaR for the entire portfolio. 
+% An overview of these works and their potential pitfalls may be found in \cite{tibiletti2001incremental}. Since this work will rather focus on marginal than incremental allocation further details may be found in the referred paper. 
+% In the empirical analysis the incremental allocation will be calculated exactly.
 
 \subsection{Marginal allocation}
+
+Discrete marginal contribution vs continuous marginal contribution. The latter is Euler allocation. Widely used in banking for market risk refer to Jorion
+
+Closed form formulas for contribution derived for standard deviation based models, VaR models, conditional VaR models.
+
+Could show this for a single variance covariance submatrix of ISDA SIMM?!
 
 \end{document}

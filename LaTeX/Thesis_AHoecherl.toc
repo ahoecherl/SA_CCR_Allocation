@@ -26,17 +26,17 @@
 \contentsline {section}{\numberline {2.4}SA-CCR}{11}{section.2.4}
 \contentsline {subsection}{\numberline {2.4.1}Consideration of margining in SA-CCR}{12}{subsection.2.4.1}
 \contentsline {section}{\numberline {2.5}Allocation of Risk Measures}{14}{section.2.5}
-\contentsline {subsection}{\numberline {2.5.1}Incremental allocation}{15}{subsection.2.5.1}
-\contentsline {subsection}{\numberline {2.5.2}Marginal allocation}{16}{subsection.2.5.2}
-\contentsline {chapter}{\numberline {3}Results}{17}{chapter.3}
-\contentsline {section}{\numberline {3.1}Allocation of initial margin}{17}{section.3.1}
-\contentsline {section}{\numberline {3.2}Allocation of SA-CCR}{17}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Allocation without margining}{17}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Allocation under VM collateralization}{17}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Allocation under VM and IM collateralization}{17}{subsection.3.2.3}
-\contentsline {chapter}{\numberline {4}Outlook and conclusion}{18}{chapter.4}
-\contentsline {section}{\numberline {4.1}Outlook}{18}{section.4.1}
-\contentsline {section}{\numberline {4.2}Conclusion}{18}{section.4.2}
-\contentsline {chapter}{Appendix \numberline {A}Architectural blueprint for SA-CCR allocation}{19}{Appendix.a.A}
-\contentsline {chapter}{Glossary}{20}{section*.28}
-\contentsline {chapter}{Bibliography}{20}{table.4.1}
+\contentsline {subsection}{\numberline {2.5.1}Incremental allocation}{17}{subsection.2.5.1}
+\contentsline {subsection}{\numberline {2.5.2}Marginal allocation}{17}{subsection.2.5.2}
+\contentsline {chapter}{\numberline {3}Results}{18}{chapter.3}
+\contentsline {section}{\numberline {3.1}Allocation of initial margin}{18}{section.3.1}
+\contentsline {section}{\numberline {3.2}Allocation of SA-CCR}{18}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Allocation without margining}{18}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Allocation under VM collateralization}{18}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Allocation under VM and IM collateralization}{18}{subsection.3.2.3}
+\contentsline {chapter}{\numberline {4}Outlook and conclusion}{19}{chapter.4}
+\contentsline {section}{\numberline {4.1}Outlook}{19}{section.4.1}
+\contentsline {section}{\numberline {4.2}Conclusion}{19}{section.4.2}
+\contentsline {chapter}{Appendix \numberline {A}Architectural blueprint for SA-CCR allocation}{20}{Appendix.a.A}
+\contentsline {chapter}{Glossary}{21}{section*.29}
+\contentsline {chapter}{Bibliography}{21}{table.4.1}
