@@ -27,7 +27,7 @@
 \contentsline {subsection}{\numberline {2.4.1}Consideration of margining in SA-CCR}{12}{subsection.2.4.1}
 \contentsline {section}{\numberline {2.5}Allocation of Risk Measures}{14}{section.2.5}
 \contentsline {subsection}{\numberline {2.5.1}Incremental allocation}{18}{subsection.2.5.1}
-\contentsline {subsection}{\numberline {2.5.2}Euler allocation}{18}{subsection.2.5.2}
+\contentsline {subsection}{\numberline {2.5.2}Euler allocation}{19}{subsection.2.5.2}
 \contentsline {subsection}{\numberline {2.5.3}Shapley allocation}{19}{subsection.2.5.3}
 \contentsline {chapter}{\numberline {3}Results}{20}{chapter.3}
 \contentsline {section}{\numberline {3.1}Allocation of initial margin}{20}{section.3.1}
@@ -39,5 +39,5 @@
 \contentsline {section}{\numberline {4.1}Outlook}{21}{section.4.1}
 \contentsline {section}{\numberline {4.2}Conclusion}{21}{section.4.2}
 \contentsline {chapter}{Appendix \numberline {A}Architectural blueprint for SA-CCR allocation}{22}{Appendix.a.A}
-\contentsline {chapter}{Glossary}{23}{section*.30}
+\contentsline {chapter}{Glossary}{23}{section*.32}
 \contentsline {chapter}{Bibliography}{23}{table.4.1}

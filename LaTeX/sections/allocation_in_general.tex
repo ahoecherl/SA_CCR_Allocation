@@ -91,7 +91,8 @@ A allocation algorithm $alloc$ exhibits native additivity if equation \ref{eq:na
     \label{eq:native additivity}
 \end{align}
 
-Risk sensitivity means that $\rho_{alloc}\left(X|X_i\right)$ should indicate how the trade $i$ impacts the overall risk $\rho\left(X\right)$. As an example, the pro rata allocation defined in \ref{def:pro rata allocation} exhibits native additivity by design but is not risk sensitive. Even a trade that is hedging the portfolio will always have a positive allocation since $\rho\left(X\right) > 0$ for any $u$.
+Risk sensitivity means that $\rho_{alloc}\left(X|X_i\right)$ should indicate how the trade $i$ impacts the overall risk $\rho\left(X\right)$. 
+No mathematical definition is available for when an allocation is considered to be risk sensitive. A sensible criteria could be that a trade that reduces the risk of the portfolio, i.e. a hedge trade should have a negative contribution to the risk measure.
 
 Depending on the application of the allocation other criteria might be important such as
 \begin{itemize}
@@ -105,8 +106,27 @@ Such requirements might be the reason that allocation algorithms that are dismis
 The incremental allocation excels for use at the trading desk. It is well suited as an input when making investment decisions or for calculating the remuneration of traders and trading desks after entering a new trade.
 Both, Gregory \cite{gregory2015xva} and Koyluoglu and Stoker \cite{koyluoglu2002risk} state that incremental allocation is the best suited allocation for these purposes. It does, however, perform poorly for risk analysis of an existing portfolio. Incremental allocation is further investigated in section \ref{sec:Incremental alloaction}.
 
-Euler allocation on the other hand is well suited for analysis of an existing portfolio. It is well suited to identify concentration risk within an portfolio or for portfolio optimization purposes. In the literature, Euler allocation is generally regarded as the best allocation approach for such purposes as the allocations naturally sum up to the risk measure, 
+Euler allocation on the other hand is well suited for analysis of an existing portfolio. It can identify concentration risk within an portfolio or be used for portfolio optimization. 
+In the literature, Euler allocation is generally regarded as the best allocation approach for such purposes as it exhibits native additivity and risk sensitivity and can be calculated for all trades.
 
+Pro rata allocation is generally not risk sensitive for risk measures that take portfolio effects into account.
+It is, however, very inexpensive to compute, suitable for models that are based on trade contributions such as the \gls{CEM} or the standardized approach for initial margin (see \ref{The standard approach}) and may circumvent some operational or technical issues as trade contributions are always positive.
+Due to its simplicity and packing risk sensitivity for the models analyzed in this thesis, pro rata allocation will not be analyzed in further detail in this thesis.
+
+While being a very intuitive approach, performance of discrete marginal allocation is relatively poor. The approach does not exhibit native additivity as Tasche \cite{tasche2007} shows that 
+\begin{align*}
+    \rho_{discrete}\left(X_i|X\right) \leq \rho_{Euler}\left(X_i|X\right)
+\end{align*}
+for $\rho$ that are continuously differentiable, sub-additive and homogeneous of degree 1. 
+Koyluoglu and Stoker \cite{koyluoglu2002risk} mention that "it could be argued that discrete marginal allocation is wholly dominated by the Euler allocation"\todo{Check if this is an appropriate way to cite directly}.
+
+Finally, the Shapley method introduced in \cite{shapley1951}, like the pro rata model, can not result in negative contributions but exhibits native additivity without the necessity of being normalized by division through $\rho(X)$.
+With no negative contributions being possible it can be argued, that the Shapley allocation is not risk sensitive. It is certainly considered by authors to be less risk sensitive that the Euler allocation.
+Since it exhibits natural additivity the Shapley allocation might be considered superior to the pro rata allocation. However, its computation is much more time consuming than any other allocation presented. 
+Therefore it can only be realistically used for very small portfolios or to calculate allocations of subportfolios, e.g. the subportfolios of certain departments.
+Koyluoglu and Stoker \cite{koyluoglu2002risk} compare Euler and Shapley allocation and find that Shapley allocation is a more robust measure as it does not require differentiability of $\rho$. The relatively rigorous requirements against $\rho$ to use Euler allocation are introduced in detail in section \ref{sec:Euler allocation} and chapter \ref{Results} investigates under which circumstances the ISDA SIMM and SA-CCR model comply with these requirements.
+Overall, Koyluoglu and Stoker suggest to only use Shapley allocation over the Euler allocation for calculating the contribution of few subportfolios if the political cost or confusion caused by negative contributions is considered to be too high. \todo{Non-negativity of Shapley allocation contradicts the results by FIS - investigate}
+% Due to this limited use case, Shapley allocation is not investigated further in this thesis. Nevertheless, it is worth mentioning that the only paper that as of the time of writing has been published on SA-CCR allocation \cite{}
 
 % Given a risk measure $\rho$, a portfolio $P$ and an individual trade  
 
@@ -148,7 +168,7 @@ It also cant be calculated deterministically a posteriori for a portfolio withou
 % An overview of these works and their potential pitfalls may be found in \cite{tibiletti2001incremental}. Since this work will rather focus on marginal than incremental allocation further details may be found in the referred paper. 
 % In the empirical analysis the incremental allocation will be calculated exactly.
 
-\subsection{Euler allocation}
+\subsection{Euler allocation}\label{sec:Euler allocation}
 
 Discrete marginal contribution vs continuous marginal contribution. The latter is Euler allocation. Widely used in banking for market risk refer to Jorion
 
