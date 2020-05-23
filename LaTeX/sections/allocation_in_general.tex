@@ -29,13 +29,19 @@ Therefore, a definition of the five approaches is following based on the notatio
 $\rho(X)$ is a risk measure that is supposed to estimate the profit or loss of the portfolio at a certain quantile for a certain time period. 
 Both, the \gls{ISDA SIMM} model and the \gls{SA-CCR} model are in their core such risk measures.
 
-The allocation or contribution of trade $i$ to risk measure $\rho(X)$ is denoted as $\rho\left(X_i|X\right)$. Position sizes in the portfolio can be notated through a vector $u = (u_1,\dots, u_n)$:
+The allocation or contribution of trade $i$ to risk measure $\rho(X)$ is denoted as $\rho\left(X_i|X\right)$. Position sizes in the portfolio can be notated through a vector $\mathbf{u} = (u_1,\dots, u_n)$:
 
 \begin{align}
     X(u) = X(u_1, \dots, u_n) = \sum_{i=1}^{n}{u_iX_i}
 \end{align}
 
-Then, with $\mathbf{1}$ being a vector of ones, $\rho\left(X\left(\mathbf{1}\right)\right) = \rho\left(X\right)$.
+To make it more convenient to analyze changes to $\mathbf{u}$ we also introduce the function
+
+\begin{align}
+    f_{\rho,X}\left(\mathbf{u}\right)
+\end{align}
+
+Then, with $\mathbf{1}$ being a vector of ones, $\rho\left(X\left(\mathbf{1}\right)\right) = \rho\left(X\right)$. $\mathbf{u} = \mathbf{1}$ indicates the initial state of the portfolio when calculating an allocation - it does not imply that the notional of each position is 1.
 
 \begin{definition}
     Assuming that $\rho\left(X\right)$ is a risk measure, the \textbf{incremental allocation} of trade $n$ can be calculated as
@@ -48,10 +54,11 @@ Then, with $\mathbf{1}$ being a vector of ones, $\rho\left(X\left(\mathbf{1}\rig
     The incremental allocation can only be calculated for trade $n$.
 \end{definition}
 
-\begin{definition}
+\begin{definition}[\label{def:Euler allocation}]
     Assuming that $\rho\left(X\right)$ is a risk measure that is homogeneous of degree one and continuously differentiable, the \textbf{Euler allocation} of an arbitrary trade $i$ can be calculated assume
     \begin{gather}
-        \rho_{Euler}\left(X_i|X\right) = \frac{d\rho}{dh}\left(X+hX_i\right)|_{h\rightarrow0} = \frac{\partial \rho(X(\mathbf{1}))}{\partial u_i}
+        \label{eq:Euler allocation}
+        \rho_{Euler}\left(X_i|X\right) = \frac{d\rho}{dh}\left(X+hX_i\right)|_{h\rightarrow0} = 1\frac{\partial f_{\rho}}{\partial u_i}
     \end{gather}
 \end{definition}
 
@@ -73,8 +80,11 @@ Then, with $\mathbf{1}$ being a vector of ones, $\rho\left(X\left(\mathbf{1}\rig
     \end{gather}
 \end{definition}
 
+To calculate the Shapley allocation of a portfolio one needs to iterate through all permutations how the trades in the portfolio could be ordered.
+For a given trade $i$ the Shapley allocation is the average of the amount by which the risk measure changes when adding trade $i$ to the portfolio in each of the permutations.
+
 \begin{definition}
-    \todo{Enter definition of Shapley allocation}
+    \todo{Need to put Shapley in a formula...}
 \end{definition}
 
 The usefulness of any of the five allocation approaches listed above is dependent on the individual application of the allocation. Criteria by which the allocation approach is judged are also highly dependent of the application. However, the two criteria
@@ -170,7 +180,48 @@ It also cant be calculated deterministically a posteriori for a portfolio withou
 
 \subsection{Euler allocation}\label{sec:Euler allocation}
 
-Discrete marginal contribution vs continuous marginal contribution. The latter is Euler allocation. Widely used in banking for market risk refer to Jorion
+The idea of Euler allocation is based on Euler's homogeneous functions theorem. 
+
+\begin{definition}
+    A function $f$ is homogeneous to a degree of $k$ if 
+    \begin{align}
+        f\left(\alpha \mathbf{x}\right) = \alpha^k f\left(\mathbf{x}\right)
+    \end{align}
+\end{definition}
+
+Euler's homogeneous functions theorem states
+\begin{theorem}
+    Let $f\left(\mathbf{x}\right)$ be a homogeneous function of degree $k$, then
+    \begin{align}
+        x_i \frac{\partial f}{\partial x_i} = k f(\mathbf{x})
+    \end{align}
+\end{theorem}
+
+With if we assume that $k=1$, use our risk measure $\rho(\mathbf{u})$ as a function of invested position size with $\mathbf{u} = \mathbf{1}$ being the current position size we yield
+\begin{align}
+    1\frac{\partial \rho(\mathbf{u})}{\partial u_i} = \rho(\mathbf{u})
+\end{align}
+which is what is stated in definition \ref{def:Euler allocation}.
+
+While $u = \mathbf{1}$ is defined as the current position size we can also define it as the notional in USD invested in the individual trades, i.e. $\mathbf{n} = (notional_1, \dots, notional_n)$.
+
+The Euler allocation w.r.t trade $i$ would then be calculated as
+\begin{align}
+    notional_i\frac{\partial \rho(\mathbf{n})}{\partial notional_i} = \rho(\mathbf{n})
+\end{align}
+
+\todo{Need to investigate if investment of 1 is right or investment of notional. Shouldn't one be equivalent to a relative bump and the other be equivalent to a relative bump?}
+
+As any partial derivative, $\frac{\partial \rho(\mathbf(u))}{\partial u_i}$ may be approximated as a finite difference.
+\begin{gather*}
+    \text{with }\mathbf{h}=(h_0,\dots,h_n) \text{ and } h_i = \epsilon > 0 \text{ and } h_{\neq i}=0 \\
+    \begin{align}
+        \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u}+\mathbf{h})-\rho(\mathbf{u}-\mathbf{h})}{2\epsilon} + \mathcal{O}(\epsilon^2) \; &\text{(central difference)} \\
+        \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u}+\mathbf{h})-\rho(\mathbf{u})}{\epsilon} + \mathcal{O}(\epsilon) &\text{(forward difference)}\\
+        \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u})-\rho(\mathbf{u}-\mathbf{h})}{\epsilon} + \mathcal{O}(\epsilon) &\text{(backward difference)}
+    \end{align}
+\end{gather*}
+
 
 Closed form formulas for contribution derived for standard deviation based models, VaR models, conditional VaR models.
 
