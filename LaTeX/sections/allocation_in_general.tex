@@ -183,11 +183,16 @@ It also cant be calculated deterministically a posteriori for a portfolio withou
 The idea of Euler allocation is based on Euler's homogeneous functions theorem. 
 
 \begin{definition}
-    A function $f$ is homogeneous to a degree of $k$ if 
-    \begin{align}
-        f\left(\alpha \mathbf{x}\right) = \alpha^k f\left(\mathbf{x}\right)
+    A function $f$ is a positive homogeneous function to a degree of $k$ if 
+    \begin{align} \label{eq:positive homogeneous function}
+        f\left(\alpha \mathbf{x}\right) = \alpha^k f\left(\mathbf{x}\right) \\
+        \text{for } \alpha >0
     \end{align}
 \end{definition}
+
+A function would be homogeneous rather than just \emph{positive} homogeneous if equation \ref{eq:positive homogeneous function} would also hold for $\alpha < 0$.
+Risk measures can only exhibit positive homgenity. Many risk measures do have the property that doubling position size does double the measured risk. 
+However, inverting the postion, e.g. having a short instead of a long position does not result in a negative risk estimate. 
 
 Euler's homogeneous functions theorem states
 \begin{theorem}
@@ -200,6 +205,7 @@ Euler's homogeneous functions theorem states
 With if we assume that $k=1$, use our risk measure $\rho(\mathbf{u})$ as a function of invested position size with $\mathbf{u} = \mathbf{1}$ being the current position size we yield
 \begin{align}
     1\frac{\partial \rho(\mathbf{u})}{\partial u_i} = \rho(\mathbf{u})
+    \label{eq:relative bump euler allocation}
 \end{align}
 which is what is stated in definition \ref{def:Euler allocation}.
 
@@ -208,6 +214,7 @@ While $u = \mathbf{1}$ is defined as the current position size we can also defin
 The Euler allocation w.r.t trade $i$ would then be calculated as
 \begin{align}
     notional_i\frac{\partial \rho(\mathbf{n})}{\partial notional_i} = \rho(\mathbf{n})
+    \label{eq:notional based euler allocation}
 \end{align}
 
 \todo{Need to investigate if investment of 1 is right or investment of notional. Shouldn't one be equivalent to a relative bump and the other be equivalent to a relative bump?}
@@ -217,7 +224,7 @@ As any partial derivative, $\frac{\partial \rho(\mathbf(u))}{\partial u_i}$ may 
     \text{with }\mathbf{h}=(h_0,\dots,h_n) \text{ and } h_i = \epsilon > 0 \text{ and } h_{\neq i}=0 \\
     \begin{align}
         \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u}+\mathbf{h})-\rho(\mathbf{u}-\mathbf{h})}{2\epsilon} + \mathcal{O}(\epsilon^2) \; &\text{(central difference)} \\
-        \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u}+\mathbf{h})-\rho(\mathbf{u})}{\epsilon} + \mathcal{O}(\epsilon) &\text{(forward difference)}\\
+        \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u}+\mathbf{h})-\rho(\mathbf{u})}{\epsilon} + \mathcal{O}(\epsilon) &\text{(forward difference)} \label{eq:forward difference}\\
         \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u})-\rho(\mathbf{u}-\mathbf{h})}{\epsilon} + \mathcal{O}(\epsilon) &\text{(backward difference)}
     \end{align}
 \end{gather*}

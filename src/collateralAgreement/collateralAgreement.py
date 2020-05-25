@@ -86,6 +86,8 @@ class CollateralAgreement(Portfolio):
         self.sync_im_model = True
         self.sync_sa_ccr_model = True
 
+        self.start_collateral_amount = 0
+
     def link_sa_ccr_instance(self, sa_ccr_instance):
         # Has to be done this way to avoid circular references between collateral agreement and SA_CCR
         if sa_ccr_instance.trades != []:
@@ -130,7 +132,12 @@ class CollateralAgreement(Portfolio):
         return self.vm_model
 
     def get_C(self):
-        return self.vm_model.get_vm() + self.get_nica()
+        calculated_collateral = self.vm_model.get_vm() + self.get_nica()
+        if abs(calculated_collateral) < self.threshold:
+            return 0
+        if abs(self.start_collateral_amount - calculated_collateral)<self.mta:
+            return self.start_collateral_amount
+        return calculated_collateral
 
     def get_V(self):
         if self.sync_sa_ccr_model == False:
@@ -184,3 +191,7 @@ class CollateralAgreement(Portfolio):
         except AttributeError:
             pass
         self.__sync_sa_ccr_model = value
+
+    def set_start_collateral_amount(self, value:float):
+        '''Sets the initial collateral value. get_C only returns something else if the MTA is exceeded'''
+        self.start_collateral_amount = value

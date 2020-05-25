@@ -2,6 +2,18 @@
 
 \begin{document}
     \section{Allocation of initial margin}\label{Allocation of initial margin}
+    The goal of this section is to investigate if a numerical Euler allocation of \gls{ISDA SIMM} is possible.
+    
+    As pointed out in section \ref{sec:Euler allocation} a risk measure needs to exhibit positive homogeneity of degree 1 to be able to perform an Euler allocation.
+    In a first step we can investigate by calculating ISDA SIMM for a single trade whether ISDA SIMM does exhibit positive homogeneity for a minimal example.
+
+    For this we set up an USD Libor IRS with ten years time to maturity a notional of 200 billion USD. This is our initial portfolio $\mathbf{u}$. ISDA SIMM would fulfill the required positive homogeneity condition if $a \rho(\mathbf{u}) = \rho(a \mathbf(u)$ for $a>0$.
+
+    Even a trivial example with just one trade is sufficient to show that Euler allocation does not work in the inhomogeneous part of the ISDA SIMM equation.
+    For this, we compare two sample portfolios one consisting of one USD IRS with 200 bn notional and one consisting of one USD IRS with 400 bn notional.
+    Critically, the second portfolio is penalized by the model since its USD IRS risk is too large while the first one does not. We calculate the Euler calculation with a forward finite difference approach as displayed in equation \ref{eq:forward difference}. However, since the notionals of the trades are so large it appears to be more sensible to calculate the Euler allocation based on the notional as shown in equation \ref{eq:notional based euler allocation} instead of normalizing the current position size as $\mathbf{u} = 1$ as in equation \ref{eq:relative bump euler allocation}.
+    Assuming that we calculate the finite difference with an $\epsilon$ of 1 USD and we notate 
+
     \section{Allocation of SA-CCR}\label{Allocation of SA-CCR}
     \subsection{Allocation without margining}
     \subsection{Allocation under VM collateralization}
