@@ -12,7 +12,7 @@ class EulerAllocator(Allocator):
 
     def __init__(self, collateralAgreement: CollateralAgreement, normalization=False):
         super().__init__(collateralAgreement, normalization=normalization)
-        self.rel_bumpsize = 0.000001
+        self.rel_bumpsize = 0.0001
         self.abs_bumpsize = 0.01
         self.fdApproach = FdApproach.Relative
 
