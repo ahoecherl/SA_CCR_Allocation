@@ -45,7 +45,25 @@
     \end{align*}
     again, we can refer to figure \ref{fig:homogeneity of ISDA SIMM} to check if this is a reasonable allocation result. As $a=1$ represents the IM charge for investing 200Bn of notional in the IRS, $a=2$ represents an investment of 400Bn notional. The associated IM is just 22.44Bn - allocating 33.67Bn of the risk measure to the only trade in the portfolio is therefore clearly wrong. The Euler allocation of 33.67Bn can also be read off figure \ref{fig:homogeneity of ISDA SIMM} - it is the slope at $a=2$ times two.
 
+
+
     \section{Allocation of SA-CCR}\label{Allocation of SA-CCR}
+
+    \subsection{Homogeneity of SA-CCR}
+
+    \subsubsection{Homogeneity of C}
+
+    To allocate \gls{SA-CCR} under consideration of margining, the available collateral $C$ is of special interest. As pointed out in table \ref{tab:Margin in SA-CCR} depending on the margining approach C can be calculated as $C = \text{VM}$ or $C = \text{VM} + \text{IM}_{\text{received}}$.
+
+    
+
+    \begin{figure}
+        \centering
+        \includegraphics{Graphics/C_homogenity.pdf}
+        \caption{}
+        \label{fig:homogeneity of C}
+    \end{figure}
+
     \subsection{Allocation without margining}
     \subsection{Allocation under VM collateralization}
     \subsection{Allocation under VM and IM collateralization}
