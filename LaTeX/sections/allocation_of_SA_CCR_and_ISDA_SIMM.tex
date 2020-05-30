@@ -53,16 +53,59 @@
 
     \subsubsection{Homogeneity of C}
 
-    To allocate \gls{SA-CCR} under consideration of margining, the available collateral $C$ is of special interest. As pointed out in table \ref{tab:Margin in SA-CCR} depending on the margining approach C can be calculated as $C = \text{VM}$ or $C = \text{VM} + \text{IM}_{\text{received}}$.
-
-    
-
+    To allocate \gls{SA-CCR} under consideration of margining, the available collateral $C$ is of special interest. As pointed out in table \ref{tab:Margin in SA-CCR} depending on the margining approach, C can be calculated as $C = \text{VM}$ or $C = \text{VM} + \text{IM}_{\text{received}}$.
     \begin{figure}
         \centering
         \includegraphics{Graphics/C_homogenity.pdf}
         \caption{}
         \label{fig:homogeneity of C}
     \end{figure}
+    The actually exchanged collateral, however has to be calculated under consideration of the threshold and minimum transfer amount as displayed in equation \ref{eq:C}. With this consideration of threshold and minimum transfer amount $C$ is not a homogeneous function. 
+    This can exemplary seen in \ref{fig:homogeneity of C}. This figure displays $C$ for an at the money 10Y USD interest swap and the same swap with a lower fixed rate making it an in the money swap. Again, a very high notional of 200 Bn is chosen to showcase the concentration risk charge of ISDA-SIMM and the threshold and minimum transfer amount have also been chosen to be very high at 2Bn and 1Bn USD.
+    Figure \ref{fig:homogeneity of C} also showcases the trivial result that the Variation Margin is a homogeneous function - the value of the trade scales linearly with the notional.
+    To be able to calculate an Euler allocation of SA-CCR one has to calculate C for use in \ref{eq:multiplier} without recognition of the minimum transfer amount as shown in equation \ref{eq:C no MTA}
+    \begin{align}
+        \label{eq:C no MTA}
+        C_{\text{noMTA}} = \begin{cases}
+            0  &\text{if } |C_{calc}|<\text{TH}\\
+            C_{calc} &\text{oterhwise}
+        \end{cases}
+    \end{align}
+    
+    Again, similar to the exemplary calculation in section \ref{Allocation of initial margin} it can be shown with a trivial example, that Euler allocation of SA-CCR is not possible under recognition of a \gls{MTA}. 
+    For this we consider the same 200Bn \gls{IRS} as in section \ref{Allocation of initial margin}. We assume that the currently posted margin is 9.04Bn which is the calculated ISDA-SIMM margin. Setting $C$ at 9.04Bn in \ref{eq:multiplier} and then calculating the SA-CCR EAD for this single IRS \todo{as specified in ...} yields an regulatory EAD of 582.8Mn USD. Any natively additive allocation should allocate this full amount to the IRS.
+    
+    The \gls{VM} is zero as the IRS is struck at par.
+    \begin{table}[htbp]
+        \centering
+            \begin{tabular}{c|c|c}
+                & $\text{SA-CCR}_{\text{MTA}}$ & $\text{SA-CCR}_{\text{No \gls{MTA}}}$ \\
+                \toprule
+                Initial C & 9038.2Mn & 9038.2Mn \\
+                \midrule
+                EAD\textsubscript{200Bn IRS} & 582.8Mn & 582.8Mn \\
+                \midrule
+                C\textsubscript{200Bn IRS} & 9038.2Mn & 9038.2Mn \\
+                \midrule
+                C\textsubscript{200.02Bn IRS} & 9038.2Mn & 9039.1Mn \\
+                \midrule
+                EAD\textsubscript{200.02Bn IRS} & 583.0Mn & 582.9Mn \\
+                \midrule
+                $\frac{\text{EAD\textsubscript{200.02Bn IRS}}-\text{EAD\textsubscript{200Bn IRS}}}{0.0001}$ & 1425.3Mn & 582.8Mn  \\
+                % & NICA  & $C_{calc}$    & RC \\
+                % \midrule
+                % Uncollateralized\newline{}bilateral derivatives & 0     & 0     & V \\
+                % \midrule
+                % Bilateral derivatives\newline{}collateralized with VM & 0     & VM    & TH+MTA \\
+                % \midrule
+                % Bilateral derivatives\newline{}collateralized with VM\newline{}and IM & IM\_received & VM+IM\_received & 0 \\
+                % \midrule
+                % Cleared OTC \newline{}derivatives & 0     & VM    & Unclear \\
+                % \midrule
+                % Exchange traded\newline{}derivatives & 0     & VM    & Unclear \\
+            \end{tabular}%
+        \caption{Numerical Euler allocation of SA-CCR with and without consideration of a minimum transfer amount for an example of a portfolio with a single 200Bn notional IRS. Euler allocation is only successful if the \gls{MTA} is not considered for the recalculation of the received margin C}
+    \end{table}
 
     \subsection{Allocation without margining}
     \subsection{Allocation under VM collateralization}

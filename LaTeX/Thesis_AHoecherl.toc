@@ -34,12 +34,12 @@
 \contentsline {section}{\numberline {3.2}Allocation of SA-CCR}{24}{section.3.2}
 \contentsline {subsection}{\numberline {3.2.1}Homogeneity of SA-CCR}{24}{subsection.3.2.1}
 \contentsline {subsubsection}{\numberline {3.2.1.1}Homogeneity of C}{24}{subsubsection.3.2.1.1}
-\contentsline {subsection}{\numberline {3.2.2}Allocation without margining}{25}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Allocation under VM collateralization}{25}{subsection.3.2.3}
-\contentsline {subsection}{\numberline {3.2.4}Allocation under VM and IM collateralization}{25}{subsection.3.2.4}
-\contentsline {chapter}{\numberline {4}Outlook and conclusion}{26}{chapter.4}
-\contentsline {section}{\numberline {4.1}Outlook}{26}{section.4.1}
-\contentsline {section}{\numberline {4.2}Conclusion}{26}{section.4.2}
-\contentsline {chapter}{Appendix \numberline {A}Architectural blueprint for SA-CCR allocation}{27}{Appendix.a.A}
-\contentsline {chapter}{Glossary}{28}{section*.34}
-\contentsline {chapter}{Bibliography}{28}{table.4.1}
+\contentsline {subsection}{\numberline {3.2.2}Allocation without margining}{26}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Allocation under VM collateralization}{26}{subsection.3.2.3}
+\contentsline {subsection}{\numberline {3.2.4}Allocation under VM and IM collateralization}{26}{subsection.3.2.4}
+\contentsline {chapter}{\numberline {4}Outlook and conclusion}{27}{chapter.4}
+\contentsline {section}{\numberline {4.1}Outlook}{27}{section.4.1}
+\contentsline {section}{\numberline {4.2}Conclusion}{27}{section.4.2}
+\contentsline {chapter}{Appendix \numberline {A}Architectural blueprint for SA-CCR allocation}{28}{Appendix.a.A}
+\contentsline {chapter}{Glossary}{29}{section*.35}
+\contentsline {chapter}{Bibliography}{30}{table.4.1}
