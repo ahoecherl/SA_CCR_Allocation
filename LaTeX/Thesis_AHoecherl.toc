@@ -42,5 +42,10 @@
 \contentsline {section}{\numberline {4.1}Outlook}{28}{section.4.1}
 \contentsline {section}{\numberline {4.2}Conclusion}{28}{section.4.2}
 \contentsline {chapter}{Appendix \numberline {A}Architectural blueprint for SA-CCR allocation}{29}{Appendix.a.A}
-\contentsline {chapter}{Glossary}{30}{section*.36}
-\contentsline {chapter}{Bibliography}{31}{table.4.1}
+\contentsline {chapter}{Appendix \numberline {B}Detailed documentation of results}{30}{Appendix.a.B}
+\contentsline {section}{\numberline {B.1}Detailed documentation of results presented in section \ref {Allocation of initial margin}}{30}{section.a.B.1}
+\contentsline {subsection}{\numberline {B.1.1}ISDA SIMM homogeneity for portfolio of a single trade}{30}{subsection.a.B.1.1}
+\contentsline {subsection}{\numberline {B.1.2}SA-CCR and ISDA SIMM Euler allocation under a perfect hedge}{33}{subsection.a.B.1.2}
+\contentsline {subsection}{\numberline {B.1.3}Homogeneity of C for a single trade portfolio}{35}{subsection.a.B.1.3}
+\contentsline {chapter}{Glossary}{38}{section*.37}
+\contentsline {chapter}{Bibliography}{39}{table.4.1}

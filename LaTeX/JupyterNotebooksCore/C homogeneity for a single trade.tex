@@ -1,0 +1,158 @@
+    
+
+    
+    \hypertarget{homogeneity-of-c-for-a-single-trade-portfolio}{%
+\subsection{Homogeneity of C for a single trade
+portfolio}\label{homogeneity-of-c-for-a-single-trade-portfolio}}
+
+    We want to investigate under which circumstances the \(C\) representing
+the received collateral in the calculation of SA-CCR exhibits
+homogeneity. For this we consider a portfolio consisting of a single IRS
+as follows
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{200000000000}
+\PY{n}{irs} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{n}{notional}\PY{p}{,}
+          \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+          \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+          \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,}
+          \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Since we have not explicitly set a fixed rate the IRS is struck at par
+and should have a present value of close to 0.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fixed rate: }\PY{l+s+si}{\PYZpc{}f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{irs}.get\PYZus{}fixed\PYZus{}rate())
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Present value: }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{irs}.get\PYZus{}price())
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Fixed rate: 0.024093
+Present value: 0.00
+    \end{Verbatim}
+
+    We also set up a fixed payer IRS that is in the money as it has a fixed
+rate of 2\%.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{irs\PYZus{}itm} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{n}{notional}\PY{p}{,}
+          \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+          \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+          \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,}
+          \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
+          \PY{n}{fixed\PYZus{}rate}\PY{o}{=}\PY{l+m+mf}{0.02}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fixed rate: }\PY{l+s+si}{\PYZpc{}f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{irs\PYZus{}itm}.get\PYZus{}fixed\PYZus{}rate())
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Present value: }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{irs\PYZus{}itm}.get\PYZus{}price())
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Fixed rate: 0.020000
+Present value: 7258788031.38
+    \end{Verbatim}
+
+    Additionally, we set up a collateral agreement exchanging IM in
+accordance with ISDA-SIMM with a minimum transfer amount of 1Bn and a
+threshold of 2Bn. For technical reasons we need to first create the
+collateral agreement and afterwards link it to an instance of the SA-CCR
+model. We put each of the two trades created above in a separate
+portfolio and collateral agreement.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{mta} \PY{o}{=} \PY{l+m+mi}{1000000000}\PY{p}{,}
+                         \PY{n}{threshold}\PY{o}{=} \PY{l+m+mi}{2000000000}\PY{p}{,}
+                         \PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{SIMM}\PY{p}{,}
+                         \PY{n}{margin\PYZus{}currency}\PY{o}{=}\PY{n}{Currency}\PY{o}{.}\PY{n}{USD}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Again we explore homogeneity at this example by exploring whether
+
+\begin{align*}
+f\left(\alpha \mathbf{x}\right) = \alpha^k f\left(\mathbf{x}\right) \\
+        \text{for } \alpha >0
+\end{align*}
+
+holds based on our initial portfolio for a range \(0<\alpha\leq2\)
+
+    Next, we calculate IM, VM, and C for the two IRS. C is once calculated
+with consideration of MTA and threshold and once without.
+
+To use the MTA we need to set a current margin amount. We will set this
+as the currently calculated \(C\). With the MTA in place C will
+afterwards only be updated if the sum of VM and IM differ from the
+current margin amount by more than the MTA.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{bumps} \PY{o}{=} \PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mf}{2.01}\PY{p}{,}\PY{l+m+mf}{0.01}\PY{p}{)}
+\PY{n}{resultDataframe} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{columns} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Legend}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} At the money IRS, with threshold and mta}
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{set\PYZus{}start\PYZus{}collateral\PYZus{}amount}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}C}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{k}{for} \PY{n}{bump} \PY{o+ow}{in} \PY{n}{bumps}\PY{p}{:}
+    \PY{n}{result} \PY{o}{=} \PY{n}{bump\PYZus{}and\PYZus{}get\PYZus{}results}\PY{p}{(}\PY{n}{bump}\PY{p}{,} \PY{n}{irs}\PY{p}{,} \PY{n}{ca}\PY{p}{)}
+    \PY{n}{result\PYZus{}to\PYZus{}record}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ATM VM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{result}\PY{p}{)}
+    \PY{n}{result\PYZus{}to\PYZus{}record}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ATM IM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{result}\PY{p}{)}
+    \PY{n}{result\PYZus{}to\PYZus{}record}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ATM: C with TH and MTA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Collateral}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{result}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} In the money IRS, with threshold and mta}
+\PY{n}{ca}\PY{o}{.}\PY{n}{remove\PYZus{}all\PYZus{}trades}\PY{p}{(}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs\PYZus{}itm}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{set\PYZus{}start\PYZus{}collateral\PYZus{}amount}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}C}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{k}{for} \PY{n}{bump} \PY{o+ow}{in} \PY{n}{bumps}\PY{p}{:}
+    \PY{n}{result} \PY{o}{=} \PY{n}{bump\PYZus{}and\PYZus{}get\PYZus{}results}\PY{p}{(}\PY{n}{bump}\PY{p}{,} \PY{n}{irs\PYZus{}itm}\PY{p}{,} \PY{n}{ca}\PY{p}{)}
+    \PY{n}{result\PYZus{}to\PYZus{}record}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ITM VM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{result}\PY{p}{)}
+    \PY{n}{result\PYZus{}to\PYZus{}record}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ITM IM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{result}\PY{p}{)}
+    \PY{n}{result\PYZus{}to\PYZus{}record}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ITM: C with TH and MTA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Collateral}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{result}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} In the money IRS without threshold or mta}
+\PY{n}{ca}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{n}{ca}\PY{o}{.}\PY{n}{mta} \PY{o}{=} \PY{l+m+mi}{0}
+
+\PY{k}{for} \PY{n}{bump} \PY{o+ow}{in} \PY{n}{bumps}\PY{p}{:}
+    \PY{n}{result} \PY{o}{=} \PY{n}{bump\PYZus{}and\PYZus{}get\PYZus{}results}\PY{p}{(}\PY{n}{bump}\PY{p}{,} \PY{n}{irs\PYZus{}itm}\PY{p}{,} \PY{n}{ca}\PY{p}{)}
+    \PY{n}{result\PYZus{}to\PYZus{}record}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ITM: C no TH or MTA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Collateral}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{result}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} At the money IRS without threshold or mta}
+\PY{n}{ca}\PY{o}{.}\PY{n}{remove\PYZus{}all\PYZus{}trades}\PY{p}{(}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{set\PYZus{}start\PYZus{}collateral\PYZus{}amount}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}C}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{k}{for} \PY{n}{bump} \PY{o+ow}{in} \PY{n}{bumps}\PY{p}{:}
+    \PY{n}{result} \PY{o}{=} \PY{n}{bump\PYZus{}and\PYZus{}get\PYZus{}results}\PY{p}{(}\PY{n}{bump}\PY{p}{,} \PY{n}{irs}\PY{p}{,} \PY{n}{ca}\PY{p}{)}
+    \PY{n}{result\PYZus{}to\PYZus{}record}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ATM: C no TH or MTA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Collateral}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{result}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Displaying the result for the at the money IRS it can be seen that the
+VM is flat at zero since the IRS is at par and therefore has a PV of 0.
+The IM shows the behaviour described in
+\ref{isda-simm-homogeneity-for-portfolio-of-a-single-trade}. C with
+threshold and minimum transfer amount is not a homogeneous at all, while
+C without threshold and MTA is partially. This is further discussed in
+section \todo{include reference}
+
+    Results are the same for the in the money IRS with the exception, that
+the VM is not 0 but VM is still a homogeneous function.
+
+

@@ -20,24 +20,7 @@ class CustomLatexExporter(LatexExporter):
 
 def exportPlotlyFigure(fig: go.Figure, name: str):
     fig.write_image(graphicsFolder + name + '.pdf')
-    # cwd = os.getcwd()
-    # os.chdir(graphicsFolder)
-    # cmd_sting = r'inkscape -D -z --file=' + name +r'.svg --export-pdf='+name+'.pdf --export-latex'
-    # os.system(cmd_sting)
-    #
-    # lines_to_write = []
-    # tag_found = False
-    #
-    # with open(name+'.pdf_tex', encoding="utf8") as in_file:
-    #     for line in in_file:
-    #
-    #         line = re.sub(rf"({name}.pdf)", r"Graphics/\g<1>", line)
-    #         lines_to_write.append(line)
-    #
-    # with open(name+'.pdf_tex', 'w+', encoding="utf8") as out_file:
-    #     out_file.writelines(lines_to_write)
-    #
-    # os.chdir(cwd)
+
 
 def export(filename):
 
@@ -71,7 +54,12 @@ def export(filename):
                 line = re.sub(r"{In}{incolor}{\d*}", r"{In}{incolor}{In}", line)
                 line = re.sub(r"{Out}{outcolor}{\d*}", r"{Out}{outcolor}{Out}", line)
                 line = re.sub(r"(output.*jpg})", r"JupyterNotebooksFull/\g<1>", line)
+                if r'\prompt{Out}{outcolor}{Out}{}' in line:
+                    lines_to_write.append(r'            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]' +'\n')
+                    line = r'\prompt{Out}{outcolor}{Out}{\boxspacing}'
                 lines_to_write.append(line)
+                if r'{ \hspace*{\fill} \\}' in line:
+                    lines_to_write.append(r'\end{tcolorbox}'+'\n')
 
     lines_to_write = lines_to_write[1:-5]
     with open(toBeCreatedFile, 'w+', encoding="utf8") as out_file:

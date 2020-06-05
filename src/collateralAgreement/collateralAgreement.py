@@ -133,8 +133,6 @@ class CollateralAgreement(Portfolio):
 
     def get_C(self):
         calculated_collateral = self.vm_model.get_vm() + self.get_nica()
-        if abs(calculated_collateral) < self.threshold:
-            return 0
         if abs(self.start_collateral_amount - calculated_collateral)<self.mta:
             return self.start_collateral_amount
         return calculated_collateral
@@ -148,7 +146,7 @@ class CollateralAgreement(Portfolio):
         return v
 
     def get_nica(self):
-        return self.im_model.get_im_receive() - self.unsegregated_overcollateraliziation_posted + self.segregated_overcollateralization_received + self.unsegregated_overcollateralization_received
+        return max(0, self.im_model.get_im_receive()-self.threshold) - self.unsegregated_overcollateraliziation_posted + self.segregated_overcollateralization_received + self.unsegregated_overcollateralization_received
 
     @property
     def sync_im_model(self):

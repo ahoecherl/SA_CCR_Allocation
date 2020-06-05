@@ -1,80 +1,37 @@
-\documentclass[12pt]{ociamthesis}
+\documentclass[11pt]{article}
 
-
-%   Mathematics
-    \usepackage{amsmath}
-    \usepackage{amssymb}
-    \usepackage{amsthm}
-    \usepackage{amscd}
-    \usepackage{amsfonts}
-    \usepackage{mathtools}
-
-    %Define headers
-    \numberwithin{equation}{section}
-    \newtheorem{theorem}[equation]{Theorem}
-    \newtheorem{lemma}[equation]{Lemma}
-    \newtheorem{prop}[equation]{Proposition}
-    \newtheorem{cor}[equation]{Corollary}
-    \newtheorem{conj}[equation]{Conjecture}
-    \newtheorem{application}[equation]{Application}
-    \theoremstyle{plain}
-    \newtheorem{definition}[equation]{Definition}
-    \newtheorem{assumption}{Assumption}
-    \newtheorem{construction}[equation]{Construction}
-    \newtheorem{rk}[equation]{Remark}
-    \newtheorem{notation}[equation]{Notation}
-    \newtheorem{eg}[equation]{Example}
-
-%   Appendix
-    \usepackage[titletoc]{appendix}
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
     
-%   References inside the document    
-    \usepackage{hyperref}
-
-%   TODOs
-    \setlength {\marginparwidth }{2cm}
-    \usepackage{xargs}
-    \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
-		
-    %using subfiles
-    %\usepackage[subpreambles=true]{standalone}
-    \usepackage{import}
-    \usepackage{subfiles}
-
-    \usepackage{nameref}
-
-    %make it possible to reference description by name instead of number if prefereable
-    \makeatletter
-    \let\orgdescriptionlabel\descriptionlabel
-    \renewcommand*{\descriptionlabel}[1]{%
-    \let\orglabel\label
-    \let\label\@gobble
-    \phantomsection
-    \edef\@currentlabel{#1\unskip}%
-    %\edef\@currentlabelname{#1}%
-    \let\label\orglabel
-    \orgdescriptionlabel{#1}%
-    }
-    \makeatother
-		
-
-\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
-
-%   The lenghty following preamble is for the inclusion and rendering of Jupyter notebooks converted to Latex with nb-convert. 
-\usepackage[breakable]{tcolorbox}
-\usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
 
     % Basic figure setup, for now with no caption control since it's done
     % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
     % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
     % Ensure that by default, figures have no caption (until we provide a
     % proper Figure object with a Caption API and a way to capture that
     % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
 
     \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
     \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
     \usepackage{xcolor} % Allow colors to be defined
     \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
     \usepackage{textcomp} % defines textquotesingle
     % Hack from http://tex.stackexchange.com/a/47451/13684:
     \AtBeginDocument{%
@@ -100,39 +57,40 @@
     \usepackage{hyperref}
     % The default LaTeX title has an obnoxious amount of whitespace. By default,
     % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
     \usepackage{longtable} % longtable support required by pandoc >1.10
     \usepackage{booktabs}  % table support for pandoc > 1.12.2
     \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
     \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
                                 % normalem makes italics be italics, not underlines
     \usepackage{mathrsfs}
+    
 
-% Colors for the hyperref package
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
 
-\definecolor{urlcolor}{rgb}{0,0,0}
-\definecolor{linkcolor}{rgb}{0,0,0}
-\definecolor{citecolor}{rgb}{0,0,0}
-
-% ANSI colors
-\definecolor{ansi-black}{HTML}{3E424D}
-\definecolor{ansi-black-intense}{HTML}{282C36}
-\definecolor{ansi-red}{HTML}{E75C58}
-\definecolor{ansi-red-intense}{HTML}{B22B31}
-\definecolor{ansi-green}{HTML}{00A250}
-\definecolor{ansi-green-intense}{HTML}{007427}
-\definecolor{ansi-yellow}{HTML}{DDB62B}
-\definecolor{ansi-yellow-intense}{HTML}{B27D12}
-\definecolor{ansi-blue}{HTML}{208FFB}
-\definecolor{ansi-blue-intense}{HTML}{0065CA}
-\definecolor{ansi-magenta}{HTML}{D160C4}
-\definecolor{ansi-magenta-intense}{HTML}{A03196}
-\definecolor{ansi-cyan}{HTML}{60C6C8}
-\definecolor{ansi-cyan-intense}{HTML}{258F8F}
-\definecolor{ansi-white}{HTML}{C5C1B4}
-\definecolor{ansi-white-intense}{HTML}{A1A6B2}
-\definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
-\definecolor{ansi-default-inverse-bg}{HTML}{000000}
-
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
 
     % commands and environments needed by pandoc snippets
     % extracted from the output of `pandoc -s`
@@ -188,6 +146,10 @@
     \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
     % Document parameters
     % Document title
+    \title{SA-CCR and ISDA SIMM under perfect hedge}
+    
+    
+    
     
     
 % Pygments definitions
@@ -395,62 +357,196 @@
       linkcolor=linkcolor,
       citecolor=citecolor,
       }
-% This Concludes the preamble for inclusion of jupyter notebooks.
-
-% Get rid of first page which is blank for inexplicable reasons
-\usepackage{atbegshi}% http://ctan.org/pkg/atbegshi
-\AtBeginDocument{\AtBeginShipoutNext{\AtBeginShipoutDiscard}}
-
-% Glossary
-\usepackage[automake, style=long, nonumberlist]{glossaries-extra}
-
-\title{SA-CCR Allocation under consideration of margining}
-\author{Andreas H\"ocherl}
-\college{Christ Church College}
-\degree{Master of Science}
-\degreedate{Trinity 2020}
-
-\setcounter{secnumdepth}{3}
-\setcounter{tocdepth}{3}
-
-\makeglossaries
-\loadglsentries{glossary}
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
 
 \begin{document}
-\pagenumbering{gobble}
-\maketitle
+    
+    \maketitle
+    
+    
 
-\subfile{sections/abstract.tex}
-\begin{romanpages}
-\tableofcontents
-\listoffigures
-\listoftables
-\end{romanpages}
-\pagenumbering{arabic}
+    
+    \hypertarget{sa-ccr-and-isda-simm-euler-allocation-under-a-perfect-hedge}{%
+\subsection{SA-CCR and ISDA SIMM Euler allocation under a perfect
+hedge}\label{sa-ccr-and-isda-simm-euler-allocation-under-a-perfect-hedge}}
 
-\subfile{sections/Introduction_motivation_overview.tex}
-\chapter{Applied models and methods}
-\subfile{sections/Instruments_pricing_market_data.tex}
-\subfile{sections/Margining}
-\subfile{sections/ISDA_SIMM_and_Sensitivities.tex}
-\subfile{sections/SA_CCR.tex}
-\subfile{sections/allocation_in_general.tex}
-\chapter{Results}\label{Results}
-\subfile{sections/allocation_of_SA_CCR_and_ISDA_SIMM.tex}
-\subfile{sections/architecture_blueprint_for_SA_CCR_allocation.tex}
-\subfile{sections/conclusion_and_outlook.tex}
+The goal is to create a portfolio with a perfect hedge and see if and
+under which circumstances EAD allocation is still possible. We load two
+perfectly offsetting IRS (one payer, one receiver). To avoid the
+unrealistic case of a zero IM and EAD portfolio we add an unrelated
+equity option into the portfolio.
 
-\todo{Remove 2cm Margin from preamble}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{IRS\PYZus{}pay} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{100000000}\PY{p}{,}
+              \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+              \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+              \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,}
+              \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
 
-\begin{appendices}
-\subfile{sections/architecture_blueprint.tex}
-\subfile{sections/result_notebooks}
-\end{appendices}
+\PY{n}{IRS\PYZus{}rec} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{100000000}\PY{p}{,}
+              \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+              \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+              \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
+              \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
 
-\printglossaries
+\PY{n}{eqOpt} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,}
+                     \PY{n}{underlying}\PY{o}{=}\PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{,}
+                     \PY{n}{tradeType} \PY{o}{=} \PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL}\PY{p}{,}
+                     \PY{n}{tradeDirection} \PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{,}
+                     \PY{n}{maturity} \PY{o}{=} \PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{)}
 
-\addcontentsline{toc}{chapter}{Bibliography} \nocite{*} % Deutsch
-\bibliography{Thesis_Bib}
-\bibliographystyle{plain}
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
 
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{p}{[}\PY{n}{IRS\PYZus{}pay}\PY{p}{,} \PY{n}{IRS\PYZus{}rec}\PY{p}{,} \PY{n}{eqOpt}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}im\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+1319277.1719911932
+6952717.387110085
+    \end{Verbatim}
+
+    We now create an Euler allocator which can be used to perform a
+numerical Euler allocation of the ISDA-SIMM IM or the SA-CCR EAD risk
+measure. The allocator can be set to use forward, backward or central
+differentiation. As the differentiation approach makes a big difference
+for this perfectly
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eulerAllocator} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{ca}\PY{p}{)}
+\PY{n}{im\PYZus{}alloc\PYZus{}forward} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}im}\PY{p}{(}\PY{p}{)}
+\PY{n}{saccr\PYZus{}alloc\PYZus{}forward} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{fdApproach2}\PY{o}{=}\PY{n}{FdApproach2}\PY{o}{.}\PY{n}{Central}
+\PY{n}{im\PYZus{}alloc\PYZus{}central} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}im}\PY{p}{(}\PY{p}{)}
+\PY{n}{saccr\PYZus{}alloc\PYZus{}central} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{fdApproach2}\PY{o}{=}\PY{n}{FdApproach2}\PY{o}{.}\PY{n}{Backward}
+\PY{n}{im\PYZus{}alloc\PYZus{}backward} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}im}\PY{p}{(}\PY{p}{)}
+\PY{n}{saccr\PYZus{}alloc\PYZus{}backward} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Below the resulting allocation for the IM is displayed. The allocation
+only exhibits nativ additivity when using the central difference
+appraoch since then the allocated values sum up to the IM value of
+6952717.39 USD.
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{display\PYZus{}table}\PY{p}{(}\PY{n}{im\PYZus{}alloc\PYZus{}forward}\PY{p}{,} \PY{n}{im\PYZus{}alloc\PYZus{}central}\PY{p}{,} \PY{n}{im\PYZus{}alloc\PYZus{}backward}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                       Backward       Central       Forward
+IRS\_Long          -4.518969e+06 -2.421718e-01  4.518969e+06
+IRS\_Short         -4.519001e+06 -6.323463e+01  4.518937e+06
+EquityOption\_Long  6.952717e+06  6.952717e+06  6.952717e+06
+Sum               -2.085253e+06  6.952654e+06  1.599062e+07
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Below the resulting allocation for the EAD is displayed. The allocation
+only exhibits nativ additivity when using the central difference
+appraoch since then the allocated values sum up to the IM value of
+1319277.17 USD.
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{display\PYZus{}table}\PY{p}{(}\PY{n}{saccr\PYZus{}alloc\PYZus{}forward}\PY{p}{,} \PY{n}{saccr\PYZus{}alloc\PYZus{}central}\PY{p}{,} \PY{n}{saccr\PYZus{}alloc\PYZus{}backward}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                       Backward       Central       Forward
+IRS\_Long          -1.877916e+05  4.854053e-02  1.877916e+05
+IRS\_Short         -1.877853e+05  1.267496e+01  1.877979e+05
+EquityOption\_Long  1.319277e+06  1.319277e+06  1.319277e+06
+Sum                9.437004e+05  1.319290e+06  1.694867e+06
+\end{Verbatim}
+\end{tcolorbox}
+        
+    The same phenomenon does not appear for if a hedge is not perfect
+i.e.~if the hedge size can be increased to further diminish the risk
+metric.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{IRS\PYZus{}pay} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{200000000}\PY{p}{,}
+              \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+              \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+              \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,}
+              \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
+
+\PY{n}{IRS\PYZus{}rec} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{100000000}\PY{p}{,}
+              \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+              \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+              \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
+              \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
+
+\PY{n}{eqOpt} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    The IM for this portfolio is 11471795.91 USD and the EAD is 1542260.63
+USD.
+
+    
+    For the IM the allocation yields:
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                       Backward       Central       Forward
+IRS\_Short         -4.519079e+06 -4.519078e+06 -4.519079e+06
+IRS\_Long           9.038157e+06  9.038157e+06  9.038157e+06
+EquityOption\_Long  6.952717e+06  6.952717e+06  6.952717e+06
+Sum                1.147180e+07  1.147180e+07  1.147180e+07
+\end{Verbatim}
+\end{tcolorbox}
+        
+    and for the EAD the different differentiation approaches yield:
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                       Backward       Central       Forward
+IRS\_Short         -2.463114e+05 -2.463099e+05 -2.463083e+05
+IRS\_Long           4.926136e+05  4.926198e+05  4.926259e+05
+EquityOption\_Long  1.295949e+06  1.295951e+06  1.295952e+06
+Sum                1.542251e+06  1.542261e+06  1.542270e+06
+\end{Verbatim}
+\end{tcolorbox}
+        
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
 \end{document}

@@ -1,0 +1,135 @@
+    
+
+    
+    \hypertarget{isda-simm-homogeneity-for-portfolio-of-a-single-trade}{%
+\subsection{ISDA SIMM homogeneity for portfolio of a single
+trade}\label{isda-simm-homogeneity-for-portfolio-of-a-single-trade}}
+
+    We want to showcase that the concentration risk addOn breaks homogeneity
+of the ISDA SIMM risk measure. The concentration threshold for USD
+interest rate risk is 230Mn USD per Basis Point change. Considering that
+IRS trades roughly have a delta of one against the interest rate this
+means that a trade with a notional of
+\(\frac{230\text{Mn}}{0.0001} = 2300\text{Bn}\) and a maturity of 1 year
+would incur a risk above the threshold. If the maturity increases to 10
+years a notional of roughly 230Bn should be enough to exceed the
+concentration threshold.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{200000000000}
+
+\PY{n}{irs} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{n}{notional}\PY{p}{,}
+          \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+          \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+          \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,}
+          \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
+
+\PY{n}{simm\PYZus{}sensis} \PY{o}{=} \PY{n}{irs}\PY{o}{.}\PY{n}{get\PYZus{}simm\PYZus{}sensis}\PY{p}{(}\PY{p}{)}
+\PY{n}{ir\PYZus{}delta} \PY{o}{=} \PY{n+nb}{sum}\PY{p}{(}\PY{p}{[}\PY{n+nb}{float}\PY{p}{(}\PY{n}{entry}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{amountUSD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)} \PY{k}{for} \PY{n}{entry} \PY{o+ow}{in} \PY{n}{simm\PYZus{}sensis} \PY{k}{if} \PY{n}{entry}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{riskType}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Risk\PYZus{}IRCurve}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{ir\PYZus{}delta}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+177293785.56303406
+\end{Verbatim}
+\end{tcolorbox}
+        
+    The trade has an aggregated delta sensitivity against a 1BP move of the
+USD interest rate of 177,293,786 USD. With the available market data the
+delta of the IRS appears to be slightly lower than one.
+
+    
+    We create a collateral agreement with associated ISDA SIMM and SA CCR
+model and load the irs in the portfolio. The collateral agreement uses
+ISDA SIMM for IM calculation.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{SIMM}\PY{p}{,}
+                         \PY{n}{margin\PYZus{}currency}\PY{o}{=}\PY{n}{Currency}\PY{o}{.}\PY{n}{USD}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca}\PY{p}{)}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    We now want to investigate if the ISDA SIMM exhibits homogeneity for
+this single trade portfolio. To do so we test if
+
+\begin{align*}
+f\left(\alpha \mathbf{x}\right) = \alpha^k f\left(\mathbf{x}\right) \\
+        \text{for } \alpha >0
+\end{align*}
+
+holds. We test for \(0<\alpha\leq 2\) with an increment size of 0.01.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{bumps} \PY{o}{=} \PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mf}{2.01}\PY{p}{,}\PY{l+m+mf}{0.01}\PY{p}{)}
+\PY{n}{resultDataframe} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{columns} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{USD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Legend}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    We create a utility function that supports IM, VM and Collateral
+although we are just exploring IM right now.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{bump\PYZus{}and\PYZus{}get\PYZus{}results}\PY{p}{(}\PY{n}{bumpsize}\PY{p}{,} \PY{n}{trade}\PY{p}{,} \PY{n}{collateralagreement}\PY{p}{)}\PY{p}{:}
+    \PY{n}{record} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+    \PY{n}{record}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bumpsize}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{bumpsize}
+    \PY{n}{bumped\PYZus{}copy} \PY{o}{=} \PY{n}{trade}\PY{o}{.}\PY{n}{get\PYZus{}bumped\PYZus{}copy}\PY{p}{(}\PY{n}{rel\PYZus{}bump\PYZus{}size}\PY{o}{=}\PY{n}{bumpsize}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+    \PY{n}{collateralagreement}\PY{o}{.}\PY{n}{remove\PYZus{}all\PYZus{}trades}\PY{p}{(}\PY{p}{)}
+    \PY{n}{collateralagreement}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{bumped\PYZus{}copy}\PY{p}{)}
+    \PY{n}{record}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{collateralagreement}\PY{o}{.}\PY{n}{get\PYZus{}im\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
+    \PY{n}{record}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{collateralagreement}\PY{o}{.}\PY{n}{get\PYZus{}vm\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
+    \PY{n}{record}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Collateral}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{collateralagreement}\PY{o}{.}\PY{n}{get\PYZus{}C}\PY{p}{(}\PY{p}{)}
+    \PY{n}{collateralagreement}\PY{o}{.}\PY{n}{remove\PYZus{}all\PYZus{}trades}\PY{p}{(}\PY{p}{)}
+    \PY{n}{collateralagreement}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{trade}\PY{p}{)}
+    \PY{k}{return} \PY{n}{record}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{for} \PY{n}{bump} \PY{o+ow}{in} \PY{n}{bumps}\PY{p}{:}
+    \PY{n}{result} \PY{o}{=} \PY{n}{bump\PYZus{}and\PYZus{}get\PYZus{}results}\PY{p}{(}\PY{n}{bump}\PY{p}{,} \PY{n}{irs}\PY{p}{,} \PY{n}{ca}\PY{p}{)}
+    \PY{n}{im\PYZus{}record} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{result}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bumpsize}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                 \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{result}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                 \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Legend}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}
+    \PY{n}{resultDataframe} \PY{o}{=} \PY{n}{resultDataframe}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{im\PYZus{}record}\PY{p}{,} \PY{n}{ignore\PYZus{}index}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fig} \PY{o}{=} \PY{n}{px}\PY{o}{.}\PY{n}{line}\PY{p}{(}\PY{n}{resultDataframe}\PY{p}{[}\PY{n}{resultDataframe}\PY{o}{.}\PY{n}{Legend} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Legend}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{line\PYZus{}dash}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Legend}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{fig}\PY{o}{.}\PY{n}{update\PYZus{}layout}\PY{p}{(}\PY{n}{xaxis\PYZus{}title} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{a}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{yaxis\PYZus{}title} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{USD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{img\PYZus{}bytes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{to\PYZus{}image}\PY{p}{(}\PY{n+nb}{format}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{jpeg}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{Image}\PY{p}{(}\PY{n}{img\PYZus{}bytes}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{JupyterNotebooksFull/output_11_0.jpg}
+    \end{center}
+    { \hspace*{\fill} \\}
+\end{tcolorbox}
+    
+
+    As can be seen, ISDA SIMM does not exhibit homogeneity. Further
+discussion of this in section \ref{Allocation of initial margin}.
+
+
