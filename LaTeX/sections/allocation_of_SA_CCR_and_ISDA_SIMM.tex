@@ -56,24 +56,35 @@
     \subsubsection{Homogeneity of C}
 
     To allocate \gls{SA-CCR} under consideration of margining, the available collateral $C$ is of special interest. As pointed out in table \ref{tab:Margin in SA-CCR} depending on the margining approach, C can be calculated as $C = \text{VM}$ or $C = \text{VM} + \text{IM}_{\text{received}}$.
+
+    The actually exchanged collateral, however has to be calculated under consideration of the threshold and minimum transfer amount as displayed in equation \ref{eq:C} \todo{Fix reference}. With this consideration of threshold and minimum transfer amount $C$ is not a homogeneous function. 
+
     \begin{figure}
         \centering
-        \includegraphics{Graphics/C_homogenity.pdf}
-        \caption{}
-        \label{fig:homogeneity of C}
+        \includegraphics{Graphics/C_and_its_components_for_ATM_IRS.pdf}
+        \caption{VM, IM, C and C under consideration of TH and MTA for a portfolio consisting of a single at the money interest rate swap. Values are calculated based on different notionals invested in the IRS with $a=1$ referring to a notional of 200Bn USD. More details on creation can be found in Appendix \ref{homogeneity-of-c-for-a-single-trade-portfolio}.}
+        \label{fig:C for ATM IRS}
     \end{figure}
-    The actually exchanged collateral, however has to be calculated under consideration of the threshold and minimum transfer amount as displayed in equation \ref{eq:C}. With this consideration of threshold and minimum transfer amount $C$ is not a homogeneous function. 
-    This can exemplary seen in \ref{fig:homogeneity of C}. This figure displays $C$ for an at the money 10Y USD interest swap and the same swap with a lower fixed rate making it an in the money swap. Again, a very high notional of 200 Bn is chosen to showcase the concentration risk charge of ISDA-SIMM and the threshold and minimum transfer amount have also been chosen to be very high at 2Bn and 1Bn USD.
-    Figure \ref{fig:homogeneity of C} also showcases the trivial result that the Variation Margin is a homogeneous function - the value of the trade scales linearly with the notional.
-    To be able to calculate an Euler allocation of SA-CCR one has to calculate C for use in \ref{eq:multiplier} without recognition of the minimum transfer amount as shown in equation \ref{eq:C no MTA}
+
+    \begin{figure}
+        \centering
+        \includegraphics{Graphics/C_and_its_components_for_ITM_IRS.pdf}
+        \caption{Same as figure \ref{fig:C for ATM IRS} but for an in the money trade with an payer interest rate at 2\% which is below par.}
+        \label{fig:C for ITM IRS}
+    \end{figure}
+
+    This can exemplary seen in figures \ref{fig:C for ATM IRS} and \ref{fig:C for ITM IRS}. These figures display $C$ for an at the money 10Y USD interest swap and the same swap with a lower fixed rate making it an in the money swap. Again, a very high notional of 200 Bn is chosen to showcase the concentration risk charge of ISDA SIMM and the threshold and minimum transfer amount have also been chosen to be very high at 2Bn and 1Bn USD.
+    Figure \ref{fig:C for ITM IRS} also showcases the trivial result that the Variation Margin is a homogeneous function - the value of the trade scales linearly with the notional.
+
+    To be able to calculate an Euler allocation of SA-CCR one has to calculate C for use in \ref{eq:multiplier} without recognition of the minimum transfer amount as the $C_{calc}$ as defined in equation \ref{eq:C_calc}.
+
     \begin{align}
-        \label{eq:C no MTA}
-        C_{\text{noMTA}} = \begin{cases}
-            0  &\text{if } |C_{calc}|<\text{TH}\\
-            C_{calc} &\text{oterhwise}
-        \end{cases}
+        \label{eq:C_calc}
+        C_{calc} &= VM + IM_{rec}
     \end{align}
-    
+
+    If only a MTA but no threshold is in place, no further adjustment is necessary.
+    This can exemplary been seen in the next example.
     Again, similar to the exemplary calculation in section \ref{Allocation of initial margin} it can be shown with a trivial example, that Euler allocation of SA-CCR is not possible under recognition of a \gls{MTA}. 
     For this we consider the same 200Bn \gls{IRS} as in section \ref{Allocation of initial margin}. We assume that the currently posted margin is 9.04Bn which is the calculated ISDA-SIMM margin. 
     Setting $C$ at 9.04Bn in \ref{eq:multiplier} and then calculating the SA-CCR EAD for this single IRS \todo{as specified in ...} yields an regulatory EAD of 582.8Mn USD. Any natively additive allocation should allocate this full amount to the IRS.
@@ -96,7 +107,7 @@
                 \midrule
                 $\frac{\text{EAD\textsubscript{200.02Bn IRS}}-\text{EAD\textsubscript{200Bn IRS}}}{0.0001}$ & 1425.3Mn & 582.8Mn  \\
             \end{tabular}%
-        \caption{Numerical Euler allocation of SA-CCR with and without consideration of a minimum transfer amount for an example of a portfolio with a single 200Bn notional IRS. Euler allocation is only successful if the \gls{MTA} is not considered for the recalculation of the received margin C}
+        \caption{Numerical Euler allocation of SA-CCR with and without consideration of a minimum transfer amount for an example of a portfolio with a single 200Bn notional IRS. Euler allocation is only successful if the \gls{MTA} is not considered for the recalculation of the received margin C. A threshold of 0 is assumed.}
     \end{table}
     In table \ref{tab:Allocate SA-CCR with MTA calculation} we assume that the initially received collateral is the currently calculated collateral. 
     When calculating the Euler allocation with a forward difference in line with \ref{eq:forward difference} the received collateral when rising the notional to 200.02Bn increases when no MTA is assumed while it remains unchanged with consideration of an MTA. 
@@ -106,6 +117,11 @@
     In both cases the slope of C is zero. 
     
     Euler allocation of SA-CCR also does not work if the calculated C does not exhibit homogeneity, i.e. if a concentration risk threshold of the ISDA-SIMM model is exceeded. Again using the 400Bn IRS from \ref{Allocation of initial margin} we calculate an EAD\textsubscript{400Bn IRS} of 843.5Mn but, despite not applying an MTA, Euler allocation yields a vastly different amount of $ \frac{\text{EAD\textsubscript{200.02Bn IRS}}-\text{EAD\textsubscript{200Bn IRS}}}{0.0001} = 201.0Mn $. If for a given portfolio C does not exhibit homogeneity, neither does SA-CCR and therefore Euler allocation of SA-CCR is not possible for such portfolios.
+
+    Finally, consideration of the threshold is challenging. When calculating $C$ with threshold $C$ does not exhibit homogeneity and an allocation will fail. On the other hand, when calculating $C$ without threshold the considered margin is to high and the sum of allocated EAD will be too low.
+    One solution to this is to first allocate the SA-CCR assuming the threshold is 0 and then scaling up the allocation by $EAD_{TH = 0} \ EAD$ where $EAD_{TH = 0}$ is the calculated SA-CCR EAD assuming a zero threshold and $EAD$ is the actual SA-CCR EAD.
+
+    
 
     This implies the following important result:
     

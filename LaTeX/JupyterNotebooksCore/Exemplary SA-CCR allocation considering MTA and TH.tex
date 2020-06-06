@@ -1,0 +1,114 @@
+    
+
+    
+    \hypertarget{exemplary-sa-ccr-allocation-considering-th-and-mta}{%
+\subsection{Exemplary SA-CCR allocation considering TH and
+MTA}\label{exemplary-sa-ccr-allocation-considering-th-and-mta}}
+
+Our goal is to perform an Euler allocation for the minimal example of a
+one trade portfolio. We use the same 200Bn IRS as in previous examples.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{irs} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{200000000000}\PY{p}{,}
+          \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
+          \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+          \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{2000000000}\PY{p}{,}
+                         \PY{n}{mta}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca}\PY{p}{)}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    The inclusion of the threshold raises the ead since it lowers the
+available overcollataralization.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ead\PYZus{}with\PYZus{}threshold} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ead\PYZus{}with\PYZus{}threshold}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{n}{ead\PYZus{}no\PYZus{}threshold} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ead\PYZus{}no\PYZus{}threshold}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{2000000000}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+817798882.3982577
+582881953.4648591
+    \end{Verbatim}
+
+    The EAD with threshold is 817798882.40 while the EAD without threshold
+is 582881953.46
+
+    
+    When trying to allocate with threshold we realize that the allocation is
+not working due to the missing homogeneity of C.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eulerAllocator} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{ca}\PY{p}{)}
+\PY{n}{allocated\PYZus{}value} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{n}{irs}\PY{p}{]}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocated\PYZus{}value}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+526604164.2713547
+    \end{Verbatim}
+
+    The value of 526604164.27 that has been allocated to the single trade in
+the portfolio is far off from the portfolios EAD of 817798882.40
+
+    
+    If we instead allocate without threshold, the allocation works.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{n}{allocated\PYZus{}value}\PY{o}{=}\PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{n}{irs}\PY{p}{]}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocated\PYZus{}value}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+582887839.6499157
+    \end{Verbatim}
+
+    The value of 582887839.65 that has been allocated to the single trade in
+the portfolio equals the portfolios EAD without threshold of
+582881953.46
+
+    
+    A reasonable approach to allocate an SA-CCR EAD under consideration of a
+threshold could be to allocate without threshold and then scale
+accordingly:
+
+\begin{align*}
+    X_{t\text{, TH}} = X_{t\text{, no TH}} \frac{EAD_{\text{TH}}}{EAD_{\text{no TH}}}
+\end{align*}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocated\PYZus{}value} \PY{o}{*} \PY{p}{(}\PY{n}{ead\PYZus{}with\PYZus{}threshold}\PY{o}{/}\PY{n}{ead\PYZus{}no\PYZus{}threshold}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+817807140.8724346
+    \end{Verbatim}
+
+

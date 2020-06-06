@@ -120,6 +120,7 @@ the calculation of \(NICA\) and \(C\) simplifies to:
 Assuming also
 \begin{assumption}\label{as:IM larger than TH and MTA}
 		\(IM_{received}>TH+MTA \; \vert \; IM_{received} > 0\)
+		\todo{This assumption is wrong because of the way threshold actually works...}
 \end{assumption}
 
 
@@ -142,18 +143,38 @@ we do yield the results for the five counterparty relation introduced in \ref{Ma
 	  \end{tabular}%
 	\caption{Calculation of NICA, C and RC under different margining approaches}\label{tab:Margin in SA-CCR}%
   \end{table}%
-\todo{Clarify RC under Clearing, need to tidy up subscripts}
+\todo{Clarify RC under Clearing, need to tidy up subscripts, 0 for RC und bilateral margin is wrong}
 Based on the calculated $C$ in this table, the \gls{MTA} and threshold need to be taken into account when calculating the collateral that is actually received.
-The collateral that is received at a point in time $t$ can be calculated as
-\begin{align}
-	\label{eq:C}
-	C_t = \begin{cases}
-		0  &\text{if } |C_{calc}|<\text{TH}\\
-		C_{t-1} &\text{if } |C_{calc}|>\text{TH} \text{ and } |C_{calc}-C_{t-1}| < \text{MTA} \\
-		C_{calc} &\text{oterhwise}
+
+Regarding the incorporation of a threshold and a MTA we will assume that the mechanics are the following:
+\begin{enumerate}
+	\item No threshold for the exchange of variation margin
+	\item A threshold exists for the exchange of initial margin
+	\item If $ IM_{calc} > \text{TH} + \text{MTA} $ then $IM_{calc} - \text{TH} $ is posted as collateral to cover the initial margin
+	\item The MTA applies for the combined change of VM and IM
+\end{enumerate}
+
+These are the usual rules in place in margin agreements applicable for the case of bilateral derivatives collateralized with VM and IM and are in line with the minimum requirements by the regulators\todo{Reference these minimum requirements}.
+In line with these rules the received collateral C can be calculated as follows:
+
+\begin{align*}
+	VM &= \sum_t{P(t)} \\
+	IM_{rec} &= \max{(0, IM_{\text{calc}}-\text{TH})}\\
+	C_{calc} &= VM + IM_{rec}\\
+	C_t &= \begin{cases}
+		C_{t-1} & \text{if } \; |C_t-C_{\text{calc}}| < MTA\\
+		C_{calc} \; &\text{else} 
 	\end{cases}
-\end{align}
-The case that is analyzed the most in this thesis is \ref{itm:Bilateral derivatives collateralized with VM and IM}. It is important to note that \(RC\) is always floored at zero in this case and a change in VM or IM then only impacts the \gls{SA-CCR} \gls{EAD} through the use of \(C\) in the multiplier calculation of equation \ref{eq:multiplier}.
+	\\
+	\\
+	\text{where} \qquad P(t) &: \text{Present value of trade $t$} \\
+	IM_{\text{calc}} &: \text{calculated \gls{IM} to be received } \\
+	\text{TH} &: \text{Threshold} \\
+	MTA &: \text{Minimum transfer amount} \\
+	C_{t-1} &: \text{$C$ calculated in last time period}
+\end{align*}
+
+The case that is analyzed the most in this thesis is \ref{itm:Bilateral derivatives collateralized with VM and IM}. It is important to note that \(RC\) is always floored at zero in this case and a change in VM or IM then only impacts the \gls{SA-CCR} \gls{EAD} through the use of \(C\) in the multiplier calculation of equation \ref{eq:multiplier}. \todo{This is wrong RC can be larger than 0}
 The multiplier is therefore the central point of focus when analyzing the interaction between SA-CCR and margin. The multiplier function is plotted in figure \ref{fig:multiplier}.
 The multiplier is ceiled at one if \(C>V\), i.e.~if the portfolio is overcollateralized which under assumption \ref{as:Collateral assumptions} is the case when the bank receives \gls{IM}. With increasing overcollateralization the multiplier drops and approaches its floor of 5\%. The other factor that drives the multiplier is the portfolios \(AddOn\). 
 
