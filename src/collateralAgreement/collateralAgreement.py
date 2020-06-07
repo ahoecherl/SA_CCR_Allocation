@@ -52,7 +52,8 @@ class CollateralAgreement(Portfolio):
                  unsegregated_overcollateraliziation_posted: float = 0.0,
                  unsegregated_overcollateralization_received: float = 0.0,
                  segregated_overcollateralization_posted: float = 0.0,
-                 segregated_overcollateralization_received: float = 0.0):
+                 segregated_overcollateralization_received: float = 0.0,
+                 threshold_vm = 0):
         self.trades = []
         self.margining = margining
         self.clearing = clearing
@@ -61,6 +62,7 @@ class CollateralAgreement(Portfolio):
         self.tradecount = tradecount
         self.dispute = dispute
         self.threshold = threshold
+        self.threshold_vm = threshold_vm
         self.mta = mta
         self.unsegregated_overcollateraliziation_posted = unsegregated_overcollateraliziation_posted
         self.unsegregated_overcollateralization_received = unsegregated_overcollateralization_received

@@ -280,14 +280,14 @@ class SA_CCR(RiskMeasureModel):
 
         :param v: Current value of the derivative transactions in the netting set
         :param c: Haircut value of the net collateral held
-        :param th: Threshold set in the collateral agreement
+        :param th: Threshold for VM exchange set in the collateral agreement
         :param mta: Minimum transfer amount set in the collateral agreement
         :param nica: Current net independent collateral amount (compare paragraph 143)
         :return: Replacement Cost as defined in paragraph 144
         """
         v = ca.get_V()
         c = ca.get_C()
-        th = ca.threshold
+        th = ca.threshold_vm
         mta = ca.mta
         nica = ca.get_nica()
         result = max(v - c, th + mta - nica, 0)

@@ -118,10 +118,9 @@
     
     Euler allocation of SA-CCR also does not work if the calculated C does not exhibit homogeneity, i.e. if a concentration risk threshold of the ISDA-SIMM model is exceeded. Again using the 400Bn IRS from \ref{Allocation of initial margin} we calculate an EAD\textsubscript{400Bn IRS} of 843.5Mn but, despite not applying an MTA, Euler allocation yields a vastly different amount of $ \frac{\text{EAD\textsubscript{200.02Bn IRS}}-\text{EAD\textsubscript{200Bn IRS}}}{0.0001} = 201.0Mn $. If for a given portfolio C does not exhibit homogeneity, neither does SA-CCR and therefore Euler allocation of SA-CCR is not possible for such portfolios.
 
-    Finally, consideration of the threshold is challenging. When calculating $C$ with threshold $C$ does not exhibit homogeneity and an allocation will fail. On the other hand, when calculating $C$ without threshold the considered margin is to high and the sum of allocated EAD will be too low.
+    Finally, consideration of the threshold is challenging. When calculating $C$ with a threshold, $C$ does not exhibit homogeneity and an allocation will fail. On the other hand, when calculating $C$ without threshold the considered margin is to high and the sum of allocated EAD will be too low.
     One solution to this is to first allocate the SA-CCR assuming the threshold is 0 and then scaling up the allocation by $EAD_{TH = 0} \ EAD$ where $EAD_{TH = 0}$ is the calculated SA-CCR EAD assuming a zero threshold and $EAD$ is the actual SA-CCR EAD.
 
-    
 
     This implies the following important result:
     

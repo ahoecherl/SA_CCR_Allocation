@@ -146,7 +146,7 @@
     \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
     % Document parameters
     % Document title
-    \title{Exemplary SA-CCR allocation considering MTA and TH}
+    \title{Exemplary SA-CCR allocation under consideration of a minimum transfer amount}
     
     
     
@@ -370,115 +370,126 @@
     
 
     
-    \hypertarget{exemplary-sa-ccr-allocation-considering-th-and-mta}{%
-\subsection{Exemplary SA-CCR allocation considering TH and
-MTA}\label{exemplary-sa-ccr-allocation-considering-th-and-mta}}
+    \hypertarget{exemplary-sa-ccr-allocation-under-consideration-of-a-minimum-transfer-amount.}{%
+\subsection{Exemplary SA-CCR allocation under consideration of a minimum
+transfer
+amount.}\label{exemplary-sa-ccr-allocation-under-consideration-of-a-minimum-transfer-amount.}}
 
-Our goal is to perform an Euler allocation for the minimal example of a
-one trade portfolio. We use the same 200Bn IRS as in previous examples.
+    The result of Appendix
+\ref{homogeneity-of-c-for-a-single-trade-portfolio} shows, that
+inclusion of the MTA results in a local plateau of \(C\). In addition to
+\(C\), the MTA also impacts RC as displayed in table
+\ref{tab:Margin in SA-CCR}.
+
+In this section we want to investigate if inclusion of the MTA breaks
+homogeneity of the SA-CCR EAD function and what can be done to mitigate
+this effect.
+
+We initialize a 200Bn IRS, a collateral agreement with a 0 threshold and
+a 1Bn MTA.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{2}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{irs} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{200000000000}\PY{p}{,}
-          \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
+\PY{n}{irs} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{200000000000}\PY{p}{,}
           \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
-          \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{)}
-\end{Verbatim}
-\end{tcolorbox}
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{3}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{2000000000}\PY{p}{,}
-                         \PY{n}{mta}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+          \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+          \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,}
+                         \PY{n}{mta}\PY{o}{=}\PY{l+m+mi}{1000000000}\PY{p}{)}
 \PY{n}{ca}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca}\PY{p}{)}\PY{p}{)}
 \PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs}\PY{p}{)}
+
+\PY{n}{ca}\PY{o}{.}\PY{n}{set\PYZus{}start\PYZus{}collateral\PYZus{}amount}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}C}\PY{p}{(}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
-    The inclusion of the threshold raises the ead since it lowers the
-available overcollataralization.
+    The starting collateral \(C_{t-1}\) is set to 9038157077 USD which is
+also the calculated IM since the VM of this par IRS is 0.
+
+    
+    The EAD is:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{4}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{ead\PYZus{}with\PYZus{}threshold} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{ead\PYZus{}with\PYZus{}threshold}\PY{p}{)}
-\PY{n}{ca}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{0}
-\PY{n}{ead\PYZus{}no\PYZus{}threshold} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{ead\PYZus{}no\PYZus{}threshold}\PY{p}{)}
-\PY{n}{ca}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{2000000000}
+\PY{n}{original\PYZus{}ead} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
+\PY{n}{original\PYZus{}ead}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+582881953.4866074
+\end{Verbatim}
+\end{tcolorbox}
+        
+    When bumping the notional of the irs by 0.01\%, we can see that the
+collateral of the portfolio does not change due to the MTA.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca}\PY{o}{.}\PY{n}{remove\PYZus{}all\PYZus{}trades}\PY{p}{(}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs}\PY{o}{.}\PY{n}{get\PYZus{}bumped\PYZus{}copy}\PY{p}{(}\PY{n}{rel\PYZus{}bump\PYZus{}size}\PY{o}{=}\PY{l+m+mf}{0.0001}\PY{p}{)}\PY{p}{)}
+\PY{n}{ead\PYZus{}bumped\PYZus{}mta} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EAD: }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ead\PYZus{}bumped\PYZus{}mta})
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C:   }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ca}.get\PYZus{}C())
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-817798882.3982577
-582881953.4648591
+EAD: 583024482
+C:   9038157077
     \end{Verbatim}
-
-    The EAD with threshold is 817798882.40 while the EAD without threshold
-is 582881953.46
-
-    
-    When trying to allocate with threshold we realize that the allocation is
-not working due to the missing homogeneity of C.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{6}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{eulerAllocator} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{ca}\PY{p}{)}
-\PY{n}{allocated\PYZus{}value} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{n}{irs}\PY{p}{]}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocated\PYZus{}value}\PY{p}{)}
+\PY{n}{ead\PYZus{}bumped\PYZus{}mta} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    When temporarily disabling the MTA the resulting EAD and C differ.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca}\PY{o}{.}\PY{n}{mta} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{n}{ead\PYZus{}bumped\PYZus{}no\PYZus{}mta} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EAD: }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ead\PYZus{}bumped\PYZus{}no\PYZus{}mta})
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C:   }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ca}.get\PYZus{}C())
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-526604164.2713547
+EAD: 582940242
+C:   9039060887
     \end{Verbatim}
 
-    The value of 526604164.27 that has been allocated to the single trade in
-the portfolio is far off from the portfolios EAD of 817798882.40
-
-    
-    If we instead allocate without threshold, the allocation works.
+    Calculating the forward difference in line with equation
+\todo{reference forward dif eq} with and without consideration of the
+MTA yields
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{8}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{ca}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{0}
-\PY{n}{allocated\PYZus{}value}\PY{o}{=}\PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{n}{irs}\PY{p}{]}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocated\PYZus{}value}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{With MTA:    }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{p}{(}\PY{n}{ead\PYZus{}bumped\PYZus{}mta}\PY{o}{\PYZhy{}}\PY{n}{original\PYZus{}ead}\PY{p}{)}\PY{o}{/}\PY{l+m+mf}{0.0001}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Without MTA: }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{p}{(}\PY{n}{ead\PYZus{}bumped\PYZus{}no\PYZus{}mta}\PY{o}{\PYZhy{}}\PY{n}{original\PYZus{}ead}\PY{p}{)}\PY{o}{/}\PY{l+m+mf}{0.0001}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-582887839.6499157
+With MTA:    1425289375
+Without MTA: 582887602
     \end{Verbatim}
 
-    The value of 582887839.65 that has been allocated to the single trade in
-the portfolio equals the portfolios EAD without threshold of
-582881953.46
+    \hypertarget{impact-of-the-minimum-transfer-amount-on-rc}{%
+\subsubsection{Impact of the minimum transfer amount on
+RC}\label{impact-of-the-minimum-transfer-amount-on-rc}}
 
-    
-    A reasonable approach to allocate an SA-CCR EAD under consideration of a
-threshold could be to allocate without threshold and then scale
-accordingly:
-
-\begin{align*}
-    X_{t\text{, TH}} = X_{t\text{, no TH}} \frac{EAD_{\text{TH}}}{EAD_{\text{no TH}}}
-\end{align*}
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{10}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocated\PYZus{}value} \PY{o}{*} \PY{p}{(}\PY{n}{ead\PYZus{}with\PYZus{}threshold}\PY{o}{/}\PY{n}{ead\PYZus{}no\PYZus{}threshold}\PY{p}{)}\PY{p}{)}
-\end{Verbatim}
-\end{tcolorbox}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-817807140.8724346
-    \end{Verbatim}
+In this case the \todo{need to continue here}
 
 
     % Add a bibliography block to the postdoc
