@@ -54,8 +54,8 @@ equity option into the portfolio.
     We now create an Euler allocator which can be used to perform a
 numerical Euler allocation of the ISDA-SIMM IM or the SA-CCR EAD risk
 measure. The allocator can be set to use forward, backward or central
-differentiation. As the differentiation approach makes a big difference
-for this perfectly
+differentiation. We will see that the differentiation approach makes a
+big difference for this perfectly hedged portfolio.h
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{In}{\boxspacing}
@@ -145,34 +145,10 @@ metric.
 \end{Verbatim}
 \end{tcolorbox}
 
-    The IM for this portfolio is 11471795.91 USD and the EAD is 1542260.63
-USD.
-
-    
     For the IM the allocation yields:
 
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{Out}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-                       Backward       Central       Forward
-IRS\_Short         -4.519079e+06 -4.519078e+06 -4.519079e+06
-IRS\_Long           9.038157e+06  9.038157e+06  9.038157e+06
-EquityOption\_Long  6.952717e+06  6.952717e+06  6.952717e+06
-Sum                1.147180e+07  1.147180e+07  1.147180e+07
-\end{Verbatim}
-\end{tcolorbox}
-        
     and for the EAD the different differentiation approaches yield:
 
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{Out}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-                       Backward       Central       Forward
-IRS\_Short         -2.463114e+05 -2.463099e+05 -2.463083e+05
-IRS\_Long           4.926136e+05  4.926198e+05  4.926259e+05
-EquityOption\_Long  1.295949e+06  1.295951e+06  1.295952e+06
-Sum                1.542251e+06  1.542261e+06  1.542270e+06
-\end{Verbatim}
-\end{tcolorbox}
-        
+    \todo{Show in graph that partial derivative is undefined in case of perfect hedge and that this is why Euler allocation is failing. Central difference happens to remedy this effect.}
+
 

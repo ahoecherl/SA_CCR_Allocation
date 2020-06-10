@@ -8,9 +8,7 @@ amount.}\label{exemplary-sa-ccr-allocation-under-consideration-of-a-minimum-tran
 
     The result of Appendix
 \ref{homogeneity-of-c-for-a-single-trade-portfolio} shows, that
-inclusion of the MTA results in a local plateau of \(C\). In addition to
-\(C\), the MTA also impacts RC as displayed in table
-\ref{tab:Margin in SA-CCR}.
+inclusion of the MTA results in a local plateau of \(C\).
 
 In this section we want to investigate if inclusion of the MTA breaks
 homogeneity of the SA-CCR EAD function and what can be done to mitigate
@@ -65,13 +63,13 @@ collateral of the portfolio does not change due to the MTA.
 \PY{n}{ca}\PY{o}{.}\PY{n}{remove\PYZus{}all\PYZus{}trades}\PY{p}{(}\PY{p}{)}
 \PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs}\PY{o}{.}\PY{n}{get\PYZus{}bumped\PYZus{}copy}\PY{p}{(}\PY{n}{rel\PYZus{}bump\PYZus{}size}\PY{o}{=}\PY{l+m+mf}{0.0001}\PY{p}{)}\PY{p}{)}
 \PY{n}{ead\PYZus{}bumped\PYZus{}mta} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
-\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EAD: }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ead\PYZus{}bumped\PYZus{}mta})
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EAD:  }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ead\PYZus{}bumped\PYZus{}mta})
 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C:   }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ca}.get\PYZus{}C())
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-EAD: 583024482
+EAD:  583024482
 C:   9038157077
     \end{Verbatim}
 
@@ -89,13 +87,13 @@ C:   9038157077
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{ca}\PY{o}{.}\PY{n}{mta} \PY{o}{=} \PY{l+m+mi}{0}
 \PY{n}{ead\PYZus{}bumped\PYZus{}no\PYZus{}mta} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
-\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EAD: }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ead\PYZus{}bumped\PYZus{}no\PYZus{}mta})
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EAD:  }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ead\PYZus{}bumped\PYZus{}no\PYZus{}mta})
 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C:   }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ca}.get\PYZus{}C())
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-EAD: 582940242
+EAD:  582940242
 C:   9039060887
     \end{Verbatim}
 
@@ -107,19 +105,122 @@ MTA yields
 \prompt{In}{incolor}{In}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{With MTA:    }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{p}{(}\PY{n}{ead\PYZus{}bumped\PYZus{}mta}\PY{o}{\PYZhy{}}\PY{n}{original\PYZus{}ead}\PY{p}{)}\PY{o}{/}\PY{l+m+mf}{0.0001}\PY{p}{)}\PY{p}{)}
-\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Without MTA: }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{p}{(}\PY{n}{ead\PYZus{}bumped\PYZus{}no\PYZus{}mta}\PY{o}{\PYZhy{}}\PY{n}{original\PYZus{}ead}\PY{p}{)}\PY{o}{/}\PY{l+m+mf}{0.0001}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Without MTA:  }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{p}{(}\PY{n}{ead\PYZus{}bumped\PYZus{}no\PYZus{}mta}\PY{o}{\PYZhy{}}\PY{n}{original\PYZus{}ead}\PY{p}{)}\PY{o}{/}\PY{l+m+mf}{0.0001}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
 With MTA:    1425289375
-Without MTA: 582887602
+Without MTA:  582887602
     \end{Verbatim}
 
     \hypertarget{impact-of-the-minimum-transfer-amount-on-rc}{%
 \subsubsection{Impact of the minimum transfer amount on
 RC}\label{impact-of-the-minimum-transfer-amount-on-rc}}
 
-In this case the \todo{need to continue here}
+the MTA also impacts RC as displayed in table
+\ref{tab:Margin in SA-CCR}. Since IM reduces the RC the most relevant
+case is when the calculated IM is below the threshold.
+
+In an example we try to allocate the EAD of a portfolio consisting of a
+single 100Mn IRS. The associated collateral agreement has a threshold of
+50Mn and a minimum transfer amount of 2Mn.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{irs} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{100000000}\PY{p}{,}
+          \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+          \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+          \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
+
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{50000000}\PY{p}{,}
+                         \PY{n}{mta} \PY{o}{=} \PY{l+m+mi}{2000000}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca}\PY{p}{)}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{RC:      }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ca}.get\PYZus{}sa\PYZus{}ccr\PYZus{}model().get\PYZus{}rc())
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{RC*1.4:  }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}rc}\PY{p}{(}\PY{p}{)}\PY{o}{*}\PY{l+m+mf}{1.4}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PFE:     }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}pfe}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PFE*1.4: }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}pfe}\PY{p}{(}\PY{p}{)}\PY{o}{*}\PY{l+m+mf}{1.4}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EAD:     }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ca}.get\PYZus{}sa\PYZus{}ccr\PYZus{}model().get\PYZus{}risk\PYZus{}measure())
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+RC:      2000000 USD
+RC*1.4:  2800000 USD
+PFE:     1179574 USD
+PFE*1.4: 1651404 USD
+EAD:     4451404 USD
+    \end{Verbatim}
+
+    The EAD is the sum of the RC and the PFE component time the \(\alpha\)
+factor of 1.4. In all previous examples, the RC has always been floored
+at 0 since the received IM was higher than the MTA or since the MTA was
+0.
+
+Again, Euler allocation is not possible, because the EAD is a sum of the
+PFE, which is a function of the portfolio notional and the RC which, at
+least locally, is a constant. Similar to the issue with threshold
+described in
+\ref{exemplary-sa-ccr-allocation-under-consideration-of-an-initial-margin-threshold}
+one can only allocate without MTA and then allocate the remainder
+\(EAD_{\text{MTA}}-EAD_{\text{no MTA}}\) according to some rule.
+
+Below, we allocate the ead assuming a mta of 0.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca}\PY{o}{.}\PY{n}{mta} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{n}{eulerAllocator} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{ca}\PY{p}{)}
+\PY{n}{allocation} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{mta} \PY{o}{=} \PY{l+m+mi}{2000000}
+\PY{n}{allocation}\PY{p}{[}\PY{n}{irs}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+1651404.724563472
+\end{Verbatim}
+\end{tcolorbox}
+        
+    As we can see the result equals \(PFE*1.4\) of the entire portfolio but
+the RC has not been allocated.
+
+The RC is also \(>0\), if \(TH < IM_{calc} < MTA\). Based on the
+available marketdata this is e.g.~the case for an IRS with a notional of
+1130Mn USD.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{irs2} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{1130000000}\PY{p}{,}
+          \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+          \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+          \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
+
+\PY{n}{ca}\PY{o}{.}\PY{n}{remove\PYZus{}all\PYZus{}trades}\PY{p}{(}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs2}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{RC:        }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ca}.get\PYZus{}sa\PYZus{}ccr\PYZus{}model().get\PYZus{}rc())
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PFE:     }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}pfe}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EAD/1.4: }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}\PY{o}{/}\PY{l+m+mf}{1.4}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EAD:     }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}}\PY{k}{ca}.get\PYZus{}sa\PYZus{}ccr\PYZus{}model().get\PYZus{}risk\PYZus{}measure())
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+RC:        934412 USD
+PFE:     13329195 USD
+EAD/1.4: 14263607 USD
+EAD:     19969050 USD
+    \end{Verbatim}
+
+    This observation is discussed further in
+\todo{Reference appropriate section in Results}.
 
 

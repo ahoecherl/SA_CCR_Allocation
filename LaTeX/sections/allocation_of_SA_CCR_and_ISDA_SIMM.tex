@@ -133,7 +133,6 @@
     \subsubsection{Euler allocation of hedge trades}
 
     As pointed out in \ref{Allocation of Risk Measures} Euler allocation is a risk sensitive allocation and as such does generally attribute negative contributions to trades that are decreasing the risk of the portfolio. If we consider a portfolio of a 200Mn payer IRS, an equivalent 100Mn receiver IRS and 1Mn long stock call options we yield the result depicted in \ref{tab:hedge trade sample results} when calculating the Euler allocation numerically with a forward difference.
-
     \begin{table}[htbp]
         \label{tab:hedge trade sample results}
         \centering
@@ -152,6 +151,11 @@
             \end{tabular}%
         \caption{}
     \end{table}
+    The 100Mn receiver IRS partially hedges the risk induced by the 200Mn payer IRS. 
+    Both, the ISDA SIMM and the SA-CCR model do not recognize any hedge effects across asset classes and therefore the risk associated with the equity option is completely independent from the two IRS trades. 
+    Appropriately, a negative IM and EAD is allocated to the smaller IRS trade and the allocation exhibits native additivity as the sum of the allocation of the three trades coincides with the risk measures of the portfolio.
+    
+    However, an allocation 
 
     \begin{table}[htbp]
         \label{tab:EAD perfect hedge}

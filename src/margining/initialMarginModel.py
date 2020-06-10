@@ -19,6 +19,10 @@ class InitialMarginModel(MarginModel):
         super().remove_trades(trades=trades)
         self.__resetCalculated__()
 
+    def remove_all_trades(self):
+        super().remove_all_trades()
+        self.__resetCalculated__()
+
     def __resetCalculated__(self):
         pass
 
