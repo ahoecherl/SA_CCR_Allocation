@@ -43,12 +43,11 @@
 \contentsline {section}{\numberline {4.2}Conclusion}{30}{section.4.2}
 \contentsline {chapter}{Appendix \numberline {A}Architectural blueprint for SA-CCR allocation}{31}{Appendix.a.A}
 \contentsline {chapter}{Appendix \numberline {B}Detailed documentation of results}{32}{Appendix.a.B}
-\contentsline {section}{\numberline {B.1}Detailed documentation of results presented in section \ref {Allocation of initial margin}}{32}{section.a.B.1}
-\contentsline {subsection}{\numberline {B.1.1}ISDA SIMM homogeneity for portfolio of a single trade}{32}{subsection.a.B.1.1}
-\contentsline {subsection}{\numberline {B.1.2}SA-CCR and ISDA SIMM Euler allocation under a perfect hedge}{35}{subsection.a.B.1.2}
-\contentsline {subsection}{\numberline {B.1.3}Homogeneity of C for a single trade portfolio}{37}{subsection.a.B.1.3}
-\contentsline {subsection}{\numberline {B.1.4}Exemplary SA-CCR allocation under consideration of an initial margin threshold}{40}{subsection.a.B.1.4}
-\contentsline {subsection}{\numberline {B.1.5}Exemplary SA-CCR allocation under consideration of a minimum transfer amount.}{44}{subsection.a.B.1.5}
-\contentsline {subsubsection}{\numberline {B.1.5.1}Impact of the minimum transfer amount on RC}{45}{subsubsection.a.B.1.5.1}
-\contentsline {chapter}{Glossary}{48}{section*.46}
-\contentsline {chapter}{Bibliography}{49}{table.4.1}
+\contentsline {section}{\numberline {B.1}ISDA SIMM homogeneity for portfolio of a single trade}{32}{section.a.B.1}
+\contentsline {subsection}{\numberline {B.1.1}SA-CCR and ISDA SIMM Euler allocation under a perfect hedge}{35}{subsection.a.B.1.1}
+\contentsline {section}{\numberline {B.2}Homogeneity of C for a single trade portfolio}{39}{section.a.B.2}
+\contentsline {section}{\numberline {B.3}Exemplary SA-CCR allocation under consideration of an initial margin threshold}{43}{section.a.B.3}
+\contentsline {section}{\numberline {B.4}Exemplary SA-CCR allocation under consideration of a minimum transfer amount.}{46}{section.a.B.4}
+\contentsline {subsubsection}{\numberline {B.4.0.1}Impact of the minimum transfer amount on RC}{48}{subsubsection.a.B.4.0.1}
+\contentsline {chapter}{Glossary}{50}{section*.45}
+\contentsline {chapter}{Bibliography}{51}{table.4.1}

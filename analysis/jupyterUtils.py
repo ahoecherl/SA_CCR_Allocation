@@ -34,11 +34,13 @@ def export(filename):
     # Configure and run out exporter
     c.LatexExporter.preprocessors = ['nbconvert.preprocessors.TagRemovePreprocessor']
 
+    targetDirectoryFull_loc = targetDirectoryFull+"\\"+filename.replace(' ', '_')[:-6]
+    targetFolder = filename.replace(' ', '_')[:-6]
     writer = FilesWriter()
-    writer.build_directory = targetDirectoryFull
+    writer.build_directory = targetDirectoryFull_loc
     test = writer.write(*CustomLatexExporter(config=c).from_filename(filename), notebook_name=filename[:-6])
 
-    createdFile = targetDirectoryFull+'\\' +filename[:-6] + '.tex'
+    createdFile = targetDirectoryFull_loc+'\\' +filename[:-6] + '.tex'
     toBeCreatedFile = targetDirectoryCore+'\\' +filename[:-6] + '.tex'
     coreFileName = targetDirectoryCore+'\\' +filename[:-6] + '_Core.tex'
 
@@ -53,13 +55,15 @@ def export(filename):
             elif tag_found:
                 line = re.sub(r"{In}{incolor}{\d*}", r"{In}{incolor}{In}", line)
                 line = re.sub(r"{Out}{outcolor}{\d*}", r"{Out}{outcolor}{Out}", line)
-                line = re.sub(r"(output.*jpg})", r"JupyterNotebooksFull/\g<1>", line)
+                string = r'JupyterNotebooksFull/'+targetFolder+'/'
+                line = re.sub(r"(output.*jpg})", string+r"\g<1>", line)
                 if r'\prompt{Out}{outcolor}{Out}{}' in line:
                     lines_to_write.append(r'            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]' +'\n')
                     line = r'\prompt{Out}{outcolor}{Out}{\boxspacing}'
                 lines_to_write.append(line)
                 if r'{ \hspace*{\fill} \\}' in line:
                     lines_to_write.append(r'\end{tcolorbox}'+'\n')
+
 
     lines_to_write = lines_to_write[1:-5]
     with open(toBeCreatedFile, 'w+', encoding="utf8") as out_file:

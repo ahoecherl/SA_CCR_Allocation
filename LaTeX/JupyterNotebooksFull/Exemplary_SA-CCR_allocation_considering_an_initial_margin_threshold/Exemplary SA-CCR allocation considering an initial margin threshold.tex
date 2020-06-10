@@ -146,7 +146,7 @@
     \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
     % Document parameters
     % Document title
-    \title{building\_SA\_CCR}
+    \title{Exemplary SA-CCR allocation considering an initial margin threshold}
     
     
     
@@ -370,114 +370,278 @@
     
 
     
-    For analysis we create an SA-CCR object that implements SA-CCR as
-specified in \cite{SACCR}
+    \hypertarget{exemplary-sa-ccr-allocation-under-consideration-of-an-initial-margin-threshold}{%
+\section{Exemplary SA-CCR allocation under consideration of an initial
+margin
+threshold}\label{exemplary-sa-ccr-allocation-under-consideration-of-an-initial-margin-threshold}}
 
-    When using \emph{SA-CCR} the exposure at default (EAD) has to be
-calculated as:
+Our goal is to perform an Euler allocation for the minimal example of a
+one trade portfolio. We use the same 200Bn IRS as in previous examples.
 
-\begin{align*}
-EAD &= \alpha * (RC + PFE)\\
-\\
-\text{where} \qquad \alpha&=1.4 \\
-RC&: \text{Replacement Cost} \\
-PFE&: \text{Potential Future Exposure}
-\end{align*}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{irs} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{200000000000}\PY{p}{,}
+          \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
+          \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+          \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{3}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{SA\PYZus{}CCR}\PY{o}{.}\PY{n}{calculate\PYZus{}sa\PYZus{}ccr\PYZus{}ead}\PY{p}{(}\PY{n}{rc} \PY{o}{=} \PY{l+m+mi}{10}\PY{p}{,} \PY{n}{pfe} \PY{o}{=} \PY{l+m+mi}{20}\PY{p}{)}
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{2000000000}\PY{p}{,}
+                         \PY{n}{mta}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca}\PY{p}{)}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{3}{\boxspacing}
+    The inclusion of the threshold raises the ead since it lowers the
+available overcollataralization.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-42.0
+\PY{n}{ead\PYZus{}with\PYZus{}threshold} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ead\PYZus{}with\PYZus{}threshold}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{n}{ead\PYZus{}no\PYZus{}threshold} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ead\PYZus{}no\PYZus{}threshold}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{2000000000}
 \end{Verbatim}
 \end{tcolorbox}
-        
-    \hypertarget{relation-of-rc-and-pfe}{%
-\paragraph{Relation of RC and PFE}\label{relation-of-rc-and-pfe}}
 
-The purpose of the RC is to assess the immediate loss suffered by the
-default of a counterparty. It is based on the current MtM of the
-derivative less the accessible collateral. If a bank has posted
-collateral to non-segregated accounts of a counterparty this collateral
-is also assumed to be lost in case of a default which increases the
-replacement cost.
+    \begin{Verbatim}[commandchars=\\\{\}]
+817798882.3982577
+582881953.4648591
+    \end{Verbatim}
 
-The potential future exposure (PFE) on the other hand assesses how the
-RC might develop in the future. The future being defined as during the
-next year. If the RC today is 0 but is likely to be larger than 0 in the
-near future the estimated EAD should take this expected increase in RC
-into account.
+    The EAD with threshold is 817798882.40 while the EAD without threshold
+is 582881953.46
 
-See also Paragraph 130 and 131 of \cite{SACCR}
+    
+    When trying to allocate with threshold we realize that the allocation is
+not working due to the missing homogeneity of C.
 
-    Paragraph 130 - case without margining:
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eulerAllocator} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{ca}\PY{p}{)}
+\PY{n}{allocated\PYZus{}value} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{n}{irs}\PY{p}{]}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocated\PYZus{}value}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
 
-\begin{quote}
-For unmargined transactions, the \emph{RC} intends to capture the loss
-that would occur if a counterparty were to default and were closed out
-of its transactions immediately. The \emph{PFE} add-on represents a
-potential conservative increase in exposure over a one-year time horizon
-from the present date (i.e.~the calculation date).
-\end{quote}
+    \begin{Verbatim}[commandchars=\\\{\}]
+526604164.2713547
+    \end{Verbatim}
 
-Paragraph 131 - case with margining:
+    The value of 526604164.27 that has been allocated to the single trade in
+the portfolio is far off from the portfolios EAD of 817798882.40
 
-\begin{quote}
-For margined trades, the \emph{RC} intends to capture the loss that
-would occur if a counterparty were to default at the present or at a
-future time, assuming that the closeout and replacement of transactions
-occur instantaneously. However, there may be a period (the margin period
-of risk) between the last exchange of collateral before default and
-replacement of the trades in the market. The \emph{PFE} add-on
-represents the potential change in value of the trades during this time
-period.
-\end{quote}
+    
+    If we instead allocate without threshold, the allocation works.
 
-    \hypertarget{definition-of-potential-future-exposure-pfe}{%
-\paragraph{Definition of Potential Future Exposure
-(PFE)}\label{definition-of-potential-future-exposure-pfe}}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{n}{allocated\PYZus{}value}\PY{o}{=}\PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{n}{irs}\PY{p}{]}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocated\PYZus{}value}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
 
-\begin{align*}
-PFE &= \text{multiplier} * AddOn^{\text{aggregate}} \\
-\\
-\text{where} \qquad AddOn^{\text{aggregate}} &: \text{aggregate add-on component} \\
-\text{multiplier} &: f(V,C,AddOn^{\text{aggregate}})
-\end{align*}
+    \begin{Verbatim}[commandchars=\\\{\}]
+582887839.6499157
+    \end{Verbatim}
 
-\(AddOn\) is calculated differently for each asset \(a\) class. Since no
-netting is allowed between asset classes the aggregate is calculated as:
+    The value of 582887839.65 that has been allocated to the single trade in
+the portfolio equals the portfolios EAD without threshold of
+582881953.46
 
-\[AddOn^{\text{aggregate}} = \sum_{a}AddOn^{a}\]
+    
+    A reasonable approach to allocate an SA-CCR EAD under consideration of a
+threshold could be to allocate without threshold and then scale
+accordingly:
 
-Collateralization is taken into account of the PFE calculation through
-the multiplier that uses the collateral held as an input. As
-overcollateralization increases, the multiplier
-decreases. The most important source of overcollateralization is initial margin. However, the multiplier is floored at 5\%.
+\begin{align}
+\label{eq:C threshold scaling}
+    X_{t\text{, TH}} = X_{t\text{, no TH}} \frac{EAD_{\text{TH}}}{EAD_{\text{no TH}}}
+\end{align}
 
-\begin{align*}
-\text{multiplier} &= \min \left\{ 1; Floor + (1-Floor) \exp\left(\frac{V-C}{2(1-Floor)AddOn^{\text{aggregate}}}\right) \right\} \\
-\text{where} \qquad Floor &= 5\%
-\end{align*}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocated\PYZus{}value} \PY{o}{*} \PY{p}{(}\PY{n}{ead\PYZus{}with\PYZus{}threshold}\PY{o}{/}\PY{n}{ead\PYZus{}no\PYZus{}threshold}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
 
-It is important to note that the multiplier can only be below 1 if
-\(C>V\), i.e.~if the portfolio is overcollateralized. If the portfolio
-is overcollateralized, the \emph{AddOn} comes into play. The idea behind
-the \emph{AddOn} is related to the idea of value at risk. The higher the
-\emph{AddOn} the faster the SA-CCR model expects the positions to lose
-in value. Therefore, the higher the value, the higher the multiplier.
+    \begin{Verbatim}[commandchars=\\\{\}]
+817807140.8724346
+    \end{Verbatim}
 
-In the example below the current NPV of the portfolio is 30 and the
-received collateral (\emph{IM} + \emph{VM}) is 37. The portfolio is
-overcollateralized as it should be when initial margin is used. On the
-other hand, as collateralization decreases e.g.~V=C since only VM is
-exchanged or C=0 in the case of an uncollateralized portfolio the
-multiplier increases.
+    However, this approach does coincide with a loss of precision. If the
+\(C_{calc}\) is below the threshold then \(C\) is 0 and exhibits
+homogeneity, even when taking the threshold into account. We can
+construct an example that shows, that the approach in
+\ref{eq:C threshold scaling} does not yield the correct allocation which
+can be calculated when taking the threshold into account since the IM is
+below the IM threshold.
+
+We set up an IRS and an Equity option that have a similar EAD on their
+own. Here we calculate with a threshold of 50Mn which is a common value
+as it is the maximum amount permitted by the regulator.
+\todo{Cite source for this}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{irs} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{100000000}\PY{p}{,}
+          \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
+          \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+          \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{50000000}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca}\PY{p}{)}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}im\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+4519078.535740282
+1651404.7245623078
+    \end{Verbatim}
+
+    Through optimization it can be identified that for a one year long call
+option on Adidas an underlying stock count of 403106 stocks results in
+the same EAD as for the IRS above.
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eqOpt} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{403106}\PY{p}{,}
+                     \PY{n}{maturity} \PY{o}{=} \PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+                     \PY{n}{underlying} \PY{o}{=} \PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{,}
+                     \PY{n}{tradeType} \PY{o}{=} \PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL}\PY{p}{,}
+                     \PY{n}{tradeDirection} \PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eqOpt} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{n}{eqOptNot}\PY{o}{.}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+\PY{n}{ca2} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{50000000}\PY{p}{)}
+\PY{n}{ca2}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca2}\PY{p}{)}\PY{p}{)}
+\PY{n}{ca2}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{eqOpt}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    The initial margin of this single trade is also far below the 50Mn
+threshold but differs significantly from the IM of the IRS.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EAD: }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{ca2}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IM:  }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{ca2}\PY{o}{.}\PY{n}{get\PYZus{}im\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+EAD: 1651404.7245622796
+IM:  2802685.461885011
+    \end{Verbatim}
+
+    Given the market data, difference in model, risk horizon etc. the SA CCR
+EAD model calculates the same risk for the two trades when calculated
+individually, while the ISDA SIMM IM model evaluates the IRS to be 61\%
+riskier.
+
+    
+    When putting both trades in a common portfolio we observe, that the EAD
+and the IM of this joint portfolio is the sum of the two separate
+portfolios. This is not surprising since both, the SA CCR and ISDA SIMM
+model do not recognize any hedge effect between different asset classes.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca3} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{50000000}\PY{p}{)}
+\PY{n}{ca3}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca3}\PY{p}{)}\PY{p}{)}
+\PY{n}{ca3}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{p}{[}\PY{n}{irs}\PY{p}{,} \PY{n}{eqOpt}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    The EAD of the combined portfolio is 3302809 USD. The calculated IM of
+the combined portfolio is 7321763 USD.
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eulerAllocator} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{ca3}\PY{p}{)}
+\PY{n}{ca3}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{50000000}
+\PY{n}{allocation} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Euler allocation allocates 1651404 USD of the EAD to the IRS.Euler
+allocation allocates 1651404 USD of the EAD to the equity option.The sum
+of these two allocations is 3302809 USD, Which is close to the EAD
+calculated for the portfolio of 3302809 USD.
+
+    
+    Due to the high threshold, no IM is exchanged. Only VM is exchanged
+which is not overcollateralization and therefore only reduces the \(RC\)
+in formula \todo{reference RC+PFE formula} to 0 but does not impact the
+\(PFE\).
+
+    The available collateral is 1450296 USD. Due to the hight threshold this
+consists only of the VM which is 1450296 USD.
+
+    
+    The 50/50 allocation is certainly the correct result since there are no
+hedge effects between the two trades and they both have the same stand
+alone EAD. However, when applying formula \ref{eq:C threshold scaling}
+we yield a different result.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ead\PYZus{}with\PYZus{}threshold} \PY{o}{=} \PY{n}{ca3}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
+\PY{n}{ca3}\PY{o}{.}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{0}
+\PY{n}{ead\PYZus{}no\PYZus{}threshold} \PY{o}{=} \PY{n}{ca3}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
+\PY{n}{allocation} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\PY{n}{factor} \PY{o}{=} \PY{n}{ead\PYZus{}with\PYZus{}threshold}\PY{o}{/}\PY{n}{ead\PYZus{}no\PYZus{}threshold}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocation}\PY{p}{[}\PY{n}{irs}\PY{p}{]}\PY{o}{*}\PY{n}{factor}\PY{p}{)}
+\PY{n}{ca3}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{50000000}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+1153317.0534241588
+    \end{Verbatim}
+
+    Euler allocation allocates 1153317 USD of the EAD to the IRS. Euler
+allocation allocates 2149501 USD of the EAD to the equity option. The
+sum of these two allocations is 3302819 USD, which is close to the EAD
+calculated for the portfolio of 3302809 USD.
+
+    
+    Therefore, the approximation of \ref{eq:C threshold scaling} should only
+be used if the \(IM_{calc} > TH_{IM}\).
 
 
     % Add a bibliography block to the postdoc

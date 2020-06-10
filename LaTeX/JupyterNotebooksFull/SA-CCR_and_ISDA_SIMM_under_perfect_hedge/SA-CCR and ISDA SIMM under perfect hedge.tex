@@ -146,7 +146,7 @@
     \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
     % Document parameters
     % Document title
-    \title{Exemplary SA-CCR allocation considering an initial margin threshold}
+    \title{SA-CCR and ISDA SIMM under perfect hedge}
     
     
     
@@ -370,279 +370,259 @@
     
 
     
-    \hypertarget{exemplary-sa-ccr-allocation-under-consideration-of-an-initial-margin-threshold}{%
-\subsection{Exemplary SA-CCR allocation under consideration of an
-initial margin
-threshold}\label{exemplary-sa-ccr-allocation-under-consideration-of-an-initial-margin-threshold}}
+    \hypertarget{sa-ccr-and-isda-simm-euler-allocation-under-a-perfect-hedge}{%
+\subsection{SA-CCR and ISDA SIMM Euler allocation under a perfect
+hedge}\label{sa-ccr-and-isda-simm-euler-allocation-under-a-perfect-hedge}}
 
-Our goal is to perform an Euler allocation for the minimal example of a
-one trade portfolio. We use the same 200Bn IRS as in previous examples.
+The goal is to create a portfolio with a perfect hedge and see if and
+under which circumstances EAD allocation is still possible. We load two
+perfectly offsetting IRS (one payer, one receiver). To avoid the
+unrealistic case of a zero IM and EAD portfolio we add an unrelated
+equity option into the portfolio.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{2}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{irs} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{200000000000}\PY{p}{,}
-          \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
-          \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
-          \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{)}
+\PY{n}{IRS\PYZus{}pay} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{100000000}\PY{p}{,}
+              \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+              \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+              \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,}
+              \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
+
+\PY{n}{IRS\PYZus{}rec} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{100000000}\PY{p}{,}
+              \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+              \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+              \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
+              \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
+
+\PY{n}{eqOpt} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{,}
+                     \PY{n}{underlying}\PY{o}{=}\PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{,}
+                     \PY{n}{tradeType} \PY{o}{=} \PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL}\PY{p}{,}
+                     \PY{n}{tradeDirection} \PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{,}
+                     \PY{n}{maturity} \PY{o}{=} \PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{3}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{2000000000}\PY{p}{,}
-                         \PY{n}{mta}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
-\PY{n}{ca}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca}\PY{p}{)}\PY{p}{)}
-\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{p}{[}\PY{n}{IRS\PYZus{}pay}\PY{p}{,} \PY{n}{IRS\PYZus{}rec}\PY{p}{,} \PY{n}{eqOpt}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}im\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
-    The inclusion of the threshold raises the ead since it lowers the
-available overcollataralization.
+    \begin{Verbatim}[commandchars=\\\{\}]
+1319277.1719911932
+6952717.387110085
+    \end{Verbatim}
+
+    We now create an Euler allocator which can be used to perform a
+numerical Euler allocation of the ISDA-SIMM IM or the SA-CCR EAD risk
+measure. The allocator can be set to use forward, backward or central
+differentiation. We will see that the differentiation approach makes a
+big difference for this perfectly hedged portfolio.h
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{4}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{ead\PYZus{}with\PYZus{}threshold} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{ead\PYZus{}with\PYZus{}threshold}\PY{p}{)}
-\PY{n}{ca}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{0}
-\PY{n}{ead\PYZus{}no\PYZus{}threshold} \PY{o}{=} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{ead\PYZus{}no\PYZus{}threshold}\PY{p}{)}
-\PY{n}{ca}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{2000000000}
-\end{Verbatim}
-\end{tcolorbox}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-817798882.3982577
-582881953.4648591
-    \end{Verbatim}
-
-    The EAD with threshold is 817798882.40 while the EAD without threshold
-is 582881953.46
-
-    
-    When trying to allocate with threshold we realize that the allocation is
-not working due to the missing homogeneity of C.
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{6}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{eulerAllocator} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{ca}\PY{p}{)}
-\PY{n}{allocated\PYZus{}value} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{n}{irs}\PY{p}{]}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocated\PYZus{}value}\PY{p}{)}
+\PY{n}{im\PYZus{}alloc\PYZus{}forward} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}im}\PY{p}{(}\PY{p}{)}
+\PY{n}{saccr\PYZus{}alloc\PYZus{}forward} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{fdApproach2}\PY{o}{=}\PY{n}{FdApproach2}\PY{o}{.}\PY{n}{Central}
+\PY{n}{im\PYZus{}alloc\PYZus{}central} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}im}\PY{p}{(}\PY{p}{)}
+\PY{n}{saccr\PYZus{}alloc\PYZus{}central} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{fdApproach2}\PY{o}{=}\PY{n}{FdApproach2}\PY{o}{.}\PY{n}{Backward}
+\PY{n}{im\PYZus{}alloc\PYZus{}backward} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}im}\PY{p}{(}\PY{p}{)}
+\PY{n}{saccr\PYZus{}alloc\PYZus{}backward} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-526604164.2713547
-    \end{Verbatim}
-
-    The value of 526604164.27 that has been allocated to the single trade in
-the portfolio is far off from the portfolios EAD of 817798882.40
+    Below the resulting allocation for the IM is displayed. The allocation
+only exhibits nativ additivity when using the central difference
+appraoch since then the allocated values sum up to the IM value of
+6952717.39 USD.
 
     
-    If we instead allocate without threshold, the allocation works.
-
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{8}{\boxspacing}
+\prompt{In}{incolor}{7}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{ca}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{0}
-\PY{n}{allocated\PYZus{}value}\PY{o}{=}\PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{n}{irs}\PY{p}{]}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocated\PYZus{}value}\PY{p}{)}
+\PY{n}{display\PYZus{}table}\PY{p}{(}\PY{n}{im\PYZus{}alloc\PYZus{}forward}\PY{p}{,} \PY{n}{im\PYZus{}alloc\PYZus{}central}\PY{p}{,} \PY{n}{im\PYZus{}alloc\PYZus{}backward}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-582887839.6499157
-    \end{Verbatim}
-
-    The value of 582887839.65 that has been allocated to the single trade in
-the portfolio equals the portfolios EAD without threshold of
-582881953.46
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                       Backward       Central       Forward
+IRS\_Long          -4.518969e+06 -2.421718e-01  4.518969e+06
+IRS\_Short         -4.519001e+06 -6.323463e+01  4.518937e+06
+EquityOption\_Long  6.952717e+06  6.952717e+06  6.952717e+06
+Sum               -2.085253e+06  6.952654e+06  1.599062e+07
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Below the resulting allocation for the EAD is displayed. The allocation
+only exhibits nativ additivity when using the central difference
+appraoch since then the allocated values sum up to the IM value of
+1319277.17 USD.
 
     
-    A reasonable approach to allocate an SA-CCR EAD under consideration of a
-threshold could be to allocate without threshold and then scale
-accordingly:
-
-\begin{align}
-\label{eq:C threshold scaling}
-    X_{t\text{, TH}} = X_{t\text{, no TH}} \frac{EAD_{\text{TH}}}{EAD_{\text{no TH}}}
-\end{align}
-
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{10}{\boxspacing}
+\prompt{In}{incolor}{9}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocated\PYZus{}value} \PY{o}{*} \PY{p}{(}\PY{n}{ead\PYZus{}with\PYZus{}threshold}\PY{o}{/}\PY{n}{ead\PYZus{}no\PYZus{}threshold}\PY{p}{)}\PY{p}{)}
+\PY{n}{display\PYZus{}table}\PY{p}{(}\PY{n}{saccr\PYZus{}alloc\PYZus{}forward}\PY{p}{,} \PY{n}{saccr\PYZus{}alloc\PYZus{}central}\PY{p}{,} \PY{n}{saccr\PYZus{}alloc\PYZus{}backward}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-817807140.8724346
-    \end{Verbatim}
-
-    However, this approach does coincide with a loss of precision. If the
-\(C_{calc}\) is below the threshold then \(C\) is 0 and exhibits
-homogeneity, even when taking the threshold into account. We can
-construct an example that shows, that the approach in
-\ref{eq:C threshold scaling} does not yield the correct allocation which
-can be calculated when taking the threshold into account since the IM is
-below the IM threshold.
-
-We set up an IRS and an Equity option that have a similar EAD on their
-own. Here we calculate with a threshold of 50Mn which is a common value
-as it is the maximum amount permitted by the regulator.
-\todo{Cite source for this}
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                       Backward       Central       Forward
+IRS\_Long          -1.877916e+05  4.854053e-02  1.877916e+05
+IRS\_Short         -1.877853e+05  1.267496e+01  1.877979e+05
+EquityOption\_Long  1.319277e+06  1.319277e+06  1.319277e+06
+Sum                9.437004e+05  1.319290e+06  1.694867e+06
+\end{Verbatim}
+\end{tcolorbox}
+        
+    The reason for the Euler allocation not working is that the SA-CCR is
+not differentiable in case of a perfect hedge. This can be shown by
+plotting the function SA-CCR w.r.t. the position size in the three
+trades.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{11}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{irs} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{100000000}\PY{p}{,}
-          \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
-          \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
-          \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{)}
-
-\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{50000000}\PY{p}{)}
-\PY{n}{ca}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca}\PY{p}{)}\PY{p}{)}
-\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs}\PY{p}{)}
+\PY{n}{bumps} \PY{o}{=} \PY{n}{arange}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.05}\PY{p}{,} \PY{l+m+mf}{0.06}\PY{p}{,} \PY{l+m+mf}{0.01}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{12}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}im\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{k}{def} \PY{n+nf}{bump\PYZus{}one\PYZus{}trade\PYZus{}and\PYZus{}return\PYZus{}diff}\PY{p}{(}\PY{n}{bump}\PY{p}{,} \PY{n}{trade}\PY{p}{:} \PY{n}{Trade}\PY{p}{,} \PY{n}{ca}\PY{p}{:} \PY{n}{CollateralAgreement}\PY{p}{,} \PY{n}{method}\PY{p}{)}\PY{p}{:}
+    \PY{n}{base} \PY{o}{=} \PY{n}{method}\PY{p}{(}\PY{p}{)}
+    \PY{n}{ca}\PY{o}{.}\PY{n}{remove\PYZus{}trades}\PY{p}{(}\PY{n}{trade}\PY{p}{)}
+    \PY{n}{bumped\PYZus{}trade} \PY{o}{=} \PY{n}{trade}\PY{o}{.}\PY{n}{get\PYZus{}bumped\PYZus{}copy}\PY{p}{(}\PY{n}{rel\PYZus{}bump\PYZus{}size}\PY{o}{=}\PY{n}{bump}\PY{p}{)}
+    \PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{bumped\PYZus{}trade}\PY{p}{)}
+    \PY{n}{result} \PY{o}{=} \PY{n}{method}\PY{p}{(}\PY{p}{)}
+    \PY{n}{ca}\PY{o}{.}\PY{n}{remove\PYZus{}trades}\PY{p}{(}\PY{n}{bumped\PYZus{}trade}\PY{p}{)}
+    \PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{trade}\PY{p}{)}
+    \PY{k}{return} \PY{n}{result}\PY{o}{\PYZhy{}}\PY{n}{base}
 \end{Verbatim}
 \end{tcolorbox}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-4519078.535740282
-1651404.7245623078
-    \end{Verbatim}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{result\PYZus{}df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{)}
 
-    Through optimization it can be identified that for a one year long call
-option on Adidas an underlying stock count of 403106 stocks results in
-the same EAD as for the IRS above.
+\PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{ca}\PY{o}{.}\PY{n}{trades}\PY{p}{:}
+    \PY{k}{for} \PY{n}{bump} \PY{o+ow}{in} \PY{n}{bumps}\PY{p}{:}
+        \PY{n}{record} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Relative change in position size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{bump}\PY{p}{,}
+                  \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Change in EAD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{bump\PYZus{}one\PYZus{}trade\PYZus{}and\PYZus{}return\PYZus{}diff}\PY{p}{(}\PY{n}{bump}\PY{p}{,} \PY{n}{t}\PY{p}{,} \PY{n}{ca}\PY{p}{,} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{)}\PY{p}{,}
+                  \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Legend}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{ast}\PY{o}{.}\PY{n}{literal\PYZus{}eval}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Instrument}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZus{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{ast}\PY{o}{.}\PY{n}{literal\PYZus{}eval}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TradeDirection}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{\PYZcb{}}
+        \PY{n}{result\PYZus{}df} \PY{o}{=} \PY{n}{result\PYZus{}df}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{record}\PY{p}{,} \PY{n}{ignore\PYZus{}index}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
 
+    Displaying \texttt{result\_df} yields:
+ 
+            
+\prompt{Out}{outcolor}{14}{}
     
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_14_0.jpg}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    Do the same for the IM:
+
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{15}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{eqOpt} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{403106}\PY{p}{,}
-                     \PY{n}{maturity} \PY{o}{=} \PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
-                     \PY{n}{underlying} \PY{o}{=} \PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{,}
-                     \PY{n}{tradeType} \PY{o}{=} \PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL}\PY{p}{,}
-                     \PY{n}{tradeDirection} \PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
+\PY{n}{result\PYZus{}df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{)}
+
+\PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{ca}\PY{o}{.}\PY{n}{trades}\PY{p}{:}
+    \PY{k}{for} \PY{n}{bump} \PY{o+ow}{in} \PY{n}{bumps}\PY{p}{:}
+        \PY{n}{record} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Relative change in position size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{bump}\PY{p}{,}
+                  \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Change in calculated IM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{bump\PYZus{}one\PYZus{}trade\PYZus{}and\PYZus{}return\PYZus{}diff}\PY{p}{(}\PY{n}{bump}\PY{p}{,} \PY{n}{t}\PY{p}{,} \PY{n}{ca}\PY{p}{,} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}im\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{)}\PY{p}{,}
+                  \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Legend}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{ast}\PY{o}{.}\PY{n}{literal\PYZus{}eval}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Instrument}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZus{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{ast}\PY{o}{.}\PY{n}{literal\PYZus{}eval}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TradeDirection}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{\PYZcb{}}
+        \PY{n}{result\PYZus{}df} \PY{o}{=} \PY{n}{result\PYZus{}df}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{record}\PY{p}{,} \PY{n}{ignore\PYZus{}index}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
+
+    Displaying \texttt{result\_df} yields:
+ 
+            
+\prompt{Out}{outcolor}{16}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_18_0.jpg}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    The same phenomenon does not appear for if a hedge is not perfect
+i.e.~if the hedge size can be increased to further diminish the risk
+metric.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{16}{\boxspacing}
+\prompt{In}{incolor}{17}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{eqOpt} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{n}{eqOptNot}\PY{o}{.}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
-\PY{n}{ca2} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{50000000}\PY{p}{)}
-\PY{n}{ca2}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca2}\PY{p}{)}\PY{p}{)}
-\PY{n}{ca2}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{eqOpt}\PY{p}{)}
+\PY{n}{IRS\PYZus{}pay} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{200000000}\PY{p}{,}
+              \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+              \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+              \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{PAYER}\PY{p}{,}
+              \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
+
+\PY{n}{IRS\PYZus{}rec} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{100000000}\PY{p}{,}
+              \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+              \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+              \PY{n}{swapDirection}\PY{o}{=}\PY{n}{SwapDirection}\PY{o}{.}\PY{n}{RECEIVER}\PY{p}{,}
+              \PY{n}{index}\PY{o}{=}\PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
+
+\PY{n}{eqOpt} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{1000000}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
-    The initial margin of this single trade is also far below the 50Mn
-threshold but differs significantly from the IM of the IRS.
+    The IM for this portfolio is 11471795.91 USD and the EAD is 1542260.63
+USD.
 
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{32}{\boxspacing}
+    
+    For the IM the allocation yields:
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{20}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EAD: }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{ca2}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IM:  }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{ca2}\PY{o}{.}\PY{n}{get\PYZus{}im\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+                       Backward       Central       Forward
+IRS\_Short         -4.519079e+06 -4.519078e+06 -4.519079e+06
+IRS\_Long           9.038157e+06  9.038157e+06  9.038157e+06
+EquityOption\_Long  6.952717e+06  6.952717e+06  6.952717e+06
+Sum                1.147180e+07  1.147180e+07  1.147180e+07
 \end{Verbatim}
 \end{tcolorbox}
+        
+    and for the EAD the different differentiation approaches yield:
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-EAD: 1651404.7245622796
-IM:  2802685.461885011
-    \end{Verbatim}
-
-    Given the market data, difference in model, risk horizon etc. the SA CCR
-EAD model calculates the same risk for the two trades when calculated
-individually, while the ISDA SIMM IM model evaluates the IRS to be 61\%
-riskier.
-
-    
-    When putting both trades in a common portfolio we observe, that the EAD
-and the IM of this joint portfolio is the sum of the two separate
-portfolios. This is not surprising since both, the SA CCR and ISDA SIMM
-model do not recognize any hedge effect between different asset classes.
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{18}{\boxspacing}
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{21}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{ca3} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{50000000}\PY{p}{)}
-\PY{n}{ca3}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca3}\PY{p}{)}\PY{p}{)}
-\PY{n}{ca3}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{p}{[}\PY{n}{irs}\PY{p}{,} \PY{n}{eqOpt}\PY{p}{]}\PY{p}{)}
+                       Backward       Central       Forward
+IRS\_Short         -2.463114e+05 -2.463099e+05 -2.463083e+05
+IRS\_Long           4.926136e+05  4.926198e+05  4.926259e+05
+EquityOption\_Long  1.295949e+06  1.295951e+06  1.295952e+06
+Sum                1.542251e+06  1.542261e+06  1.542270e+06
 \end{Verbatim}
 \end{tcolorbox}
-
-    The EAD of the combined portfolio is 3302809 USD. The calculated IM of
-the combined portfolio is 7321763 USD.
-
-    
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{20}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{eulerAllocator} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{ca3}\PY{p}{)}
-\PY{n}{ca3}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{50000000}
-\PY{n}{allocation} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
-\end{Verbatim}
-\end{tcolorbox}
-
-    Euler allocation allocates 1651404 USD of the EAD to the IRS.Euler
-allocation allocates 1651404 USD of the EAD to the equity option.The sum
-of these two allocations is 3302809 USD, Which is close to the EAD
-calculated for the portfolio of 3302809 USD.
-
-    
-    Due to the high threshold, no IM is exchanged. Only VM is exchanged
-which is not overcollateralization and therefore only reduces the \(RC\)
-in formula \todo{reference RC+PFE formula} to 0 but does not impact the
-\(PFE\).
-
-    The available collateral is 1450296 USD. Due to the hight threshold this
-consists only of the VM which is 1450296 USD.
-
-    
-    The 50/50 allocation is certainly the correct result since there are no
-hedge effects between the two trades and they both have the same stand
-alone EAD. However, when applying formula \ref{eq:C threshold scaling}
-we yield a different result.
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{23}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{ead\PYZus{}with\PYZus{}threshold} \PY{o}{=} \PY{n}{ca3}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
-\PY{n}{ca3}\PY{o}{.}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{0}
-\PY{n}{ead\PYZus{}no\PYZus{}threshold} \PY{o}{=} \PY{n}{ca3}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{(}\PY{p}{)}
-\PY{n}{allocation} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
-\PY{n}{factor} \PY{o}{=} \PY{n}{ead\PYZus{}with\PYZus{}threshold}\PY{o}{/}\PY{n}{ead\PYZus{}no\PYZus{}threshold}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{allocation}\PY{p}{[}\PY{n}{irs}\PY{p}{]}\PY{o}{*}\PY{n}{factor}\PY{p}{)}
-\PY{n}{ca3}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{50000000}
-\end{Verbatim}
-\end{tcolorbox}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-1153317.0534241588
-    \end{Verbatim}
-
-    Euler allocation allocates 1153317 USD of the EAD to the IRS. Euler
-allocation allocates 2149501 USD of the EAD to the equity option. The
-sum of these two allocations is 3302819 USD, which is close to the EAD
-calculated for the portfolio of 3302809 USD.
-
-    
-    Therefore, the approximation of \ref{eq:C threshold scaling} should only
-be used if the \(IM_{calc} > TH_{IM}\).
-
+        
 
     % Add a bibliography block to the postdoc
     
