@@ -221,13 +221,16 @@ The Euler allocation w.r.t trade $i$ would then be calculated as
 
 As any partial derivative, $\frac{\partial \rho(\mathbf(u))}{\partial u_i}$ may be approximated as a finite difference.
 \begin{gather*}
-    \text{with }\mathbf{h}=(h_0,\dots,h_n) \text{ and } h_i = \epsilon > 0 \text{ and } h_{\neq i}=0 \\
-    \begin{align}
-        \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u}+\mathbf{h})-\rho(\mathbf{u}-\mathbf{h})}{2\epsilon} + \mathcal{O}(\epsilon^2) \; &\text{(central difference)} \\
-        \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u}+\mathbf{h})-\rho(\mathbf{u})}{\epsilon} + \mathcal{O}(\epsilon) &\text{(forward difference)} \label{eq:forward difference}\\
-        \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u})-\rho(\mathbf{u}-\mathbf{h})}{\epsilon} + \mathcal{O}(\epsilon) &\text{(backward difference)}
-    \end{align}
+    \text{with }\mathbf{h}=(h_0,\dots,h_n) \text{ and } h_i = \epsilon > 0 \text{ and } h_{\neq i}=0 \\ 
 \end{gather*}
+\begin{align}
+    \label{eq:central difference}
+    \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u}+\mathbf{h})-\rho(\mathbf{u}-\mathbf{h})}{2\epsilon} + \mathcal{O}(\epsilon^2) \; &\text{(central difference)} \\
+    \label{eq:forward difference}
+    \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u}+\mathbf{h})-\rho(\mathbf{u})}{\epsilon} + \mathcal{O}(\epsilon) &\text{(forward difference)}\\ 
+    \label{eq:backward difference}
+    \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u})-\rho(\mathbf{u}-\mathbf{h})}{\epsilon} + \mathcal{O}(\epsilon) &\text{(backward difference)}
+\end{align}
 
 
 Closed form formulas for contribution derived for standard deviation based models, VaR models, conditional VaR models.

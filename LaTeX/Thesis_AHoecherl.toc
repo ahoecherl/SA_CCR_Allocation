@@ -30,14 +30,13 @@
 \contentsline {subsection}{\numberline {2.5.2}Euler allocation}{20}{subsection.2.5.2}
 \contentsline {subsection}{\numberline {2.5.3}Shapley allocation}{21}{subsection.2.5.3}
 \contentsline {chapter}{\numberline {3}Results}{22}{chapter.3}
-\contentsline {section}{\numberline {3.1}Allocation of initial margin}{22}{section.3.1}
-\contentsline {section}{\numberline {3.2}Allocation of SA-CCR}{24}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Homogeneity of SA-CCR}{24}{subsection.3.2.1}
-\contentsline {subsubsection}{\numberline {3.2.1.1}Homogeneity of C}{24}{subsubsection.3.2.1.1}
-\contentsline {subsubsection}{\numberline {3.2.1.2}Euler allocation of hedge trades}{27}{subsubsection.3.2.1.2}
-\contentsline {subsection}{\numberline {3.2.2}Allocation without margining}{29}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Allocation under VM collateralization}{29}{subsection.3.2.3}
-\contentsline {subsection}{\numberline {3.2.4}Allocation under VM and IM collateralization}{29}{subsection.3.2.4}
+\contentsline {section}{\numberline {3.1}General approach to numerical Euler allocation of SA-CCR}{22}{section.3.1}
+\contentsline {section}{\numberline {3.2}Consideration of edge cases}{22}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Allocation when an ISDA-SIMM liquidity threshold is exceeded}{23}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Incorporation of a minimum transfer amount and threshold}{25}{subsection.3.2.2}
+\contentsline {subsubsection}{\numberline {3.2.2.1}Incorporation of a minimum transfer amount}{25}{subsubsection.3.2.2.1}
+\contentsline {subsubsection}{\numberline {3.2.2.2}Incorporation of a threshold}{27}{subsubsection.3.2.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Allocation of hedged portfolios}{28}{subsection.3.2.3}
 \contentsline {chapter}{\numberline {4}Outlook and conclusion}{30}{chapter.4}
 \contentsline {section}{\numberline {4.1}Outlook}{30}{section.4.1}
 \contentsline {section}{\numberline {4.2}Conclusion}{30}{section.4.2}
@@ -48,6 +47,6 @@
 \contentsline {section}{\numberline {B.2}Homogeneity of C for a single trade portfolio}{39}{section.a.B.2}
 \contentsline {section}{\numberline {B.3}Exemplary SA-CCR allocation under consideration of an initial margin threshold}{43}{section.a.B.3}
 \contentsline {section}{\numberline {B.4}Exemplary SA-CCR allocation under consideration of a minimum transfer amount.}{46}{section.a.B.4}
-\contentsline {subsubsection}{\numberline {B.4.0.1}Impact of the minimum transfer amount on RC}{48}{subsubsection.a.B.4.0.1}
-\contentsline {chapter}{Glossary}{50}{section*.45}
+\contentsline {subsection}{\numberline {B.4.1}Impact of the minimum transfer amount on RC}{48}{subsection.a.B.4.1}
+\contentsline {chapter}{Glossary}{50}{section*.47}
 \contentsline {chapter}{Bibliography}{51}{table.4.1}

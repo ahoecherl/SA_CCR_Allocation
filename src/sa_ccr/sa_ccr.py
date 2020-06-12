@@ -29,7 +29,7 @@ class SA_CCR(RiskMeasureModel):
         return ead
 
     def calculate_sa_ccr_ead(rc: float, pfe: float) -> float:
-        """
+        """F
         Calculate EAD of SA-CCR as defined in paragraph 186.
         Class function.
 
