@@ -1,0 +1,263 @@
+    
+
+    
+    \hypertarget{sa-ccr-euler-allocation-of-exemplary-equity-portfolio}{%
+\section{SA-CCR Euler allocation of exemplary equity
+portfolio}\label{sa-ccr-euler-allocation-of-exemplary-equity-portfolio}}
+
+We set up a collateral agreement with no thresholds or MTA and add two
+equity options to it. A big put option on Adidas and a smaller call
+option on Adidas. Both options are struck at the current market price
+\(S(0)\).
+
+We consider three cases of margining
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  No margining
+\item
+  VM only
+\item
+  VM and bilateral IM
+\end{enumerate}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,}
+                         \PY{n}{threshold\PYZus{}vm}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,}
+                         \PY{n}{mta}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,}
+                         \PY{n}{margining}\PY{o}{=}\PY{n}{Margining}\PY{o}{.}\PY{n}{UNMARGINED}\PY{p}{,}
+                         \PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{NO\PYZus{}IM}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{ca\PYZus{}vm} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,}
+                            \PY{n}{threshold\PYZus{}vm}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,}
+                            \PY{n}{mta}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,}
+                            \PY{n}{margining}\PY{o}{=}\PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}\PY{p}{,}
+                            \PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{NO\PYZus{}IM}\PY{p}{)}
+\PY{n}{ca\PYZus{}vm}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca\PYZus{}vm}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{ca\PYZus{}im} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{threshold}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,}
+                            \PY{n}{threshold\PYZus{}vm}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,}
+                            \PY{n}{mta}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,}
+                            \PY{n}{margining}\PY{o}{=}\PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}\PY{p}{,}
+                            \PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{SIMM}\PY{p}{)}
+\PY{n}{ca\PYZus{}im}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca\PYZus{}im}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{underlying}\PY{o}{=}\PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{,}
+                               \PY{n}{maturity}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+                               \PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{2000000}\PY{p}{,}
+                               \PY{n}{tradeType}\PY{o}{=}\PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL}\PY{p}{,}
+                               \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
+
+\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{underlying}\PY{o}{=}\PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{,}
+                              \PY{n}{maturity}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+                              \PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{3000000}\PY{p}{,}
+                              \PY{n}{tradeType}\PY{o}{=}\PY{n}{TradeType}\PY{o}{.}\PY{n}{PUT}\PY{p}{,}
+                              \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    The current value of these trades is 6,601,467 EUR for the call option
+and 10,378,881 EUR for the put option.
+
+    
+    When putting these trades in the three portfolios and observe a high
+difference between the unmargined and VM margined EAD. This difference
+is primarily driven through the RC and therefore through the high
+positive PV.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call}\PY{p}{,} \PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{p}{]}\PY{p}{)}
+\PY{n}{ca\PYZus{}vm}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call}\PY{p}{,} \PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{p}{]}\PY{p}{)}
+\PY{n}{ca\PYZus{}im}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call}\PY{p}{,}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EAD with no margining: }\PY{l+s+si}{\PYZob{}:,.2f\PYZcb{}}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EAD with VM margining: }\PY{l+s+si}{\PYZob{}:,.2f\PYZcb{}}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{ca\PYZus{}vm}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{RC with no margining: }\PY{l+s+si}{\PYZob{}:,.2f\PYZcb{}}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}rc}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{RC with VM margining: }\PY{l+s+si}{\PYZob{}:,.2f\PYZcb{}}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{ca\PYZus{}vm}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}rc}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Portfolio PV: }\PY{l+s+si}{\PYZob{}:,.2f\PYZcb{}}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}V}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+EAD with no margining: 37,643,536.02 USD
+EAD with VM margining: 3,519,457.62 USD
+RC with no margining: 18,508,579.01 USD
+RC with VM margining: 0.00 USD
+Portfolio PV: 18,508,579.01 USD
+    \end{Verbatim}
+
+    Next, we perform an Euler allocation:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eulerAllocator1} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{ca}\PY{p}{)}
+\PY{n}{eulerAllocator2} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{ca\PYZus{}vm}\PY{p}{)}
+\PY{n}{eulerAllocator3} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{ca\PYZus{}im}\PY{p}{)}
+\PY{n}{allocation\PYZus{}no\PYZus{}margin} \PY{o}{=} \PY{n}{eulerAllocator1}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\PY{n}{allocation\PYZus{}with\PYZus{}vm} \PY{o}{=} \PY{n}{eulerAllocator2}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\PY{n}{allocation\PYZus{}with\PYZus{}im\PYZus{}and\PYZus{}im} \PY{o}{=} \PY{n}{eulerAllocator3}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\PY{n}{allocation\PYZus{}im} \PY{o}{=} \PY{n}{eulerAllocator3}\PY{o}{.}\PY{n}{allocate\PYZus{}im}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    we can calculate how far the sum of the allocated values deviates from
+the risk measure:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Diff EAD no margin:    0.00 EUR
+Diff EAD only VM:      0.00 EUR
+Diff EAD VM + IM:   1068.64 EUR
+Diff calculated IM:    6.74 EUR
+    \end{Verbatim}
+
+    In relation to the EAD of 345,874 EUR the deviation of the allocated EAD
+under VM and IM of 1,068.64 EUR is not large but can be improved
+nevertheless.
+
+    
+    By, default the implemented Euler allocation class uses a forward
+difference approach. If we switch over to a central difference approach
+the deviation shrinks significantly.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eulerAllocator3}\PY{o}{.}\PY{n}{fdApproach2} \PY{o}{=} \PY{n}{FdApproach2}\PY{o}{.}\PY{n}{Central}
+\PY{n}{allocation\PYZus{}im} \PY{o}{=} \PY{n}{eulerAllocator3}\PY{o}{.}\PY{n}{allocate\PYZus{}im}\PY{p}{(}\PY{p}{)}
+\PY{n}{allocation\PYZus{}with\PYZus{}im\PYZus{}and\PYZus{}im} \PY{o}{=} \PY{n}{eulerAllocator3}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Diff EAD VM + IM:   0.01 EUR
+Diff calculated IM: 0.00 EUR
+    \end{Verbatim}
+
+    Displaying the allocation results
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+          2Mn ADS Call 3Mn ADS Put Portfolio Risk Measure
+SIMM           -33.75\%     133.75\%         14,231,564 USD
+No margin       99.21\%       0.79\%         37,643,536 USD
+VM only        232.47\%    -132.47\%          3,519,458 USD
+VM+IM          622.10\%    -522.10\%            345,874 USD
+\end{Verbatim}
+\end{tcolorbox}
+        
+    For SIMM the Put has the higher risk and the Call is considered a hedge
+trade while for SA-CCR with only VM, the Call has the higher risk and
+the Put is considered a hedge trade.
+
+The reason for this are the different holding periods between the two
+models. If we lower the maturity of the trades to 10 days instead, we
+can see that for SA-CCR with only VM the call is considered the hedge
+trade.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call\PYZus{}10d} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{underlying}\PY{o}{=}\PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{,}
+                               \PY{n}{maturity}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+                               \PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{2000000}\PY{p}{,}
+                               \PY{n}{tradeType}\PY{o}{=}\PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL}\PY{p}{,}
+                               \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
+
+\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put\PYZus{}10d} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{underlying}\PY{o}{=}\PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{,}
+                              \PY{n}{maturity}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+                              \PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{3000000}\PY{p}{,}
+                              \PY{n}{tradeType}\PY{o}{=}\PY{n}{TradeType}\PY{o}{.}\PY{n}{PUT}\PY{p}{,}
+                              \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca\PYZus{}vm}\PY{o}{.}\PY{n}{remove\PYZus{}all\PYZus{}trades}\PY{p}{(}\PY{p}{)}
+\PY{n}{ca\PYZus{}vm}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call\PYZus{}10d}\PY{p}{,}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put\PYZus{}10d}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{allocation\PYZus{}with\PYZus{}vm} \PY{o}{=} \PY{n}{eulerAllocator2}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+        2Mn ADS Call 1W3D 3Mn ADS Put 1W3D Portfolio Risk Measure
+VM only          -358.06\%          458.06\%          1,701,707 USD
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Going back to 1Y maturity equity options we can see that the allocations
+of the preexisting trades can change significantly, when we add another
+equity option to the portfolio. We choose a position of 10Mn call
+options on deutsche Bank.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eq\PYZus{}opt\PYZus{}dbk\PYZus{}call} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{underlying}\PY{o}{=}\PY{n}{Stock}\PY{o}{.}\PY{n}{DBK}\PY{p}{,}
+                               \PY{n}{maturity}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+                               \PY{n}{notional} \PY{o}{=} \PY{l+m+mi}{10000000}\PY{p}{,}
+                               \PY{n}{tradeType}\PY{o}{=}\PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL}\PY{p}{,}
+                               \PY{n}{tradeDirection}\PY{o}{=}\PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
+
+\PY{n}{ca}\PY{o}{.}\PY{n}{remove\PYZus{}all\PYZus{}trades}\PY{p}{(}\PY{p}{)}
+\PY{n}{ca}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call}\PY{p}{,}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{p}{,}\PY{n}{eq\PYZus{}opt\PYZus{}dbk\PYZus{}call}\PY{p}{]}\PY{p}{)}
+\PY{n}{ca\PYZus{}vm}\PY{o}{.}\PY{n}{remove\PYZus{}all\PYZus{}trades}\PY{p}{(}\PY{p}{)}
+\PY{n}{ca\PYZus{}vm}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call}\PY{p}{,}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{p}{,}\PY{n}{eq\PYZus{}opt\PYZus{}dbk\PYZus{}call}\PY{p}{]}\PY{p}{)}
+\PY{n}{ca\PYZus{}im}\PY{o}{.}\PY{n}{remove\PYZus{}all\PYZus{}trades}\PY{p}{(}\PY{p}{)}
+\PY{n}{ca\PYZus{}im}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call}\PY{p}{,}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{p}{,}\PY{n}{eq\PYZus{}opt\PYZus{}dbk\PYZus{}call}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{allocation\PYZus{}no\PYZus{}margin} \PY{o}{=} \PY{n}{eulerAllocator1}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\PY{n}{allocation\PYZus{}with\PYZus{}vm} \PY{o}{=} \PY{n}{eulerAllocator2}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\PY{n}{allocation\PYZus{}with\PYZus{}im\PYZus{}and\PYZus{}im} \PY{o}{=} \PY{n}{eulerAllocator3}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\PY{n}{allocation\PYZus{}im} \PY{o}{=} \PY{n}{eulerAllocator3}\PY{o}{.}\PY{n}{allocate\PYZus{}im}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+          10Mn DBK Call 2Mn ADS Call 3Mn ADS Put PF Risk Measure
+SIMM             63.10\%       15.23\%      21.67\%  27,551,513 USD
+No margin        57.45\%       33.16\%       9.39\%  76,295,560 USD
+VM only          80.79\%       44.65\%     -25.44\%  10,230,051 USD
+VM+IM           106.19\%       86.85\%     -93.04\%   1,847,365 USD
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Further analysis of the results shown above may be found in section
+\todo{Enter Reference}
+
+

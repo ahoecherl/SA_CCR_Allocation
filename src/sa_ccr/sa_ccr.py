@@ -5,6 +5,7 @@ from pandas import read_csv, Series
 from scipy.stats import norm
 
 from collateralAgreement.collateralAgreement import CollateralAgreement, Margining, Clearing, Tradecount, Dispute
+from marketdata.interestRateCurves import DiscountCurve
 from riskMeasureModel import RiskMeasureModel
 from instruments.Trade import Trade
 from utilities.Enums import AssetClass, TradeType, TradeDirection, SubClass, MaturityBucket, EquitySubClass
@@ -112,7 +113,15 @@ class SA_CCR(RiskMeasureModel):
 
             lambda_factor = SA_CCR.__calculate_lambda__(trade)
 
-            d1 = (log((trade.S + lambda_factor) / (trade.K + lambda_factor)) + 0.5 * sigma ** 2 * trade.t) / (
+            if trade.assetClass == AssetClass.EQ:
+                from marketdata import init_marketdata
+                discountCurve = DiscountCurve[trade.currency.value].value.value
+                discountFactor = discountCurve.discount(init_marketdata.today + trade.ql_maturity)
+                forwardRate = 1/discountFactor * trade.S
+            else:
+                forwardRate = trade.S
+
+            d1 = (log((forwardRate + lambda_factor) / (trade.K + lambda_factor)) + 0.5 * sigma ** 2 * trade.t) / (
                         sigma * sqrt(trade.t))
 
             delta = n_mult * norm.cdf(d1_mult * d1)

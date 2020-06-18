@@ -1,0 +1,104 @@
+    
+
+    
+    \hypertarget{sa-ccr-euler-allocation-of-an-exemplary-multi-asset-class-portfolio}{%
+\section{SA-CCR Euler allocation of an exemplary multi asset class
+portfolio}\label{sa-ccr-euler-allocation-of-an-exemplary-multi-asset-class-portfolio}}
+
+We want to show at an example, how the Euler allocation of trades can be
+summed up to subportfolios to still accurately represent the risk
+dynamics of the allocated risk measure.
+
+We combine the exemplary equity portfolio with the exemplary rates
+portfolio set up in the previous sections within a joint portfolio.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{trades} \PY{o}{=} \PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call}\PY{p}{,}
+          \PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{p}{,}
+          \PY{n}{eq\PYZus{}opt\PYZus{}dbk\PYZus{}call}\PY{p}{,}
+          \PY{n}{payer\PYZus{}usd\PYZus{}6Y}\PY{p}{,}
+          \PY{n}{receiver\PYZus{}eur\PYZus{}6Y}\PY{p}{,}
+          \PY{n}{rec\PYZus{}swaption\PYZus{}1\PYZus{}6}\PY{p}{]}
+
+\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}only} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{margining}\PY{o}{=}\PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}\PY{p}{,}
+                                       \PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{NO\PYZus{}IM}\PY{p}{)}
+\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}only}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}only}\PY{p}{)}\PY{p}{)}
+\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}only}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{trades}\PY{p}{)}
+
+\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{margining}\PY{o}{=}\PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}\PY{p}{,}
+                                         \PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{SIMM}\PY{p}{)}
+\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{p}{)}\PY{p}{)}
+\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{trades}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    And perform an Euler allocation using a central difference approach.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eulerAllocator\PYZus{}vm} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}only}\PY{p}{)}
+\PY{n}{eulerAllocator\PYZus{}vm}\PY{o}{.}\PY{n}{fdApproach2} \PY{o}{=} \PY{n}{FdApproach2}\PY{o}{.}\PY{n}{Central}
+\PY{n}{eulerAllocator\PYZus{}vm\PYZus{}and\PYZus{}im} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{p}{)}
+\PY{n}{eulerAllocator\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{o}{.}\PY{n}{fdApproach2} \PY{o}{=} \PY{n}{FdApproach2}\PY{o}{.}\PY{n}{Central}
+
+\PY{n}{alloc\PYZus{}ead\PYZus{}under\PYZus{}vm} \PY{o}{=} \PY{n}{eulerAllocator\PYZus{}vm}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\PY{n}{alloc\PYZus{}ead\PYZus{}under\PYZus{}vm\PYZus{}and\PYZus{}im} \PY{o}{=} \PY{n}{eulerAllocator\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\PY{n}{alloc\PYZus{}im} \PY{o}{=} \PY{n}{eulerAllocator\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{o}{.}\PY{n}{allocate\PYZus{}im}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    We then display the results on a trade level:
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                                                   Allocated EAD VM only  \textbackslash{}
+2,000,000 ADS Call 1Y                                      4,567,360 USD
+3,000,000 ADS Put 1Y                                      -2,602,617 USD
+10,000,000 DBK Call 1Y                                     8,265,308 USD
+180,000,000 EURIBOR6M RECEIVER IRS 6Y                      1,957,315 USD
+1,000,000,000 USDLIBOR3M PAYER IRS 6Y                     10,873,970 USD
+500,000,000 USDLIBOR3M RECEIVER Swaption 1Y to 6Y         -1,773,170 USD
+Overall Portfolio                                         21,288,165 USD
+
+                                                    Allocated IM  \textbackslash{}
+2,000,000 ADS Call 1Y                              4,197,013 USD
+3,000,000 ADS Put 1Y                               5,969,992 USD
+10,000,000 DBK Call 1Y                            17,384,508 USD
+180,000,000 EURIBOR6M RECEIVER IRS 6Y                172,265 USD
+1,000,000,000 USDLIBOR3M PAYER IRS 6Y             27,859,887 USD
+500,000,000 USDLIBOR3M RECEIVER Swaption 1Y to 6Y  6,763,936 USD
+Overall Portfolio                                 62,347,602 USD
+
+                                                   Allocated EAD VM + IM
+2,000,000 ADS Call 1Y                                      1,472,268 USD
+3,000,000 ADS Put 1Y                                      -1,515,288 USD
+10,000,000 DBK Call 1Y                                     1,872,447 USD
+180,000,000 EURIBOR6M RECEIVER IRS 6Y                        762,482 USD
+1,000,000,000 USDLIBOR3M PAYER IRS 6Y                      2,059,910 USD
+500,000,000 USDLIBOR3M RECEIVER Swaption 1Y to 6Y         -1,250,488 USD
+Overall Portfolio                                          3,401,332 USD
+\end{Verbatim}
+\end{tcolorbox}
+        
+    We can aggregate the results across the asset classes.
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                     Allocated EAD VM only   Allocated IM  \textbackslash{}
+Equity Subportfolio         10,230,051 USD 27,551,513 USD
+Rates Subportfolio          11,058,114 USD 34,796,088 USD
+
+                     Allocated EAD VM + IM
+Equity Subportfolio          1,829,428 USD
+Rates Subportfolio           1,571,904 USD
+\end{Verbatim}
+\end{tcolorbox}
+        
+    This result is discussed further in section \todo{Reference required}.
+
+

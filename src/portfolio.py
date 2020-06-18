@@ -24,3 +24,7 @@ class Portfolio:
 
     def remove_all_trades(self):
         self.trades = []
+
+    def replace_trade(self, trade_to_be_replaced: Trade, replacement_trade: Trade):
+        self.remove_trades(trade_to_be_replaced)
+        self.add_trades(replacement_trade)

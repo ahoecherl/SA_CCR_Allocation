@@ -31,22 +31,27 @@
 \contentsline {subsection}{\numberline {2.5.3}Shapley allocation}{21}{subsection.2.5.3}
 \contentsline {chapter}{\numberline {3}Results}{22}{chapter.3}
 \contentsline {section}{\numberline {3.1}General approach to numerical Euler allocation of SA-CCR}{22}{section.3.1}
-\contentsline {section}{\numberline {3.2}Consideration of edge cases}{22}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Allocation when an ISDA-SIMM liquidity threshold is exceeded}{23}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Incorporation of a minimum transfer amount and threshold}{25}{subsection.3.2.2}
-\contentsline {subsubsection}{\numberline {3.2.2.1}Incorporation of a minimum transfer amount}{25}{subsubsection.3.2.2.1}
-\contentsline {subsubsection}{\numberline {3.2.2.2}Incorporation of a threshold}{27}{subsubsection.3.2.2.2}
+\contentsline {subsection}{\numberline {3.1.1}Exemplary allocation of SA-CCR for a small portfolio of equity options}{23}{subsection.3.1.1}
+\contentsline {section}{\numberline {3.2}Consideration of edge cases}{23}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Allocation when an ISDA-SIMM liquidity threshold is exceeded}{24}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Incorporation of a minimum transfer amount and threshold}{26}{subsection.3.2.2}
+\contentsline {subsubsection}{\numberline {3.2.2.1}Incorporation of a minimum transfer amount}{27}{subsubsection.3.2.2.1}
+\contentsline {subsubsection}{\numberline {3.2.2.2}Incorporation of a VM threshold}{28}{subsubsection.3.2.2.2}
+\contentsline {subsubsection}{\numberline {3.2.2.3}Incorporation of an IM threshold}{28}{subsubsection.3.2.2.3}
 \contentsline {subsection}{\numberline {3.2.3}Allocation of hedged portfolios}{28}{subsection.3.2.3}
 \contentsline {chapter}{\numberline {4}Outlook and conclusion}{30}{chapter.4}
 \contentsline {section}{\numberline {4.1}Outlook}{30}{section.4.1}
 \contentsline {section}{\numberline {4.2}Conclusion}{30}{section.4.2}
 \contentsline {chapter}{Appendix \numberline {A}Architectural blueprint for SA-CCR allocation}{31}{Appendix.a.A}
 \contentsline {chapter}{Appendix \numberline {B}Detailed documentation of results}{32}{Appendix.a.B}
-\contentsline {section}{\numberline {B.1}ISDA SIMM homogeneity for portfolio of a single trade}{32}{section.a.B.1}
-\contentsline {subsection}{\numberline {B.1.1}SA-CCR and ISDA SIMM Euler allocation under a perfect hedge}{35}{subsection.a.B.1.1}
-\contentsline {section}{\numberline {B.2}Homogeneity of C for a single trade portfolio}{39}{section.a.B.2}
-\contentsline {section}{\numberline {B.3}Exemplary SA-CCR allocation under consideration of an initial margin threshold}{43}{section.a.B.3}
-\contentsline {section}{\numberline {B.4}Exemplary SA-CCR allocation under consideration of a minimum transfer amount.}{46}{section.a.B.4}
-\contentsline {subsection}{\numberline {B.4.1}Impact of the minimum transfer amount on RC}{48}{subsection.a.B.4.1}
-\contentsline {chapter}{Glossary}{50}{section*.47}
-\contentsline {chapter}{Bibliography}{51}{table.4.1}
+\contentsline {section}{\numberline {B.1}SA-CCR Euler allocation of exemplary equity portfolio}{32}{section.a.B.1}
+\contentsline {section}{\numberline {B.2}Euler allocation of an exemplary rates portfolio}{36}{section.a.B.2}
+\contentsline {section}{\numberline {B.3}SA-CCR Euler allocation of an exemplary multi asset class portfolio}{39}{section.a.B.3}
+\contentsline {section}{\numberline {B.4}ISDA SIMM homogeneity for portfolio of a single trade}{42}{section.a.B.4}
+\contentsline {subsection}{\numberline {B.4.1}SA-CCR and ISDA SIMM Euler allocation under a perfect hedge}{44}{subsection.a.B.4.1}
+\contentsline {section}{\numberline {B.5}Homogeneity of C for a single trade portfolio}{49}{section.a.B.5}
+\contentsline {section}{\numberline {B.6}Exemplary SA-CCR allocation under consideration of an initial margin threshold}{53}{section.a.B.6}
+\contentsline {section}{\numberline {B.7}Exemplary SA-CCR allocation under consideration of a minimum transfer amount.}{56}{section.a.B.7}
+\contentsline {subsection}{\numberline {B.7.1}Impact of the minimum transfer amount on RC}{58}{subsection.a.B.7.1}
+\contentsline {chapter}{Glossary}{60}{section*.57}
+\contentsline {chapter}{Bibliography}{61}{table.4.1}
