@@ -6,13 +6,13 @@
 
     Afterwards, section \ref{sec:Consideration of edge cases} lists scenarios, under which Euler allocation prerequisites are violated and suggests approaches on how to mitigate these issues or proposes a workaround.
 
-    \section{General approach to numerical Euler allocation of SA-CCR\label{sec:General approach to numerical Euler allocation of SA-CCR}}
+    \section{Exemplary Euler allocation of SA-CCR under consideration of margining\label{sec:Exemplary Euler allocation of SA-CCR under consideration of margining}}
 
     In this section we assume, that the minimum transfer amount, variation margin threshold and initial margin threshold as defined in \todo{Enter reference} are all 0. This means, that the margin calculated by the used variation margin and initial margin model is entirely incorporated in the SA-CCR model for EAD calculation.
 
     The reason for this is, that assumptions other than 0 for the thresholds and MTA generally violate the homogeneity prerequisite for Euler allocation. In practice, this is a strong and somewhat unrealistic assumption as for example an initial margin threshold of 50Mn is usual for bilateral portfolios as it is the highest amount allowed by the regulator \todo{Reference to where this is stated}. Due to the high practical relevance the impact of thresholds and MTA on Euler allocation is analyzed in detail in section \ref{sec:Consideration of edge cases}.   
 
-    \subsection{Exemplary allocation of SA-CCR for a small portfolio of equity options}
+    \subsection{Exemplary allocation of SA-CCR for a small portfolio of equity options\label{sec:Exemplary allocation of SA-CCR for a small portoflio of equity options}}
 
     \todo{Ensure that there are no issues with the currencies. EAD should actually be EUR and needs to be converted to USD}
 
@@ -163,12 +163,12 @@
     For the swaption it is more difficult to pinpoint where the difference between the two models that results in the very different risk assessment of the swaption in relation to the rest of the portfolio is originating.
     Sensitivities of the swaps and swaption are calculated very differently between the two models with the ISDA SIMM model being based on current market data whilst the SA-CCR makes much more simplifying assumptions.
 
-    \subsection{Exemplary allocation of SA-CCR on subportfolios}
+    \subsection{Exemplary allocation of SA-CCR on subportfolios\label{sec:Exemplary allocation of SA-CCR on subportfolios}}
 
     One of the advantages of the Euler allocation is, that once allocated, values on trade level can be aggregated to also produce risk sensitive results for subportfolios. It is also possible to directly allocate risk metrics on subportfolios if no further granularity is required and thereby saving computation time. The detailed computation steps for the results of this section are demonstrated in appendix \ref{sa-ccr-euler-allocation-of-an-exemplary-multi-asset-class-portfolio}.
 
     For this we put the five exemplary derivatives of the two previous sections in a joint portfolio, i.e. the EUR IRS, the USD IRS, the USD swaption and the position in Adidas put and call options.
-    The resulting portfolio measure risk measures are displayed in \ref{tab:multiAssetResult} with the portfolio results of the standalone portfolios from the previous section displayed as reference.
+    The resulting portfolio risk measures are displayed in \ref{tab:multiAssetResult} with the portfolio results of the standalone portfolios from the previous section displayed as reference.
 
     \begin{table}[htbp]
         \centering
@@ -184,15 +184,45 @@
         \label{tab:multiAssetResult}%
     \end{table}%
 
-    As we can see, in for EAD under VM and ISDA SIMM the multi asset class portfolio is simply the sum of the risk measures of the portfolios containing only trades of the individual asset class.
+    As we can see, for EAD under VM and ISDA SIMM the multi asset class portfolio is simply the sum of the risk measures of the portfolios containing only trades of the individual asset class.
     The reason for this is, that for both models, SA-CCR and ISDA SIMM no hedge effects are recognized between different asset classes.
-    Nevertheless, for EAD under VM and IM we can observe in table \ref{tab:multiAssetResult} that the EAD of the multi asset class portfolio is slightly lower than the sum of equity and rates portfolio. 
-    The reason for this is that initial margin pledged for interest rates trades may also be used to mitigate losses caused by equity trades and vice versa. This slightly increases the overcollateralization of the joint portfolio leading to a lower EAD und VM and IM. 
+    Nevertheless, for EAD under VM and IM we can observe in table \ref{tab:multiAssetResult} that the EAD of the multi asset class portfolio is slightly lower than the sum of the equity and the rates portfolio. 
+    The reason for this is that initial margin pledged for interest rates trades may also be used to mitigate losses caused by equity trades and vice versa. This slightly increases the overcollateralization of the joint portfolio leading to a lower EAD und VM and IM.
+
+    When allocating the joint portfolio on the individual trades we yield the trade allocations displayed in \ref{tab:multiAssetAllocation} and can also aggregate the results on subportfolio level as shown in the table for an equity and rates subportfolio.
+
+    \begin{table}[htbp]
+        \centering
+        \begin{tabular}{l||r|r|r}
+                & \makecell{Allocated \\ EAD VM only} &\makecell{Allocated \\ ISDA SIMM} & \makecell{Allocated \\EAD VM + IM} \\
+                \toprule
+        2Mn ADS Call & 8,181,543 USD & -4,802,460 USD & 2,959,180 USD \\
+        3Mn ADS Put & -4,662,085 USD & 19,034,023 USD & -2,643,342 USD \\
+        \midrule
+        Equity subportfolio & 3,519,458 USD & 14,231,564 USD & 315,837 USD \\
+        \toprule
+        180Mn EUR Swap & 1,957,315 USD & 172,265 USD & 630,350 USD \\
+        1000Mn USD Swap & 10,873,970 USD & 27,859,887 USD & 1,921,998 USD \\
+        500Mn USD Swaption & -1,773,170 USD & 6,763,936 USD & -977,443 USD \\
+        \midrule
+        Rates subportfolio & 11,058,114 USD & 34,796,088 USD & 1,574,905 USD \\
+        \end{tabular}%
+        \caption{}
+        \label{tab:multiAssetAllocation}%
+    \end{table}%
+
+    If an allocation on trade level is more granular than necessary it is also possible to directly allocate the portfolio risk measure on subportfolios. Therefore, $u$ from equation \todo{Reference missing update sentence accordingly} needs to be interpreted not as a single trade but rather as a selection of trades.
+    When calculating the Euler allocation with a central difference approach this means that the notional of all trades within the subportfolio is bumped simultaneously by a relative amount $\epsilon / 2$.
+    This does save computation time as in the example above only four new portfolio risk measure aggregations are necessary to allocate on to the equity and rates subportfolio directly while ten aggregations are necessary to allocate a risk measure on all of the five trades. An allocation of the subportfolios is calculated with this approach in appendix \ref{sa-ccr-euler-allocation-of-an-exemplary-multi-asset-class-portfolio} and yields exactly the same result as the summed up subportfolio results in table \ref{tab:multiAssetAllocation}.
+
+    This might also be a valid approach for a risk analysis architecture that calculates allocations only when requested by a user in real time on the required aggregation level. 
 
     Figure \ref{fig:C for ITM IRS} also showcases the trivial result that the Variation Margin is a homogeneous function - the value of the trade scales linearly with the notional.
     
     Critically, this result can also be transferred to any SA-CCR allocation approach that would treat C as an externally given constant value as locally, treating C as a constant value is the same as consideration of a \gls{MTA}. 
-    In both cases the slope of C is zero.  
+    In both cases the slope of C is zero. 
+
+
 
     \section{Consideration of edge cases\label{sec:Consideration of edge cases}}
 

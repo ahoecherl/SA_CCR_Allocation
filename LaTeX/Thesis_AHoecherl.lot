@@ -9,10 +9,12 @@
 \contentsline {table}{\numberline {3.5}{\ignorespaces }}{27}{table.3.5}
 \contentsline {table}{\numberline {3.6}{\ignorespaces }}{27}{table.3.6}
 \contentsline {table}{\numberline {3.7}{\ignorespaces }}{27}{table.3.7}
-\contentsline {table}{\numberline {3.8}{\ignorespaces Numerical Euler allocation of SA-CCR with and without consideration of a minimum transfer amount for an example of a portfolio with a single 200Bn notional IRS. Euler allocation is only successful if the \gls {MTA} is not considered for the recalculation of the received margin C. A threshold of 0 is assumed.}}{33}{table.3.8}
-\contentsline {table}{\numberline {3.9}{\ignorespaces }}{34}{table.3.9}
-\contentsline {table}{\numberline {3.10}{\ignorespaces }}{34}{table.3.10}
-\contentsline {table}{\numberline {3.11}{\ignorespaces }}{34}{table.3.11}
+\contentsline {table}{\numberline {3.8}{\ignorespaces }}{28}{table.3.8}
+\contentsline {table}{\numberline {3.9}{\ignorespaces Numerical Euler allocation of SA-CCR with and without consideration of a minimum transfer amount for an example of a portfolio with a single 200Bn notional IRS. Euler allocation is only successful if the \gls {MTA} is not considered for the recalculation of the received margin C. A threshold of 0 is assumed.}}{34}{table.3.9}
+\contentsline {table}{\numberline {3.10}{\ignorespaces }}{35}{table.3.10}
+\contentsline {table}{\numberline {3.11}{\ignorespaces }}{35}{table.3.11}
+\contentsline {table}{\numberline {3.12}{\ignorespaces }}{35}{table.3.12}
+\addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
