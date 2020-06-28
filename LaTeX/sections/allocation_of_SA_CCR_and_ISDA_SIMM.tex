@@ -320,7 +320,6 @@
     Setting $C$ at 9.04Bn in \ref{eq:multiplier} and then calculating the SA-CCR EAD for this single IRS \todo{as specified in ...} yields an regulatory EAD of 582.8Mn USD. Any natively additive allocation should allocate this full amount to the IRS.
     The \gls{VM} is zero as the IRS is struck at par.
     \begin{table}[htbp]
-        \label{tab:Allocate SA-CCR with MTA calculation}
         \centering
         \begin{tabular}{c|c|c}
             & $\text{SA-CCR}_{\text{MTA}}$ & $\text{SA-CCR}_{\text{No \gls{MTA}}}$ \\
@@ -338,6 +337,7 @@
             $\frac{\text{EAD\textsubscript{200.02Bn IRS}}-\text{EAD\textsubscript{200Bn IRS}}}{0.0001}$ & 1425.3Mn & 582.8Mn  \\
         \end{tabular}%
         \caption{Numerical Euler allocation of SA-CCR with and without consideration of a minimum transfer amount for an example of a portfolio with a single 200Bn notional IRS. Euler allocation is only successful if the \gls{MTA} is not considered for the recalculation of the received margin C. A threshold of 0 is assumed.}
+        \label{tab:Allocate SA-CCR with MTA calculation}
     \end{table}
     In table \ref{tab:Allocate SA-CCR with MTA calculation} we assume that the initially received collateral is the currently calculated collateral. 
     When calculating the Euler allocation with a forward difference in line with \ref{eq:forward difference} the received collateral when rising the notional to 200.02Bn increases when no MTA is assumed while it remains unchanged with consideration of an MTA. 
@@ -345,17 +345,74 @@
     
     \subsubsection{Incorporation of a VM threshold\label{sec:Incorporation of a VM threshold}}
     
+    Generally, a variation margin threshold can not be in place when bilateral initial margin is being exchanged. The reason for this is, that the regulator poses a VM threshold of zero as a prerequisite for bilateral initial margining \todo{Reference the according article}.
+
+    No exchange of IM implies that no overcollateralization can be available and therefore margining has no impact on the $PFE$ as defined in formula \todo{Reference PFE formula}. Instead the VM threshold solely impact the $RC$ which, based on formula \todo{Reference RC focmula}, under VM but in absence of VM simplifies to $RC = \text{VM Threshold}$ independent of the portfolio constellation. 
+    Consequently, a VM threshold will always increase the portfolio EAD by $1.4*\text{VM threshold}$. Even if the portfolio is empty, the EAD will be $1.4 * \text{VM threshold}$.
+
+    When performing an Euler allocation of a portfolio with a VM threshold the sum of the allocations will be $EAD - 1.4 * \text{VM threshold}$. This is arguably a correct result, as this remainder is independent of the trades and even remains when all trades are removed from the portfolio. 
+    A bank allocating its EAD can decide freely weather the VM threshold impact on the EAD of $1.4 * \text{VM threshold}$ shall remain unallocated or to allocate it to the trades of the portfolio according to some pro-rata approach.
+
+    Some exemplary calculations exploring the effects of a VM threshold can be found in appendix \ref{ead-impact-of-a-variation-margin-threshold}.
+
     \subsubsection{Incorporation of an IM threshold\label{sec:Incorporation of an IM threshold}}
     
-    Consideration of the threshold is challenging. When calculating $C$ with a threshold, $C$ does not exhibit homogeneity and an allocation will fail. On the other hand, when calculating $C$ without threshold the considered margin is to high and the sum of allocated EAD will be too low.
-    One solution to this is to first allocate the SA-CCR assuming the threshold is 0 and then scaling up the allocation by $EAD_{TH = 0} \ EAD$ where $EAD_{TH = 0}$ is the calculated SA-CCR EAD assuming a zero threshold and $EAD$ is the actual SA-CCR EAD.
+    In comparison with recognizing a minimum transfer amount or a variation margin threshold adjusting for the inclusion of IM threshold is the most challenging.
+    As we can see in figures \ref{fig:C for ATM IRS} and \ref{fig:C for ITM IRS} inclusion of an initial margin threshold does reduce the received IM to zero until the threshold is reached and afterwards reduces the exchanged IM amount by the IM threshold.
+    Theoretically, this behavior is determined by the bilateral collateral agreement and the two parties could also agree to exchange the full calculated IM amount once the threshold is exceeded.
+    However, subsequent deduction of the IM threshold once the threshold itself is exceeded is explicitly allowed by the regulator \todo{reference to the according article} and allows the counterparties to exchange as little IM as possible while still being regulatory compliant.
+    This setup should therefore be the most common in practice which is why it is the only one considered in this section.
+
+    We investigate the impact of an initial margin threshold by means of an exemplary portfolio consisting of an equity option and an interest rate swap.
+    Detailed documentation of this exemplary calculation may be found in \ref{exemplary-sa-ccr-allocation-under-consideration-of-an-initial-margin-threshold}.
+
+    The notional of the two trades is chosen such that they have the same EAD under VM but different IM and consequently different EAD under VM and IM. 
+    The different risk measure of the two standalone portfolios are displayed in \ref{tab:IM threshold example standalone} all figures do not assume any threshold.
+    \begin{table}[htbp]
+        \centering
+        \begin{tabular}{c|c|c|c}
+            & EAD under VM & IM & EAD under VM and IM \\
+            \toprule
+            Equity option & 1,651,405 & 2,806,744 & 530,996 \\
+            Interest rate swap& 1,651,405 & 4,519,079 & 291,441 \\
+            \midrule
+            Portfolio of both& 3,302,809 & 7,325,823 & 777,229 \\
+        \end{tabular}%
+        \caption{All values are in USD}
+        \label{tab:IM threshold example standalone}
+    \end{table}
+    As we can see the IRS has a lower EAD under VM and IM than the equity option which is due to the fact that the ISDA SIMM model charges considerably more IM for the IRS which is then recognized as overcollateralization for the subsequent EAD calculation.
+
+    When we now assume an IM threshold of zero, five million and ten million USD and perform a numerical Euler allocation with a central difference approach we yield the results displayed in \ref{tab:IM threshold example allocated}.
+    \begin{table}[htbp]
+        \centering
+        \begin{tabular}{c||c|c|c}
+            & No IM threshold & 5Mn IM threshold & 10Mn IM threshold \\
+            \toprule
+            \makecell{Allocated to \\ Equity option} & 505,528 (65\%) & 331,448 (16\%) & 1,651,405 (50\%) \\
+            \midrule
+            \makecell{Allocated to \\ Interest rate swap}& 271,701 (35\%) & -381,962 (-19\%) & 1,651,405 (50\%) \\
+            \bottomrule
+            \makecell{Portfolio \\ risk measure} & 777,229 & 2,032,638 & 3,302,809 \\
+        \end{tabular}%
+        \caption{All values are in USD}
+        \label{tab:IM threshold example allocated}
+    \end{table}
+    As we can see, the results for a 10Mn threshold are exactly the same as those assuming no IM. Since the calculated IM is lower than the IM threshold no IM is exchanged and the allocation works fine since it is the same as an allocation under VM only.
+    On the other hand, the allocation assuming no IM threshold is also working fine. As we can see, the Euler allocation correctly allocates a lower fraction of 35\% instead of 50\% of the EAD to the IRS in this scenario since it has a higher contribution towards the overcollateralization of the portfolio.
+
+    However, the Euler allocation fails when we assume a threshold of 5Mn USD. This could be expected as the EAD locally does not exhibit homogeneity since as we were able to infer from figures \ref{fig:C for ATM IRS} and \ref{fig:C for ITM IRS}. The calculated figures do not represent any form of a risk sensitive allocation - neither in absolute nor in relative terms.
+
+    While we can't use the results of the Euler allocation under the assumption of a 5Mn IM threshold we can use the allocation results under no IM threshold and under VM only to draw conclusion on a risk sensitive allocation for the case with a 5Mn IM threshold.
+    Considering the IRS we do know, that allocating 50\% of the EAD to the IRS would be too much since some IM is available which is lowering the EAD from 3.3Mn to 2Mn USD and the contribution of the IRS to this IM is overproportionate. On the other hand, and allocation of 35\% of the EAD to the IRS would be too little since this would be the relative amount allocated if the entire IM calculated would be exchange.
     
+    Based on these considerations we can establish that the relative fraction of EAD under an IM threshold should be within a bounded range. 
+    This range is bound by the relative result of an Euler allocation under assumption of no IM threshold and the relative result of an Euler allocation under the assumption of no IM being exchanged.
     
     \subsection{Allocation of hedged portfolios\label{sec:Allocation of hedged portfolios}}
     
-    As pointed out in \ref{Allocation of Risk Measures} Euler allocation is a risk sensitive allocation and as such does generally attribute negative contributions to trades that are decreasing the risk of the portfolio. If we consider a portfolio of a 200Mn payer IRS, an equivalent 100Mn receiver IRS and 1Mn long stock call options we yield the result depicted in \ref{tab:hedge trade sample results} when calculating the Euler allocation numerically with a forward difference.
+    As pointed out in section \ref{Allocation of Risk Measures} Euler allocation is a risk sensitive allocation and as such does generally attribute negative contributions to trades that are decreasing the risk of the portfolio. If we consider a portfolio of a 200Mn payer IRS, an equivalent 100Mn receiver IRS and 1Mn long stock call options we yield the result depicted in table \ref{tab:hedge trade sample results} when calculating the Euler allocation numerically with a forward difference for the SA-CCR under IM and VM and ISDA SIMM risk measures.
     \begin{table}[htbp]
-        \label{tab:hedge trade sample results}
         \centering
         \begin{tabular}{c|c|c}
             & SA-CCR & ISDA SIMM \\
@@ -371,15 +428,13 @@
             Portfolio risk measure & 1.54Mn & 11.47Mn \\
         \end{tabular}%
         \caption{}
+        \label{tab:hedge trade sample results}
     \end{table}
     The 100Mn receiver IRS partially hedges the risk induced by the 200Mn payer IRS. 
     Both, the ISDA SIMM and the SA-CCR model do not recognize any hedge effects across asset classes and therefore the risk associated with the equity option is completely independent from the two IRS trades. 
     Appropriately, a negative IM and EAD is allocated to the smaller IRS trade and the allocation exhibits native additivity as the sum of the allocation of the three trades coincides with the risk measures of the portfolio.
     
-    However, an allocation 
-    
     \begin{table}[htbp]
-        \label{tab:EAD perfect hedge}
         \centering
         \begin{tabular}{c|c|c|c}
             & Forward & Central & Backward \\
@@ -395,10 +450,14 @@
                 Portfolio risk measure & \multicolumn{3}{c}{1.32Mn} \\
             \end{tabular}%
             \caption{}
+            \label{tab:EAD perfect hedge}
     \end{table}
+
+    However, if we decrease the notional of the payer swap to 100Mn as well and allocate the SA-CCR EAD again with a forward difference approach, we yield the result depicted in the leftmost column of table \ref{tab:EAD perfect hedge} clearly isn't a viable allocation as it is far off the risk measure.
     
+    As we can see in table \ref{tab:EAD perfect hedge} the chosen finite difference approach completely changes the resulting allocation with only the central difference approach exhibiting subadditivity.
+    The same observation can also be made for the allocation of the ISDA SIMM IM depicted in table \ref{tab:IM perfect hedge}.
     \begin{table}[htbp]
-        \label{tab:IM perfect hedge}
         \centering
         \begin{tabular}{c|c|c|c}
             & Forward & Central & Backward \\
@@ -414,7 +473,24 @@
             Portfolio risk measure & \multicolumn{3}{c}{6.95Mn}  \\
         \end{tabular}%
         \caption{}
+        \label{tab:IM perfect hedge}
     \end{table}
     
+    The reason for this observation is that the portfolios risk measures happen to not be differentiable w.r.t. position size for the two swap trades. This can be seen in figure \ref{fig:indifferentiability of ead} for the EAD and in figure \ref{fig:indifferentiability of im} for ISDA SIMM IM.
+    As we can see, both an increase and decrease of position size in either IRS leads to an increase in initial margin and the slope of this increase is constant.
+
+    \begin{figure}
+        \centering
+        \includegraphics{Graphics/Indifferentiabililty_of_EAD.pdf}
+        \caption{}
+        \label{fig:indifferentiability of ead}
+    \end{figure}
+
+    \begin{figure}
+        \centering
+        \includegraphics{Graphics/Indifferentiabililty_of_IM.pdf}
+        \caption{}
+        \label{fig:indifferentiability of im}
+    \end{figure}
+    
     \end{document}
-    de. 

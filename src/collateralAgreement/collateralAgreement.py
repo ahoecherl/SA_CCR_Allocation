@@ -55,10 +55,10 @@ class CollateralAgreement(Portfolio):
                  segregated_overcollateralization_received: float = 0.0,
                  threshold_vm = 0):
         self.trades = []
-        self.margining = margining
-        self.clearing = clearing
-        self.initialMargining = initialMargining
         self.margin_currency = margin_currency
+        self.margining = margining
+        self.initialMargining = initialMargining
+        self.clearing = clearing
         self.tradecount = tradecount
         self.dispute = dispute
         self.threshold = threshold
@@ -68,21 +68,6 @@ class CollateralAgreement(Portfolio):
         self.unsegregated_overcollateralization_received = unsegregated_overcollateralization_received
         self.segregated_overcollateralization_posted = segregated_overcollateralization_posted
         self.segregated_overcollateralization_received = segregated_overcollateralization_received
-        if margining == Margining.UNMARGINED and not (
-                clearing == Clearing.UNCLEARED and initialMargining == InitialMargining.NO_IM):
-            raise (Exception('No IM can be exhchanged for an unmargined collateral agreement '))
-        if clearing == Clearing.CLEARED and not initialMargining == InitialMargining.CCPIMM:
-            raise (Exception('If the collateral agreement is cleared CCPIMM has to be used as the IM Model'))
-        if margining == Margining.UNMARGINED:
-            self.vm_model = NoVariationMargin()
-        elif margining == Margining.MARGINED:
-            self.vm_model = VariationMarginModel(vm_currency=margin_currency)
-        if initialMargining == InitialMargining.CCPIMM:
-            self.im_model = CCPIMM(resultCurrency=margin_currency)
-        elif initialMargining == InitialMargining.SIMM:
-            self.im_model = SIMM(resultCurrency=margin_currency)
-        elif initialMargining == InitialMargining.NO_IM:
-            self.im_model = NOIMM(resultCurrency=margin_currency)
 
         self.sync_vm_model = True
         self.sync_im_model = True
@@ -149,6 +134,64 @@ class CollateralAgreement(Portfolio):
 
     def get_nica(self):
         return max(0, self.im_model.get_im_receive()-self.threshold) - self.unsegregated_overcollateraliziation_posted + self.segregated_overcollateralization_received + self.unsegregated_overcollateralization_received
+
+    @property
+    def initialMargining(self):
+        try: result = self.__initialMargining
+        except AttributeError: result = None
+        return result
+
+    @initialMargining.setter
+    def initialMargining(self, value: InitialMargining):
+        self.check_margin_model_consistency(initialMargining=value)
+        if value == InitialMargining.CCPIMM:
+            self.im_model = CCPIMM(resultCurrency=self.margin_currency)
+        elif value == InitialMargining.SIMM:
+            self.im_model = SIMM(resultCurrency=self.margin_currency)
+        elif value == InitialMargining.NO_IM:
+            self.im_model = NOIMM(resultCurrency=self.margin_currency)
+        self.im_model.add_trades(self.trades)
+        self.__initialMargining = value
+
+    @property
+    def margining(self):
+        try: result = self.__margining
+        except AttributeError: result = None
+        return result
+
+    @property
+    def clearing(self):
+        try: result = self.__clearing
+        except AttributeError: result = None
+        return result
+
+    @clearing.setter
+    def clearing(self, value):
+        self.check_margin_model_consistency(clearing=value)
+        self.__clearing = value
+
+    @margining.setter
+    def margining(self, value: Margining):
+        self.check_margin_model_consistency(margining=value)
+        if value == Margining.UNMARGINED:
+            self.vm_model = NoVariationMargin()
+        elif value == Margining.MARGINED:
+            self.vm_model = VariationMarginModel(vm_currency=self.margin_currency)
+        self.vm_model.add_trades(self.trades)
+        self.__margining = value
+
+    def check_margin_model_consistency(self, margining=None, clearing=None, initialMargining=None):
+        if margining is None:
+            margining = self.margining
+        if clearing is None:
+            clearing = self.clearing
+        if initialMargining is None:
+            initialMargining = self.initialMargining
+        if margining == Margining.UNMARGINED and not (
+                self.clearing in [Clearing.UNCLEARED, None] and initialMargining in [InitialMargining.NO_IM, None]):
+            raise (Exception('No IM can be exhchanged for an unmargined collateral agreement '))
+        if clearing == Clearing.CLEARED and not initialMargining == InitialMargining.CCPIMM:
+            raise (Exception('If the collateral agreement is cleared CCPIMM has to be used as the IM Model'))
 
     @property
     def sync_im_model(self):

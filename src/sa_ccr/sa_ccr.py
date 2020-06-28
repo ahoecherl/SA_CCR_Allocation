@@ -52,8 +52,10 @@ class SA_CCR(RiskMeasureModel):
         :param floor: Regulatory floor for the multiplier. Set to 5% in paragraph 149
         :return: Multiplier for PFE calculation according to SA-CCR
         """
-
-        return min(1, floor + (1 - floor) * exp((V - C) / (2 * (1 - floor) * addOn_aggregate)))
+        if addOn_aggregate==0:
+            return 1
+        else:
+            return min(1, floor + (1 - floor) * exp((V - C) / (2 * (1 - floor) * addOn_aggregate)))
 
     def trade_level_adjusted_notional(trade: Trade):
         """

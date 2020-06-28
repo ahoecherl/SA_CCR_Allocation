@@ -5,7 +5,8 @@ from collateralAgreement.collateralAgreement import CollateralAgreement, Margini
 from instruments.equity_instruments.equityOption import EquityOption
 from instruments.interestRateInstrument.irs import IRS
 from margining.simm import SIMM
-from margining.variationMarginModel import VariationMarginModel
+from margining.noimm import NOIMM
+from margining.variationMarginModel import VariationMarginModel, NoVariationMargin
 from marketdata.EquitySpot import EquitySpot
 from marketdata.fxConverter import fxConvert
 from marketdata.interestRateIndices import InterestRateIndex
@@ -176,3 +177,49 @@ def test_syncing_and_desyncing():
     assert local_sa_ccr_model.trades == [trade1, trade2, trade3]
     assert ca.vm_model.trades == [trade1, trade2, trade3]
     assert ca.im_model.trades == [trade1, trade2, trade3]
+
+def test_margining_switch():
+    ca = CollateralAgreement(clearing=Clearing.UNCLEARED,margining=Margining.UNMARGINED, initialMargining=InitialMargining.NO_IM)
+    ca.link_sa_ccr_instance(SA_CCR(ca))
+    dummy_trade = EquityOption()
+    ca.add_trades(dummy_trade)
+    assert ca.initialMargining == InitialMargining.NO_IM
+    assert ca.margining == Margining.UNMARGINED
+    assert ca.clearing == Clearing.UNCLEARED
+    assert ca.get_vm_model().__class__ == NoVariationMargin
+    assert ca.get_im_model().__class__ == NOIMM
+
+    with pytest.raises(Exception):
+        ca.initialMargining = InitialMargining.SIMM
+    with pytest.raises(Exception):
+        ca.clearing = Clearing.CLEARED
+    with pytest.raises(Exception):
+        ca.initialMargining = InitialMargining.CCPIMM
+
+    assert ca.get_vm_model().__class__ == NoVariationMargin
+    assert ca.get_im_model().__class__ == NOIMM
+
+    assert ca.get_C() == 0
+    assert ca.get_C()-ca.get_V() < 0
+
+    ca.margining = Margining.MARGINED
+    assert ca.margining == Margining.MARGINED
+    assert ca.initialMargining == InitialMargining.NO_IM
+    assert ca.get_vm_model().__class__ == VariationMarginModel
+    assert ca.get_C() > 0
+    assert ca.get_C() - ca.get_V() == 0
+    ca.initialMargining = InitialMargining.SIMM
+    assert ca.margining == Margining.MARGINED
+    assert ca.initialMargining == InitialMargining.SIMM
+    assert ca.get_C() > 0
+    assert ca.get_C() - ca.get_V() > 0
+
+    assert ca.get_im_model().__class__ == SIMM
+
+    with pytest.raises(Exception):
+        ca.margining = Margining.UNMARGINED
+
+    ca.initialMargining = InitialMargining.NO_IM
+    ca.margining = Margining.UNMARGINED
+    assert ca.margining == Margining.UNMARGINED
+    assert ca.initialMargining == InitialMargining.NO_IM

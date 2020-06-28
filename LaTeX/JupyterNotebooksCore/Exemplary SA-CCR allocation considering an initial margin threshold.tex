@@ -154,7 +154,7 @@ as it is the maximum amount permitted by the regulator.
     \end{Verbatim}
 
     Through optimization it can be identified that for a one year long call
-option on Adidas an underlying stock count of 403106 stocks results in
+option on Adidas an underlying stock count of 403690 stocks results in
 the same EAD as for the IRS above.
 
     
@@ -191,8 +191,8 @@ threshold but differs significantly from the IM of the IRS.
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-EAD: 1651404.7245622796
-IM:  2802685.461885011
+EAD: 1651404.7245622769
+IM:  2806744.4625389306
     \end{Verbatim}
 
     Given the market data, difference in model, risk horizon etc. the SA CCR
@@ -216,7 +216,7 @@ model do not recognize any hedge effect between different asset classes.
 \end{tcolorbox}
 
     The EAD of the combined portfolio is 3302809 USD. The calculated IM of
-the combined portfolio is 7321763 USD.
+the combined portfolio is 7325822 USD.
 
     
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -239,8 +239,8 @@ which is not overcollateralization and therefore only reduces the \(RC\)
 in formula \todo{reference RC+PFE formula} to 0 but does not impact the
 \(PFE\).
 
-    The available collateral is 1450296 USD. Due to the hight threshold this
-consists only of the VM which is 1450296 USD.
+    The available collateral is 1452396 USD. Due to the hight threshold this
+consists only of the VM which is 1452396 USD.
 
     
     The 50/50 allocation is certainly the correct result since there are no
@@ -262,16 +262,34 @@ we yield a different result.
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-1153317.0534241588
+1154590.5057480328
     \end{Verbatim}
 
-    Euler allocation allocates 1153317 USD of the EAD to the IRS. Euler
-allocation allocates 2149501 USD of the EAD to the equity option. The
-sum of these two allocations is 3302819 USD, which is close to the EAD
+    Euler allocation allocates 1154590 USD of the EAD to the IRS. Euler
+allocation allocates 2148228 USD of the EAD to the equity option. The
+sum of these two allocations is 3302818 USD, which is close to the EAD
 calculated for the portfolio of 3302809 USD.
 
     
     Therefore, the approximation of \ref{eq:C threshold scaling} should only
 be used if the \(IM_{calc} > TH_{IM}\).
+
+When we exceed the threshold we can see that the Euler allocation with
+threshold returns the same results as the Euler allocation without
+thresholds. For this we decrease the IM threshold from 10Mn to 1Mn.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca3}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{1000000}
+\PY{n}{allocation\PYZus{}10Mn\PYZus{}threshold} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{ca3}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{100000}
+\PY{n}{allocation\PYZus{}1Mn\PYZus{}threshold} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{ca3}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{n}{allocation\PYZus{}no\PYZus{}threshold} \PY{o}{=} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
 
 

@@ -1,0 +1,237 @@
+    
+
+    
+    \hypertarget{exemplary-sa-ccr-allocation-under-consideration-of-an-initial-margin-threshold}{%
+\section{Exemplary SA-CCR allocation under consideration of an initial
+margin
+threshold}\label{exemplary-sa-ccr-allocation-under-consideration-of-an-initial-margin-threshold}}
+
+We consider a portfolio of two trades, an IRS and an equity option.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{irs} \PY{o}{=} \PY{n}{IRS}\PY{p}{(}\PY{n}{notional}\PY{o}{=}\PY{l+m+mi}{100000000}\PY{p}{,}
+          \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{,}
+          \PY{n}{timeToSwapStart}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Days}\PY{p}{)}\PY{p}{,}
+          \PY{n}{timeToSwapEnd}\PY{o}{=}\PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{ca\PYZus{}irs} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{NO\PYZus{}IM}\PY{p}{)}
+\PY{n}{ca\PYZus{}irs}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca\PYZus{}irs}\PY{p}{)}\PY{p}{)}
+\PY{n}{ca\PYZus{}irs}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{irs}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eqOpt} \PY{o}{=} \PY{n}{EquityOption}\PY{p}{(}\PY{n}{notional} \PY{o}{=} \PY{l+m+mf}{403690.28}\PY{p}{,}
+                     \PY{n}{maturity} \PY{o}{=} \PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}\PY{p}{,}
+                     \PY{n}{underlying} \PY{o}{=} \PY{n}{Stock}\PY{o}{.}\PY{n}{ADS}\PY{p}{,}
+                     \PY{n}{tradeType} \PY{o}{=} \PY{n}{TradeType}\PY{o}{.}\PY{n}{CALL}\PY{p}{,}
+                     \PY{n}{tradeDirection} \PY{o}{=} \PY{n}{TradeDirection}\PY{o}{.}\PY{n}{LONG}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca\PYZus{}eqOpt} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{NO\PYZus{}IM}\PY{p}{)}
+\PY{n}{ca\PYZus{}eqOpt}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca\PYZus{}eqOpt}\PY{p}{)}\PY{p}{)}
+\PY{n}{ca\PYZus{}eqOpt}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{eqOpt}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    These two trades happen to have the same EAD under VM only
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'IRS EAD under VM: 1,651,405 USD'
+\end{Verbatim}
+\end{tcolorbox}
+        
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'EQ EAD under VM: 1,651,405 USD'
+\end{Verbatim}
+\end{tcolorbox}
+        
+    If they are put into a common portfolio under VM only this common
+portfolio just has the sum as EAD as no hedge effects take place.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca\PYZus{}common} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}
+    \PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{NO\PYZus{}IM}\PY{p}{)}
+\PY{n}{ca\PYZus{}common}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{ca\PYZus{}common}\PY{p}{)}\PY{p}{)}
+\PY{n}{ca\PYZus{}common}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{p}{[}\PY{n}{eqOpt}\PY{p}{,}\PY{n}{irs}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'Portfolio EAD under VM: 3,302,809 USD'
+\end{Verbatim}
+\end{tcolorbox}
+        
+    However the IM and consequently the EAD under IM differ between the two
+trades.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca\PYZus{}eqOpt}\PY{o}{.}\PY{n}{initialMargining} \PY{o}{=} \PY{n}{InitialMargining}\PY{o}{.}\PY{n}{SIMM}
+\PY{n}{ca\PYZus{}irs}\PY{o}{.}\PY{n}{initialMargining} \PY{o}{=} \PY{n}{InitialMargining}\PY{o}{.}\PY{n}{SIMM}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'EQ IM: 2,806,744 USD'
+\end{Verbatim}
+\end{tcolorbox}
+        
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'IRS IM: 4,519,079 USD'
+\end{Verbatim}
+\end{tcolorbox}
+        
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'EQ EAD under VM and IM: 530,996 USD'
+\end{Verbatim}
+\end{tcolorbox}
+        
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'IRS EAD under VM and IM: 291,441 USD'
+\end{Verbatim}
+\end{tcolorbox}
+        
+    The IM of the common portfolio is the sum of the individual portfolios
+while the EAD of the common portfolio is a bit smaller than the
+respective sum.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca\PYZus{}common}\PY{o}{.}\PY{n}{initialMargining} \PY{o}{=} \PY{n}{InitialMargining}\PY{o}{.}\PY{n}{SIMM}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'Portfolio IM: 7,325,823 USD'
+\end{Verbatim}
+\end{tcolorbox}
+        
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'Portfolio EAD under VM and IM: 777,229 USD'
+\end{Verbatim}
+\end{tcolorbox}
+        
+    We can compare the allocation of EAD with and without IM to see that
+with IM, less is attributed to the IRS as it commands a higher margin.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eulerAllocator} \PY{o}{=} \PY{n}{EulerAllocator}\PY{p}{(}\PY{n}{ca\PYZus{}common}\PY{p}{)}
+\PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{fdApproach2}\PY{o}{=}\PY{n}{FdApproach2}\PY{o}{.}\PY{n}{Central}
+\PY{n}{ca\PYZus{}common}\PY{o}{.}\PY{n}{initialMargining} \PY{o}{=} \PY{n}{InitialMargining}\PY{o}{.}\PY{n}{NO\PYZus{}IM}
+\PY{p}{\PYZob{}}\PY{n}{k}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}class\PYZus{}\PYZus{}}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{:} \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{v}\PY{l+s+si}{:}\PY{l+s+s1}{,.0f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}}
+ \PY{k}{for} \PY{n}{k}\PY{p}{,} \PY{n}{v} \PY{o+ow}{in} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\{'EquityOption': '1,651,405 USD', 'IRS': '1,651,405 USD'\}
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca\PYZus{}common}\PY{o}{.}\PY{n}{initialMargining} \PY{o}{=} \PY{n}{InitialMargining}\PY{o}{.}\PY{n}{SIMM}
+\PY{p}{\PYZob{}}\PY{n}{k}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}class\PYZus{}\PYZus{}}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{:} \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{v}\PY{l+s+si}{:}\PY{l+s+s1}{,.0f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}}
+ \PY{k}{for} \PY{n}{k}\PY{p}{,} \PY{n}{v} \PY{o+ow}{in} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\{'EquityOption': '505,528 USD', 'IRS': '271,701 USD'\}
+\end{Verbatim}
+\end{tcolorbox}
+        
+    We introduce an initial margin threshold that is higher than the
+calculated IM and see that the resulting allocation is sub-additive and
+the same as in the case without initial margin.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca\PYZus{}common}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{10000000}
+\PY{p}{\PYZob{}}\PY{n}{k}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}class\PYZus{}\PYZus{}}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{:} \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{v}\PY{l+s+si}{:}\PY{l+s+s1}{,.0f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}}
+ \PY{k}{for} \PY{n}{k}\PY{p}{,} \PY{n}{v} \PY{o+ow}{in} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\{'EquityOption': '1,651,405 USD', 'IRS': '1,651,405 USD'\}
+\end{Verbatim}
+\end{tcolorbox}
+        
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'Portfolio EAD with 10Mn IM threshold: 3,302,809 USD'
+\end{Verbatim}
+\end{tcolorbox}
+        
+    When we lower the threshold below the exchanged IM the allocation fails
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{In}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ca\PYZus{}common}\PY{o}{.}\PY{n}{threshold} \PY{o}{=} \PY{l+m+mi}{5000000}
+\PY{p}{\PYZob{}}\PY{n}{k}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}class\PYZus{}\PYZus{}}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{:} \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{v}\PY{l+s+si}{:}\PY{l+s+s1}{,.0f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}}
+ \PY{k}{for} \PY{n}{k}\PY{p}{,} \PY{n}{v} \PY{o+ow}{in} \PY{n}{eulerAllocator}\PY{o}{.}\PY{n}{allocate\PYZus{}ead}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\{'EquityOption': '331,448 USD', 'IRS': '-381,962 USD'\}
+\end{Verbatim}
+\end{tcolorbox}
+        
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{Out}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'Portfolio EAD with 10Mn IM threshold: 2,032,638 USD'
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Further discussion of these results in section
+\ref{sec:Incorporation of an IM threshold}.
+
+
