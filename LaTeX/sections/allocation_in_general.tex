@@ -3,13 +3,13 @@
 \begin{document}
 
 
-\section{Allocation of Risk Measures}\label{Allocation of Risk Measures}
+\section{Allocation of Risk Measures}\label{sec:Allocation of Risk Measures}
 
 With increasing sophistication of risk, own capital and margining models the need for equally sophisticated tools for attributing these measures rises as well. Allocating the variation margin or models that disregard portfolio effect entirely such as the current exposure method (CEM) to individual trades is trivial as these measures may just be calculated for an individual trade and then added up across all trades to obtain the correct aggregate value. 
 For measures which take portfolio effects into account such as a \gls{VaR} model, \gls{ISDA SIMM} or \gls{SA-CCR} however, this approach is not possible. The advent of portfolio based models for internal risk measurement in the late 1990s and for regulatory risk measurement in the late 2000s sparked research into how such measures should be reallocated. Gregory \cite[Chapter~10.7]{gregory2015xva} states that three approaches are used in practice: 
 \begin{enumerate}
 \item Incremental allocation
-\item Marginal allocation which will be called Euler allocation in this thesis  
+\item Marginal allocation which will be called Euler allocation for the remainder of this thesis  
 \item Pro rata allocation
 \end{enumerate}
 
@@ -19,7 +19,7 @@ Based on the paper of Koyluoglu and Stoker \cite{koyluoglu2002risk} the list of 
     \item Shapley value
 \end{enumerate}
  
-Unfortunately, naming conventions for the different allocation approaches are not consistent between the different publications.
+Unfortunately, naming conventions for the different allocation approaches are not consistent across different publications.
 Therefore, a definition of the five approaches is following based on the notation used by Tasche \cite{tasche2007}. In the following we will always assume that $X_1, \dots, X_n$ are real valued random variables that are representing the profits and losses of the trades in a portfolio. $1, \dots, n$ represents the order in which the trades have been added to the portfolio. $X$ denotes the portfolio-wide \gls{PnL}, s.t.
 
 \begin{align}
@@ -32,7 +32,8 @@ Both, the \gls{ISDA SIMM} model and the \gls{SA-CCR} model are in their core suc
 The allocation or contribution of trade $i$ to risk measure $\rho(X)$ is denoted as $\rho\left(X_i|X\right)$. Position sizes in the portfolio can be notated through a vector $\mathbf{u} = (u_1,\dots, u_n)$:
 
 \begin{align}
-    X(u) = X(u_1, \dots, u_n) = \sum_{i=1}^{n}{u_iX_i}
+    \label{eq: u formula}
+    X(\mathbf{u}) = X(u_1, \dots, u_n) = \sum_{i=1}^{n}{u_iX_i}
 \end{align}
 
 To make it more convenient to analyze changes to $\mathbf{u}$ we also introduce the function
@@ -43,48 +44,48 @@ To make it more convenient to analyze changes to $\mathbf{u}$ we also introduce 
 
 Then, with $\mathbf{1}$ being a vector of ones, $\rho\left(X\left(\mathbf{1}\right)\right) = \rho\left(X\right)$. $\mathbf{u} = \mathbf{1}$ indicates the initial state of the portfolio when calculating an allocation - it does not imply that the notional of each position is 1.
 
-\begin{definition}
-    Assuming that $\rho\left(X\right)$ is a risk measure, the \textbf{incremental allocation} of trade $n$ can be calculated as
+\begin{definition}[Incremental allocation]
+    Assuming that $\rho\left(X\right)$ is a risk measure, the incremental allocation of trade $n$ can be calculated as
     \begin{gather}
         \begin{split}
             \text{with } u_{i\neq n} = 1 \text{ and }u_n = 0\\
-            \rho_{inc}\left(X_n|X\right) = \rho\left(X\right) - \rho\left(X\left(u\right)\right)    
+            \rho_{inc}\left(X_n|X\right) = \rho\left(X\right) - \rho\left(X\left(\mathbf{u}\right)\right)\; \text{.}
         \end{split}
     \end{gather}
     The incremental allocation can only be calculated for trade $n$.
 \end{definition}
 
-\begin{definition}[\label{def:Euler allocation}]
-    Assuming that $\rho\left(X\right)$ is a risk measure that is homogeneous of degree one and continuously differentiable, the \textbf{Euler allocation} of an arbitrary trade $i$ can be calculated assume
+\begin{definition}[Euler allocation\label{def:Euler allocation}]
+    Assuming that $\rho\left(X\right)$ is a risk measure that is homogeneous of degree one and continuously differentiable, the Euler allocation of an arbitrary trade $i$ can be calculated as
     \begin{gather}
         \label{eq:Euler allocation}
-        \rho_{Euler}\left(X_i|X\right) = \frac{d\rho}{dh}\left(X+hX_i\right)|_{h\rightarrow0} = 1\frac{\partial f_{\rho}}{\partial u_i}
+        \rho_{Euler}\left(X_i|X\right) = \frac{d\rho}{dh}\left(X+hX_i\right)|_{h\rightarrow0} = 1\frac{\partial f_{\rho}}{\partial u_i}  \; \text{.}
     \end{gather}
 \end{definition}
 
-\begin{definition}[\label{def:pro rata allocation}]
-    Assuming that $\rho\left(X\right)$ is a risk measure, the \textbf{pro rata allocation} of an arbitrary trade $i$ can be calculated as
-    \begin{gather}
-        \text{with } u_{i} = 1 \text{ and } u_{\neq i} = 0\\
-        \rho_{ProRata}\left(X_i|X\right) = \frac{\rho(X(u))}{\rho(X)}
-    \end{gather}
-\end{definition}
-
-\begin{definition}
-    Assuming that $\rho(X)$ is a risk measure, the \textbf{discrete marginal allocation} of an arbitrary trade $i$ can be calculated as
+\begin{definition}[Pro rata allocation\label{def:pro rata allocation}]
+    Assuming that $\rho\left(X\right)$ is a risk measure, the pro rata allocation of an arbitrary trade $i$ can be calculated as
     \begin{gather}
         \begin{split}
-            \text{with } u_{i} = 0 \text{ and } u_{\neq i} = 1\\
-            \rho_{discrete}\left(X_n|X\right) = \rho\left(X\right) - \rho\left(X\left(u\right)\right)    
+            \text{with } u_{i} = 1 \text{ and } u_{\neq i} = 0\\
+            \rho_{ProRata}\left(X_i|X\right) = \frac{\rho(X(\mathbf{u}))}{\rho(X)} \; \text{.}
         \end{split}
     \end{gather}
 \end{definition}
 
+\begin{definition} [Discrete marginal allocation]
+    Assuming that $\rho(X)$ is a risk measure, the discrete marginal allocation of an arbitrary trade $i$ can be calculated as
+    \begin{gather}
+        \begin{split}
+            \text{with } u_{i} = 0 \text{ and } u_{\neq i} = 1\\
+            \rho_{discrete}\left(X_n|X\right) = \rho\left(X\right) - \rho\left(X\left(\mathbf{u}\right)\right)    
+        \end{split}
+    \end{gather}
+\end{definition}
+
+\begin{definition}[Shapley allocation]
 To calculate the Shapley allocation of a portfolio one needs to iterate through all permutations how the trades in the portfolio could be ordered.
 For a given trade $i$ the Shapley allocation is the average of the amount by which the risk measure changes when adding trade $i$ to the portfolio in each of the permutations.
-
-\begin{definition}
-    \todo{Need to put Shapley in a formula...}
 \end{definition}
 
 The usefulness of any of the five allocation approaches listed above is dependent on the individual application of the allocation. Criteria by which the allocation approach is judged are also highly dependent of the application. However, the two criteria
@@ -94,15 +95,15 @@ The usefulness of any of the five allocation approaches listed above is dependen
 \end{enumerate}
 are usually regarded to be the most important one. They are for example the criteria by which Koyluoglu and Stoker \cite{koyluoglu2002risk} compare the different allocation approaches.
 
-A allocation algorithm $alloc$ exhibits native additivity if equation \ref{eq:native additivity} holds.
+A allocation algorithm $alloc$ exhibits \textbf{native additivity} if equation \ref{eq:native additivity} holds.
 
 \begin{align}
     \sum_{i=1}^n{\rho_{alloc}\left(X|X_i\right)} = \rho\left(X\right)
     \label{eq:native additivity}
 \end{align}
 
-Risk sensitivity means that $\rho_{alloc}\left(X|X_i\right)$ should indicate how the trade $i$ impacts the overall risk $\rho\left(X\right)$. 
-No mathematical definition is available for when an allocation is considered to be risk sensitive. A sensible criteria could be that a trade that reduces the risk of the portfolio, i.e. a hedge trade should have a negative contribution to the risk measure.
+\textbf{Risk sensitivity} means that $\rho_{alloc}\left(X|X_i\right)$ should indicate how the trade $i$ impacts the overall risk $\rho\left(X\right)$. 
+No mathematical definition is available to define when an allocation is considered to be risk sensitive. A sensible criteria could be that a trade that reduces the risk of the portfolio, i.e. a hedge trade should have a negative contribution to the risk measure.
 
 Depending on the application of the allocation other criteria might be important such as
 \begin{itemize}
@@ -120,22 +121,23 @@ Euler allocation on the other hand is well suited for analysis of an existing po
 In the literature, Euler allocation is generally regarded as the best allocation approach for such purposes as it exhibits native additivity and risk sensitivity and can be calculated for all trades.
 
 Pro rata allocation is generally not risk sensitive for risk measures that take portfolio effects into account.
-It is, however, very inexpensive to compute, suitable for models that are based on trade contributions such as the \gls{CEM} or the standardized approach for initial margin (see \ref{The standard approach}) and may circumvent some operational or technical issues as trade contributions are always positive.
-Due to its simplicity and packing risk sensitivity for the models analyzed in this thesis, pro rata allocation will not be analyzed in further detail in this thesis.
+It is, however, very inexpensive to compute and suitable for models that are based on trade contributions such as the \gls{CEM} or the standardized approach for initial margin (see \ref{The standard approach}).
+Usage of a pro rata allocation may circumvent some operational or technical issues as trade contributions are always positive.
+Due to its simplicity and lacking risk sensitivity for the models analyzed in this thesis, pro rata allocation will not be analyzed in further detail in this thesis.
 
 While being a very intuitive approach, performance of discrete marginal allocation is relatively poor. The approach does not exhibit native additivity as Tasche \cite{tasche2007} shows that 
 \begin{align*}
     \rho_{discrete}\left(X_i|X\right) \leq \rho_{Euler}\left(X_i|X\right)
 \end{align*}
 for $\rho$ that are continuously differentiable, sub-additive and homogeneous of degree 1. 
-Koyluoglu and Stoker \cite{koyluoglu2002risk} mention that "it could be argued that discrete marginal allocation is wholly dominated by the Euler allocation"\todo{Check if this is an appropriate way to cite directly}.
+Koyluoglu and Stoker \cite{koyluoglu2002risk} note that "it could be argued that discrete marginal allocation is wholly dominated by the Euler allocation". For these reasons discrete marginal allocation is not analyzed in further detail in this thesis.
 
-Finally, the Shapley method introduced in \cite{shapley1951}, like the pro rata model, can not result in negative contributions but exhibits native additivity without the necessity of being normalized by division through $\rho(X)$.
-With no negative contributions being possible it can be argued, that the Shapley allocation is not risk sensitive. It is certainly considered by authors to be less risk sensitive that the Euler allocation.
-Since it exhibits natural additivity the Shapley allocation might be considered superior to the pro rata allocation. However, its computation is much more time consuming than any other allocation presented. 
-Therefore it can only be realistically used for very small portfolios or to calculate allocations of subportfolios, e.g. the subportfolios of certain departments.
-Koyluoglu and Stoker \cite{koyluoglu2002risk} compare Euler and Shapley allocation and find that Shapley allocation is a more robust measure as it does not require differentiability of $\rho$. The relatively rigorous requirements against $\rho$ to use Euler allocation are introduced in detail in section \ref{sec:Euler allocation} and chapter \ref{Results} investigates under which circumstances the ISDA SIMM and SA-CCR model comply with these requirements.
-Overall, Koyluoglu and Stoker suggest to only use Shapley allocation over the Euler allocation for calculating the contribution of few subportfolios if the political cost or confusion caused by negative contributions is considered to be too high. \todo{Non-negativity of Shapley allocation contradicts the results by FIS - investigate}
+Finally, the Shapley method introduced in \cite{shapley1951} exhibits native additivity and risk sensitivity.
+However, its computation is much more time consuming than any other allocation presented. 
+Therefore it can realistically only be used for very small portfolios or to calculate allocations of subportfolios, e.g. the subportfolios of certain departments.
+Koyluoglu and Stoker \cite{koyluoglu2002risk} compare Euler and Shapley allocation and find that Shapley allocation is a more robust measure as it does not require differentiability of $\rho$. The relatively rigorous requirements against $\rho$ to use Euler allocation are introduced in detail in section \ref{sec:Euler allocation} and chapter \ref{sec:Results} investigates under which circumstances the ISDA SIMM and SA-CCR model comply with these requirements.
+Overall, Koyluoglu and Stoker suggest to only use Shapley allocation over the Euler allocation for calculating the contribution of few subportfolios.
+Due to the poor computational performance and the resulting small practical relevance, Shapley allocation is not investigated further in this thesis.
 % Due to this limited use case, Shapley allocation is not investigated further in this thesis. Nevertheless, it is worth mentioning that the only paper that as of the time of writing has been published on SA-CCR allocation \cite{}
 
 % Given a risk measure $\rho$, a portfolio $P$ and an individual trade  
@@ -150,7 +152,7 @@ Overall, Koyluoglu and Stoker suggest to only use Shapley allocation over the Eu
 % \end{itemize}
 
 \subsection{Incremental allocation\label{sec:Incremental alloaction}}
-Incremental allocation can only be applied when observing the development of a portfolio through time. Given a pre-existing portfolio $P$ consisting of $n$ trades $t_1$ through $t_n$ and a portfolio-based measure $M$ the incremental contribution of the first and second additional trade may be calculated as:
+Incremental allocation can only be applied when observing the development of a portfolio through time. Given a pre-existing portfolio $P$ consisting of $n$ trades $t_1$ through $t_n$ and a portfolio-based measure $M$, the incremental contribution of the first and second additional trade may be calculated as:
 \begin{align*}
 M_{\text{inc},t_{n+1}} & =M\left(t_1\dots t_{n+1}\right)- M\left(t_1\dots t_{n}\right) \\
 M_{\text{inc},t_{n+2}} & =M\left(t_1\dots t_{n+2}\right)- M\left(t_1\dots t_{n+1}\right)
@@ -165,7 +167,7 @@ M_{\text{inc},t_i}&= M(t_i)-M(t_{i-1}) \\
 M_{\text{inc},t_n}&= M(t_n) - M(t_{n-1})\\
 \sum_{i=1}^{n}{M_{\text{inc},i}} &= M(t_1)-M(t_1)+\dots+M(t_{n-1})-M(t_{n-1})+M(t_n) = M(t_n)
 \end{align*}
-The incremental allocation can be calculated as or before a new trade is added to the portfolio. It is a risk sensitive value when it is calculated as it accurately reflect how the additional trade changes the risk measure. 
+The incremental allocation can be calculated as or before a new trade is added to the portfolio. It is a risk sensitive value when it is calculated as it accurately reflects how the additional trade changes the risk measure. 
 If the trade is mitigating risk at the time of its inception according to $M$ its incremental allocation $M_{inc}$ is negative. If it increases the risk its $M_{inc}$ is positive. However, $M_{inc}$ does not adapt over time and is likely to loose its accurate risk depiction as additional trades are added to the portfolio. 
 As a portfolio develops it may well be possible, that a trade for which a negative $M_{inc}$ was calculated at its inception may loose its risk mitigation. 
 Due to this property $M_{inc}$ of a given trade should ideally only be used at or before trade inception. 
@@ -173,6 +175,13 @@ One such use case is the PnL calculation of a new trade to determine the perform
 Another would be to use it prior to an investment decision \cite{tibiletti2001incremental}. 
 It can however not be used to analyze an existing portfolio to e.g. identify trades which drive risk or determine how increases or decreases in a given position would impact the portfolio measure. 
 It also cant be calculated deterministically a posteriori for a portfolio without knowing its composition through time.
+
+Unlike the Euler allocation that will be introduced in the next chapter the risk measure or portfolio composition does not need to fulfill any requisites. The only, very minor constraint is that no two trades can be added to portfolio simultaneously.
+This may actually be a limitation in practice if e.g. the incremental allocation is calculated based on the last EOD portfolio and different trading desks add trades to a common portfolio throughout the day.
+
+However, it is clear that the incremental allocation may be applied to the \gls{SA-CCR} model and the \gls{ISDA SIMM} model without any restrictions and practitioners should therefore use this approach for the use cases in the front office at which is excels as pointed out in section \ref{sec:Allocation of Risk Measures}.
+
+As no further analysis whether incremental allocation is suitable for \gls{SA-CCR} allocation is necessary it will not be discussed further in this thesis.
 
 % In the past, some academic work focused on approximating the incremental VaR as it requires a recalculation of the VaR for the entire portfolio. 
 % An overview of these works and their potential pitfalls may be found in \cite{tibiletti2001incremental}. Since this work will rather focus on marginal than incremental allocation further details may be found in the referred paper. 
@@ -196,32 +205,31 @@ However, inverting the postion, e.g. having a short instead of a long position d
 
 Euler's homogeneous functions theorem states
 \begin{theorem}
-    Let $f\left(\mathbf{x}\right)$ be a homogeneous function of degree $k$, then
+    Let $f\left(\mathbf{x}\right)$ be a (positive) homogeneous function of degree $k$, then
     \begin{align}
-        x_i \frac{\partial f}{\partial x_i} = k f(\mathbf{x})
+        \sum_i{x_i \frac{\partial f}{\partial x_i}} = k f(\mathbf{x})
+        \label{eq:Euler theorem of positive homogeneous functions}
     \end{align}
 \end{theorem}
 
-With if we assume that $k=1$, use our risk measure $\rho(\mathbf{u})$ as a function of invested position size with $\mathbf{u} = \mathbf{1}$ being the current position size we yield
+With if we assume that $k=1$, use our risk measure $\rho(\mathbf{u})$ as a function of invested position size with $\mathbf{u} = \mathbf{1}$ being the current position equation \ref{eq:Euler theorem of positive homogeneous functions} transforms to
 \begin{align}
-    1\frac{\partial \rho(\mathbf{u})}{\partial u_i} = \rho(\mathbf{u})
+    \mathbf{1}\frac{\partial \rho(\mathbf{u})}{\partial u_i} = \rho(\mathbf{u})
     \label{eq:relative bump euler allocation}
 \end{align}
-which is what is stated in definition \ref{def:Euler allocation}.
+which is what is stated in as the definition of Euler allocation in definition \ref{def:Euler allocation}.
 
-While $u = \mathbf{1}$ is defined as the current position size we can also define it as the notional in USD invested in the individual trades, i.e. $\mathbf{n} = (notional_1, \dots, notional_n)$.
+While $u = \mathbf{1}$ is defined as the current position size we can also define it as the notional in USD invested in the individual trades, i.e. $\mathbf{n} = (\text{notional}_1, \dots, \text{notional}_n)$.
 
 The Euler allocation w.r.t trade $i$ would then be calculated as
 \begin{align}
-    notional_i\frac{\partial \rho(\mathbf{n})}{\partial notional_i} = \rho(\mathbf{n})
+    \mathbf{n}\frac{\partial \rho(\mathbf{n})}{\partial \text{notional}_i} = \rho(\mathbf{n})
     \label{eq:notional based euler allocation}
 \end{align}
 
-\todo{Need to investigate if investment of 1 is right or investment of notional. Shouldn't one be equivalent to a relative bump and the other be equivalent to a relative bump?}
-
 As any partial derivative, $\frac{\partial \rho(\mathbf(u))}{\partial u_i}$ may be approximated as a finite difference.
 \begin{gather*}
-    \text{with }\mathbf{h}=(h_0,\dots,h_n) \text{ and } h_i = \epsilon > 0 \text{ and } h_{\neq i}=0 \\ 
+    \text{with }\mathbf{h}=(h_0,\dots,h_n) \text{ and } h_i = \epsilon > 0 \text{ and } h_{\neq i}=0
 \end{gather*}
 \begin{align}
     \label{eq:central difference}
@@ -232,13 +240,8 @@ As any partial derivative, $\frac{\partial \rho(\mathbf(u))}{\partial u_i}$ may 
     \frac{\partial \rho(\mathbf{u})}{\partial u_i} &= \frac{\rho(\mathbf{u})-\rho(\mathbf{u}-\mathbf{h})}{\epsilon} + \mathcal{O}(\epsilon) &\text{(backward difference)}
 \end{align}
 
-
-Closed form formulas for contribution derived for standard deviation based models, VaR models, conditional VaR models.
-
-Could show this for a single variance covariance submatrix of ISDA SIMM?!
-
-\subsection{Shapley allocation}
-
-\todo{Inclusion of this section optional}
+Throughout this thesis we will work with formula \ref{eq:relative bump euler allocation}.
+However, one could instead also work with formula \ref{eq:notional based euler allocation} and yield the same results.
+Calculating the partial derivatives of equation \ref{eq:relative bump euler allocation} through a finite difference approach is equivalent to a relative bump of the notional while applying a finite difference approach on equation \ref{eq:notional based euler allocation} would result in an absolute bump of the notional of each trade. 
 
 \end{document}

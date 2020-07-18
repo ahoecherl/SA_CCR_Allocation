@@ -4,10 +4,10 @@
 \section{SA-CCR}\label{SA-CCR}
 
 Counterparty credit risk is considered to be a part of credit risk by the regulator. Risk weighted assets have to be calculated and need to be backed by own capital. The three main inputs for calculating credit risk are the probability of default (PD) the loss given default (LGD) and the exposure at default (EAD). Assuming the default of a counterparty over the course of the next year, the EAD is the current estimation of money indebted by the counterparty to the bank at the time of default. Estimating EAD for traditional credit instruments s.a. loans, credit cards, mortgages or bonds is relatively simple. Such instruments do often times have deterministic payment schedules making it easy to predict the exposure in one years time. Credit lines or credit cards behave less deterministic but it is still simple to determine an upper bound to the future exposure by assuming that the entire credit line is exhausted.
-The counterparty credit risk incurred by derivatives has first been regarded in regulatory capital calculation in Basel II \cite{basel2}. Due to the stochastic nature of derivatives EAD calculation for counterparty credit risk has always been regulated separately ever since. Consideration of \gls{CCR} in regulatory capital was overhauled as part of Basel III \todo{proper citation needed}. The regulation for the internal margin model (\gls{IMM}) approach was adjusted and the current exposure model (\gls{CEM}) that was introduced with Basel II as the standard approach for \gls{CCR} \gls{EAD} calculation was replaced with the \gls{SA-CCR} model and the simplified \gls{SA-CCR} model. \todo{Include timeline of SA-CCR regulatory documents}.
+The counterparty credit risk incurred by derivatives has first been regarded in regulatory capital calculation in Basel II \cite{basel2}. Due to the stochastic nature of derivatives, EAD calculation for counterparty credit risk has always been regulated separately ever since. Consideration of \gls{CCR} in regulatory capital was overhauled as part of Basel III \todo{proper citation needed}. The regulation for the internal margin model (\gls{IMM}) approach was adjusted and the current exposure model (\gls{CEM}) that was introduced with Basel II as the standard approach for \gls{CCR} \gls{EAD} calculation was replaced with the \gls{SA-CCR} model and the simplified \gls{SA-CCR} model.
 
-The \gls{SA-CCR} model was implemented for the analysis section of this thesis but will not be presented in a comprehensive fashion here. Instead the reader may refer to the latest regulatory documents \todo{CRD2 document} and \todo{latest EBA update} or the library developed for this thesis \cite{Hoecherl2020}.
-This section will highlight the aspects of the SA-CCR model and the simplified SA-CCR model that are of special interest within the scope of this thesis such as the consideration of margin. 
+The \gls{SA-CCR} model was implemented to yield the results presented in chapter \ref{sec:Results} of this thesis but the structure of the \gls{SA-CCR} model will not be presented in a comprehensive fashion here. Instead the reader may refer to the latest regulatory documents \todo{CRD2 document} and \todo{latest EBA update} or the library developed for this thesis \cite{Hoecherl2020}.
+This section will highlight the aspects of the SA-CCR model that are of special interest within the scope of this thesis such as the consideration of margin. 
 
 \subsection{Consideration of margining in SA-CCR}
 
@@ -22,6 +22,7 @@ calculated as:
 		RC&: \text{Replacement Cost} \\
 		PFE&: \text{Potential Future Exposure}
 	\end{split}
+	\label{eq:SA-CCR EAD}
 \end{align}
 
 The purpose of the RC is to assess the immediate loss suffered by the
@@ -32,7 +33,7 @@ is also assumed to be lost in case of a default which increases the
 replacement cost.
 The potential future exposure (PFE) on the other hand assesses how the
 RC might develop in the future. The future being defined as during the
-next year. If the RC today is 0 but is likely to be larger than 0 in the
+next year. If the RC today is zero but is likely to be larger than zero in the
 near future the estimated EAD should take this expected increase in RC
 into account.
 
@@ -63,7 +64,7 @@ period.
 
 The PFE is defined as
 \begin{align}
-	\begin{split}
+	\begin{split}\label{eq:PFE}
 		PFE &= \text{multiplier} * AddOn^{\text{agg}} \\
 		\\
 		\text{where} \qquad AddOn^{\text{agg}} &: \text{aggregate add-on component} \\
@@ -71,7 +72,7 @@ The PFE is defined as
 	\end{split}
 \end{align}
 
-\(AddOn\) is calculated differently for each asset \(a\) class. Since no
+\(AddOn\) is calculated differently for each asset class \(a\). Since no
 netting is allowed between asset classes the aggregate is calculated as:
 
 \[AddOn^{\text{agg}} = \sum_{a}AddOn^{a}\]
@@ -91,7 +92,7 @@ decreases. The most important source of overcollateralization is initial margin.
 
 The RC is defined as
 \begin{align}
-	\begin{split}
+	\begin{split}\label{eq:RC}
 		RC &= \max\{V-C; TH+MTA-NICA;0\} \\
 		\\
 		\text{where} \qquad V&: \text{Current portfolio value}\\
@@ -102,13 +103,13 @@ The RC is defined as
 	\end{split}
 \end{align}
 
-\(C\) is defined according to the \emph{NICA} definition, which in accordance with paragraph 143 of \cite{SACCR}. By making assumption \todo{Could add reasoning to make this assumption} \ref{as:Collateral assumptions}
+\(C\) is defined according to the \emph{NICA} definition, which is defined in paragraph 143 of \cite{SACCR}. For the purpose of this thesis we simplify the \emph{NICA} definition by making assumption \ref{as:Collateral assumptions}.
 
 \begin{assumption}\label{as:Collateral assumptions}
 Variation margin is posted in unsegregated accounts, initial margin is posted in segregated accounts and initial margin is the only form of overcollateralization.
 \end{assumption}
 
-the calculation of \(NICA\) and \(C\) simplifies to:
+Under assumption \ref{as:Collateral assumptions}, the calculation of \(NICA\) and \(C\) simplifies to:
 
 \begin{align}
 	\begin{split}
@@ -117,68 +118,65 @@ the calculation of \(NICA\) and \(C\) simplifies to:
 	\end{split}
 \end{align}
 
-Assuming also
-\begin{assumption}\label{as:IM larger than TH and MTA}
-		\(IM_{received}>TH+MTA \; \vert \; IM_{received} > 0\)
-		\todo{This assumption is wrong because of the way threshold actually works...}
-\end{assumption}
+Regarding the incorporation of a variation margin and initial margin threshold and a MTA we will assume that the mechanics are the following:
+\begin{enumerate}
+	\item A threshold TH\textsubscript{VM} may exist if only VM is exchanged but no IM
+	\item No threshold for the exchange of variation margin TH\textsubscript{VM} can be in place if initial margin is exchanged
+	\item A threshold TH\textsubscript{IM} for initial margin may exist 
+	\item If $ IM_{calc} > \text{TH\textsubscript{IM}} + \text{MTA} $ then $IM_{calc} - \text{TH\textsubscript{IM}} $ is posted as collateral to cover the initial margin
+	\item A possible MTA applies for the combined change of VM and IM
+\end{enumerate}
 
+These are the usual rules in place in margin agreements applicable for the case of bilateral derivatives collateralized with VM and IM and are in line with the minimum requirements by the regulators\todo{Reference these minimum requirements}.
+In line with these rules the received collateral C can be calculated as follows:
 
-we do yield the results for the five counterparty relation introduced in \ref{Margining} that are displayed in table \ref{tab:Margin in SA-CCR}.
+\begin{align}
+	% \begin{split}
+		VM &= \begin{cases}
+			\sum_t{P(t)} \; & \text{if } \; \left|\sum_t{P(t)}\right| > \text{TH\textsubscript{VM}} \\
+			0 & \text{else}
+		\end{cases}\nonumber \\
+	% \end{split} \\
+	IM_{rec} &= \max{(0, IM_{\text{calc}}-\text{TH\textsubscript{IM}})} \nonumber \\
+	C_{calc} &= VM + IM_{rec} \nonumber \\
+	\begin{split}
+		C_t &= \begin{cases}
+			C_{t-1} & \text{if } \; |C_t-C_{\text{calc}}| < MTA\\
+			C_{calc} \; &\text{else} 
+		\end{cases}\label{eq:C}
+	\end{split}\\
+	\nonumber \\
+	\text{where} \qquad P(t) &: \text{Present value of trade $t$} \nonumber \\
+	\text{IM\textsubscript{calc}} &: \text{calculated \gls{IM} to be received } \nonumber \\
+	\text{TH\textsubscript{VM}} &: \text{Variation Margin Threshold} \nonumber \\
+	\text{TH\textsubscript{IM}} &: \text{Initial Margin Threshold} \nonumber \\
+	MTA &: \text{Minimum transfer amount} \nonumber \\
+	C_{t-1} &: \text{$C$ calculated in last time period} \nonumber
+\end{align}
+
+Considering thresholds and a possible minimum transfer amount we yield the formulas depicted in \ref{tab:Margin in SA-CCR} for some key figures of the \gls{SA-CCR} model.
+
 % Table generated by Excel2LaTeX from sheet 'Sheet1'
 \begin{table}[htbp]
 	\centering
 	  \begin{tabular}{p{9.82em}|c|c|c}
 	  \multicolumn{1}{r|}{} & NICA  & $C_{calc}$    & RC \\
 	  \midrule
-	  Uncollateralized\newline{}bilateral derivatives & 0     & 0     & V \\
+	  Uncollateralized\newline{}bilateral derivatives & 0     & 0     & $\sum_t{P(t)}$ \\
 	  \midrule
-	  Bilateral derivatives\newline{}collateralized with VM & 0     & VM    & $TH_{VM}$+MTA \\
+	  Bilateral derivatives\newline{}collateralized with VM & 0     & VM    & TH\textsubscript{VM}+MTA \\
 	  \midrule
-	  Bilateral derivatives\newline{}collateralized with VM\newline{}and IM & IM\_received & VM+IM\_received & 0 \\
-	  \midrule
-	  Cleared OTC \newline{}derivatives & 0     & VM    & Unclear \\
-	  \midrule
-	  Exchange traded\newline{}derivatives & 0     & VM    & Unclear \\
+	  Bilateral derivatives\newline{}collateralized with VM\newline{}and IM & IM\textsubscript{rec} & VM+IM\textsubscript{rec} & $\max{\left(0, \text{MTA} - \text{IM\textsubscript{rec}}\right)}$ \\
 	  \end{tabular}%
-	\caption{Calculation of NICA, C and RC under different margining approaches}\label{tab:Margin in SA-CCR}%
+	\caption{Calculation of NICA, C and RC under different, uncleared margining approaches}\label{tab:Margin in SA-CCR}%
   \end{table}%
-\todo{Clarify RC under Clearing, need to tidy up subscripts, 0 for RC und bilateral margin is wrong, clarify what $TH_{IM}$ is.}
-Based on the calculated $C$ in this table, the \gls{MTA} and threshold need to be taken into account when calculating the collateral that is actually received.
 
-Regarding the incorporation of a threshold and a MTA we will assume that the mechanics are the following:
-\begin{enumerate}
-	\item No threshold for the exchange of variation margin
-	\item A threshold exists for the exchange of initial margin
-	\item If $ IM_{calc} > \text{TH} + \text{MTA} $ then $IM_{calc} - \text{TH} $ is posted as collateral to cover the initial margin
-	\item The MTA applies for the combined change of VM and IM
-\end{enumerate}
+The case that is analyzed the most in this thesis is \ref{itm:Bilateral derivatives collateralized with VM and IM}. It is important to note that assuming the absence of a minimum transfer amount, the \(RC\) is always floored at zero in this case and a change in VM or IM then only impacts the \gls{SA-CCR} \gls{EAD} through the use of \(C\) in the multiplier calculation of equation \ref{eq:multiplier}.
 
-These are the usual rules in place in margin agreements applicable for the case of bilateral derivatives collateralized with VM and IM and are in line with the minimum requirements by the regulators\todo{Reference these minimum requirements}.
-In line with these rules the received collateral C can be calculated as follows:
-
-\begin{align*}
-	VM &= \sum_t{P(t)} \\
-	IM_{rec} &= \max{(0, IM_{\text{calc}}-\text{TH})}\\
-	C_{calc} &= VM + IM_{rec}\\
-	C_t &= \begin{cases}
-		C_{t-1} & \text{if } \; |C_t-C_{\text{calc}}| < MTA\\
-		C_{calc} \; &\text{else} 
-	\end{cases}
-	\\
-	\\
-	\text{where} \qquad P(t) &: \text{Present value of trade $t$} \\
-	IM_{\text{calc}} &: \text{calculated \gls{IM} to be received } \\
-	\text{TH} &: \text{Threshold} \\
-	MTA &: \text{Minimum transfer amount} \\
-	C_{t-1} &: \text{$C$ calculated in last time period}
-\end{align*}
-
-The case that is analyzed the most in this thesis is \ref{itm:Bilateral derivatives collateralized with VM and IM}. It is important to note that \(RC\) is always floored at zero in this case and a change in VM or IM then only impacts the \gls{SA-CCR} \gls{EAD} through the use of \(C\) in the multiplier calculation of equation \ref{eq:multiplier}. \todo{This is wrong RC can be larger than 0}
 The multiplier is therefore the central point of focus when analyzing the interaction between SA-CCR and margin. The multiplier function is plotted in figure \ref{fig:multiplier}.
 The multiplier is ceiled at one if \(C>V\), i.e.~if the portfolio is overcollateralized which under assumption \ref{as:Collateral assumptions} is the case when the bank receives \gls{IM}. With increasing overcollateralization the multiplier drops and approaches its floor of 5\%. The other factor that drives the multiplier is the portfolios \(AddOn\). 
 
-The $AddOn$ is a portfolio metric that is supposed to represent how quickly the value of the portfolio can rise within the \gls{MPoR}. The underlying idea is similar to a value at risk and to $AddOn$ is designed to be easy to compute while still being portfolio based and taking optionalities into account. Margining does not impact the calculated $AddOn$. Therefore, $AddOn$ calculation for SA-CCR is not presented in great detail at this point. The reader is referred to \todo{Cite AddOn Section of SA-CCR} and the library that was implemented for the purpose of this thesis \cite{Hoecherl2020}.
+The $AddOn$ is a portfolio metric that is supposed to represent how quickly the value of the portfolio can rise within the \gls{MPoR}. The underlying idea is similar to a value at risk and the $AddOn$ is designed to be easy to compute while still being portfolio based and taking optionalities into account. Margining does not impact the calculated $AddOn$. Therefore, $AddOn$ calculation for SA-CCR is not presented in great detail at this point. The reader is referred to \todo{Cite AddOn Section of SA-CCR} and the library that was implemented for the purpose of this thesis \cite{Hoecherl2020}.
 
 % It is important to note that the multiplier can only be below 1 if
 % \(C>V\), i.e.~if the portfolio is overcollateralized. If the portfolio
