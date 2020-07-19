@@ -324,11 +324,24 @@
     \end{figure}
     
     This can exemplary seen in figures \ref{fig:C for ATM IRS} and \ref{fig:C for ITM IRS}. These figures display $C$ for an at the money 10Y USD interest swap and the same swap with a lower fixed rate making it an in the money swap. Again, a very high notional of 200 Bn is chosen to showcase the concentration risk charge of ISDA SIMM and the threshold and minimum transfer amount have also been chosen to be very high at 2Bn and 1Bn USD.
+
+    \subsubsection{Incorporation of a VM threshold\label{sec:Incorporation of a VM threshold}}
+    
+    Generally, a variation margin threshold can not be in place when bilateral initial margin is being exchanged. The reason for this is, that the regulator poses a VM threshold of zero as a prerequisite for bilateral initial margining \cite[Requirement 2.1]{BCBS_MarginRequirements}.
+
+    No exchange of IM implies that no overcollateralization can be available and therefore margining has no impact on the $PFE$ as defined in formula \ref{eq:PFE}. Instead the VM threshold solely impacts the $RC$ which, based on formula \ref{eq:RC}, under VM but in absence of IM simplifies to $RC = \text{VM Threshold}$ independent of the portfolio constellation. 
+    Consequently, a VM threshold will always increase the portfolio EAD by $1.4*\text{VM threshold}$. Even if the portfolio is empty, the EAD will be $1.4 * \text{VM threshold}$.
+
+    When performing an Euler allocation of a portfolio with a VM threshold, the sum of the allocations will be $EAD - 1.4 * \text{VM threshold}$. This is arguably a correct result, as this remainder is independent of the trades and even remains when all trades are removed from the portfolio. 
+    A bank allocating its EAD can decide freely weather the VM threshold impact on the EAD of $1.4 * \text{VM threshold}$ shall remain unallocated or to allocate it to the trades of the portfolio according to some pro-rata approach.
+
+    Some exemplary calculations exploring the effects of a VM threshold can be found in appendix \ref{ead-impact-of-a-variation-margin-threshold}.
     
     \subsubsection{Incorporation of a minimum transfer amount}
 
-    Again, similar to the exemplary calculation in section \ref{sec:Allocation when an ISDA-SIMM liquidity threshold is exceeded} it can be shown with a trivial example, that Euler allocation of SA-CCR is not possible under recognition of a \gls{MTA}. 
-    For this we consider the same 200Bn \gls{IRS} as in section \ref{sec:Allocation when an ISDA-SIMM liquidity threshold is exceeded}. We assume that the currently posted margin is 9.04Bn which is the calculated ISDA-SIMM margin. 
+    Again, similar to the exemplary calculation in section \ref{sec:Allocation when an ISDA-SIMM liquidity threshold is exceeded} it can be shown with a trivial example, that Euler allocation of SA-CCR is not possible under recognition of a \gls{MTA}. Detailed documentation of this exemplary calculation may be found in appendix \ref{exemplary-sa-ccr-allocation-under-consideration-of-a-minimum-transfer-amount.}.
+    
+    We consider the same 200Bn \gls{IRS} as in section \ref{sec:Allocation when an ISDA-SIMM liquidity threshold is exceeded}. We assume that the currently posted margin is 9.04Bn which is the calculated ISDA-SIMM margin. 
     Setting $C$ at 9.04Bn in the SA-CCR equation \ref{eq:multiplier} and then calculating the SA-CCR EAD for this single IRS yields an regulatory EAD of 582.8Mn USD. Any natively additive allocation should allocate this full amount to the IRS.
     The \gls{VM} is zero as the IRS is struck at par.
     \begin{table}[htbp]
@@ -352,26 +365,25 @@
         \label{tab:Allocate SA-CCR with MTA calculation}
     \end{table}
     In table \ref{tab:Allocate SA-CCR with MTA calculation} we assume that the initially received collateral is the currently calculated collateral. 
-    When calculating the Euler allocation with a forward difference in line with \ref{eq:forward difference} the received collateral when rising the notional to 200.02Bn increases when no MTA is assumed while it remains unchanged with consideration of an MTA. 
+    When calculating the Euler allocation with a forward difference \todo{to be replaced with a central difference} in line with equation \ref{eq:forward difference}, the received collateral when rising the notional to 200.02Bn increases when no MTA is assumed while it remains unchanged with consideration of an MTA. 
     Ultimately, this difference leads to a correct allocation of the entire EAD to the single IRS with the \emph{No MTA} approach while the \emph{MTA} approach obviously yields a wrong result by allocating 244\% of the portfolios EAD to its only trade.
 
-    \todo{This section is not complete. Missing solving it by disabling MTA and the issue with the RC that remains.}
-    
-    \subsubsection{Incorporation of a VM threshold\label{sec:Incorporation of a VM threshold}}
-    
-    Generally, a variation margin threshold can not be in place when bilateral initial margin is being exchanged. The reason for this is, that the regulator poses a VM threshold of zero as a prerequisite for bilateral initial margining \cite[Requirement 2.1]{BCBS_MarginRequirements}.
+    In the above example any adverse impact that the MTA may have on the Euler allocation can be mitigated by simply assuming an MTA of zero during the calculation of the Euler allocation.
+    However, a scenario can be constructed in which this approach still leads to an allocation, whose sum deviates from the portfolio risk measure.
 
-    No exchange of IM implies that no overcollateralization can be available and therefore margining has no impact on the $PFE$ as defined in formula \ref{eq:PFE}. Instead the VM threshold solely impacts the $RC$ which, based on formula \ref{eq:RC}, under VM but in absence of IM simplifies to $RC = \text{VM Threshold}$ independent of the portfolio constellation. 
-    Consequently, a VM threshold will always increase the portfolio EAD by $1.4*\text{VM threshold}$. Even if the portfolio is empty, the EAD will be $1.4 * \text{VM threshold}$.
+    As established in table \ref{tab:Margin in SA-CCR} the MTA impacts the RC of the \gls{SA-CCR} calculation with $RC = \text{TH\textsubscript{IM}} + \text{MTA}$ under VM collateralization and $RC = \max{\left(0, \text{MTA} - \text{IM\textsubscript{rec}}\right)}$ under VM and IM collateralization.
+    If only VM is exchanged this does not need to be recognized in an Euler allocation. Following the same line of argument that has already been used in section \ref{sec:Incorporation of a VM threshold} the MTA increases the EAD under all circumstances by a flat amount of $1.4*EAD$ which does not necessarily have to be allocated to any trade.
 
-    When performing an Euler allocation of a portfolio with a VM threshold, the sum of the allocations will be $EAD - 1.4 * \text{VM threshold}$. This is arguably a correct result, as this remainder is independent of the trades and even remains when all trades are removed from the portfolio. 
-    A bank allocating its EAD can decide freely weather the VM threshold impact on the EAD of $1.4 * \text{VM threshold}$ shall remain unallocated or to allocate it to the trades of the portfolio according to some pro-rata approach.
+    On the other hand, if VM and IM are exchanged a MTA does not increase the RC by a flat amount but the impact of the MTA on the RC depends on the received initial margin. Accordingly, if $\text{IM\textsubscript{rec}} < MTA$ the impact of a trade on the exchanged initial margin not only impacts the PFE of equation \ref{eq:SA-CCR EAD} but also the RC. This effect is lost if the Euler allocation is calculated under an assumption of $MTA = 0$. An example for this phenomenon is presented in Appendix \ref{impact-of-the-minimum-transfer-amount-on-rc}.
 
-    Some exemplary calculations exploring the effects of a VM threshold can be found in appendix \ref{ead-impact-of-a-variation-margin-threshold}.
+    However, the window for this phenomenon to occur in practice is rather small. If bilateral initial margin is exchanged, the regulator mandates that a minimum transfer amount may not exceed half a million EUR \cite[Requirement 2.3]{BCBS_MarginRequirements}.
+    In comparison to the calculated bilateral initial margin of common portfolios or the mandated maximum IM threshold of 50Mn EUR \cite[Requirement 2.2]{BCBS_MarginRequirements} this is a rather small amount.
+    Accordingly unlikely is it that the received initial margin satisfies $0<\text{IM\textsubscript{rec}}<\text{MTA}$.
+    Considering this it appears to be feasible in all cases to just assume a MTA of zero when calculating an Euler allocation and to just ignore the fact that a fraction of the SA-CCR EAD of up to $1.4*MTA$ may remain unallocated after doing so.
 
     \subsubsection{Incorporation of an IM threshold\label{sec:Incorporation of an IM threshold}}
     
-    In comparison with recognizing a minimum transfer amount or a variation margin threshold adjusting for the inclusion of IM threshold is the most challenging.
+    In comparison with recognizing a minimum transfer amount or a variation margin threshold adjusting for the inclusion of IM threshold appears to be a much bigger issue.
     As we can see in figures \ref{fig:C for ATM IRS} and \ref{fig:C for ITM IRS}, inclusion of an initial margin threshold does reduce the received IM to zero until the threshold is reached and afterwards reduces the exchanged IM amount by the IM threshold.
     Theoretically, this behavior is determined by the bilateral collateral agreement and the two parties could also agree to exchange the full calculated IM amount once the threshold is exceeded.
     However, subsequent deduction of the IM threshold once the threshold itself is exceeded is explicitly allowed by the regulator \cite[Background discussion 2(h)]{BCBS_MarginRequirements} and allows the counterparties to exchange as little IM as possible while still being regulatory compliant.

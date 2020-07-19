@@ -37,26 +37,26 @@
 \contentsline {section}{\numberline {3.2}Consideration of edge cases}{31}{section.3.2}
 \contentsline {subsection}{\numberline {3.2.1}Allocation when an ISDA-SIMM liquidity threshold is exceeded}{32}{subsection.3.2.1}
 \contentsline {subsection}{\numberline {3.2.2}Incorporation of a minimum transfer amount and threshold}{34}{subsection.3.2.2}
-\contentsline {subsubsection}{\numberline {3.2.2.1}Incorporation of a minimum transfer amount}{35}{subsubsection.3.2.2.1}
-\contentsline {subsubsection}{\numberline {3.2.2.2}Incorporation of a VM threshold}{36}{subsubsection.3.2.2.2}
-\contentsline {subsubsection}{\numberline {3.2.2.3}Incorporation of an IM threshold}{36}{subsubsection.3.2.2.3}
-\contentsline {subsection}{\numberline {3.2.3}Allocation of hedged portfolios}{38}{subsection.3.2.3}
-\contentsline {chapter}{\numberline {4}Discussion of results}{41}{chapter.4}
-\contentsline {section}{\numberline {4.1}Evaluation of the numerical allocation approach}{42}{section.4.1}
-\contentsline {section}{\numberline {4.2}Limitations of an Euler allocation of SA-CCR}{43}{section.4.2}
-\contentsline {chapter}{\numberline {5}Conclusion and Outlook}{45}{chapter.5}
-\contentsline {section}{\numberline {5.1}Conclusion}{45}{section.5.1}
-\contentsline {section}{\numberline {5.2}Outlook}{46}{section.5.2}
-\contentsline {chapter}{Appendix \numberline {A}Detailed documentation of results}{49}{Appendix.a.A}
-\contentsline {section}{\numberline {A.1}SA-CCR Euler allocation of exemplary equity portfolio}{49}{section.a.A.1}
-\contentsline {section}{\numberline {A.2}Euler allocation of an exemplary rates portfolio}{53}{section.a.A.2}
-\contentsline {section}{\numberline {A.3}SA-CCR Euler allocation of an exemplary multi asset class portfolio}{56}{section.a.A.3}
-\contentsline {section}{\numberline {A.4}ISDA SIMM homogeneity for portfolio of a single trade}{60}{section.a.A.4}
-\contentsline {subsection}{\numberline {A.4.1}SA-CCR and ISDA SIMM Euler allocation under a perfect hedge}{63}{subsection.a.A.4.1}
-\contentsline {section}{\numberline {A.5}Homogeneity of C for a single trade portfolio}{67}{section.a.A.5}
-\contentsline {section}{\numberline {A.6}Exemplary SA-CCR allocation under consideration of a minimum transfer amount.}{71}{section.a.A.6}
-\contentsline {subsection}{\numberline {A.6.1}Impact of the minimum transfer amount on RC}{72}{subsection.a.A.6.1}
-\contentsline {section}{\numberline {A.7}EAD impact of a variation margin threshold}{74}{section.a.A.7}
-\contentsline {section}{\numberline {A.8}Exemplary SA-CCR allocation under consideration of an initial margin threshold}{75}{section.a.A.8}
-\contentsline {chapter}{Glossary}{79}{section*.26}
-\contentsline {chapter}{Bibliography}{80}{table.5.1}
+\contentsline {subsubsection}{\numberline {3.2.2.1}Incorporation of a VM threshold}{35}{subsubsection.3.2.2.1}
+\contentsline {subsubsection}{\numberline {3.2.2.2}Incorporation of a minimum transfer amount}{36}{subsubsection.3.2.2.2}
+\contentsline {subsubsection}{\numberline {3.2.2.3}Incorporation of an IM threshold}{37}{subsubsection.3.2.2.3}
+\contentsline {subsection}{\numberline {3.2.3}Allocation of hedged portfolios}{39}{subsection.3.2.3}
+\contentsline {chapter}{\numberline {4}Discussion of results}{42}{chapter.4}
+\contentsline {section}{\numberline {4.1}Evaluation of the numerical allocation approach}{43}{section.4.1}
+\contentsline {section}{\numberline {4.2}Limitations of an Euler allocation of SA-CCR}{44}{section.4.2}
+\contentsline {chapter}{\numberline {5}Conclusion and Outlook}{46}{chapter.5}
+\contentsline {section}{\numberline {5.1}Conclusion}{46}{section.5.1}
+\contentsline {section}{\numberline {5.2}Outlook}{47}{section.5.2}
+\contentsline {chapter}{Appendix \numberline {A}Detailed documentation of results}{50}{Appendix.a.A}
+\contentsline {section}{\numberline {A.1}SA-CCR Euler allocation of exemplary equity portfolio}{50}{section.a.A.1}
+\contentsline {section}{\numberline {A.2}Euler allocation of an exemplary rates portfolio}{54}{section.a.A.2}
+\contentsline {section}{\numberline {A.3}SA-CCR Euler allocation of an exemplary multi asset class portfolio}{57}{section.a.A.3}
+\contentsline {section}{\numberline {A.4}ISDA SIMM homogeneity for portfolio of a single trade}{61}{section.a.A.4}
+\contentsline {subsection}{\numberline {A.4.1}SA-CCR and ISDA SIMM Euler allocation under a perfect hedge}{64}{subsection.a.A.4.1}
+\contentsline {section}{\numberline {A.5}Homogeneity of C for a single trade portfolio}{68}{section.a.A.5}
+\contentsline {section}{\numberline {A.6}Exemplary SA-CCR allocation under consideration of a minimum transfer amount.}{72}{section.a.A.6}
+\contentsline {subsection}{\numberline {A.6.1}Impact of the minimum transfer amount on RC}{73}{subsection.a.A.6.1}
+\contentsline {section}{\numberline {A.7}EAD impact of a variation margin threshold}{75}{section.a.A.7}
+\contentsline {section}{\numberline {A.8}Exemplary SA-CCR allocation under consideration of an initial margin threshold}{76}{section.a.A.8}
+\contentsline {chapter}{Glossary}{80}{section*.26}
+\contentsline {chapter}{Bibliography}{81}{table.5.1}
