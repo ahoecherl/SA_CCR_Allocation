@@ -5,13 +5,11 @@
     
     After the 2008 financial crisis the G20 agreed to reduce systematic, counterparty and operational risk and as a result of this commitment has been put into effect by regulators worldwide. In Europe, the European Market Infrastructure Regulation (EMIR) came into force in August 2012 and focused on promoting or mandating central clearing as the primary measure to reduce counterparty risk.
 
-    \subsection{The standard approach}\label{The standard approach}
+    \subsection{The standardised approach}\label{The standard approach}
 
-    \todo{Is it called standard approach or standardized approach?}
-
-    The standard approach to calculate bilateral initial margin has been proposed by the bank for international settlement in \todo{Insert paragraph and paper of the IM standard approach} and has been implemented in European law in \todo{Section in CRD II that mandates the standard approach}. It is a schedule based approach that calculates an \gls{IM} contribution on a trade by trade basis multiplying the trades notional with a regulatory factor based on the asset class and term to maturity of the trade.
-    The resulting sum may be reduced by up to 60\% through the so called net-gross ratio, if the portfolio has a negative present value from the perspective of the calculating bank \todo{Check if negative is correct}.
-    For a detailed specification of the aggregation the reader may refer to \todo{insert again BIS and CRD definition of standardized approach}. The implementation of this approach is addressed in \ref{sec:ISDA SIMM implementation}.
+    The standardised approach to calculate bilateral initial margin has been proposed by the bank for international settlement in \cite[Requirement 3.5 and 3.6]{BCBS_MarginRequirements} and has been implemented in European law in \cite{OTC_Margin_EU_Regulation}. It is a schedule based approach that calculates an \gls{IM} contribution on a trade by trade basis multiplying the trades notional with a regulatory factor based on the asset class and term to maturity of the trade.
+    The resulting sum may be reduced by up to 60\% through the so called net-gross ratio, if the portfolio has a negative present value from the perspective of the calculating bank.
+    For a detailed specification of the aggregation the reader may refer to \cite{BCBS_MarginRequirements} and \cite{OTC_Margin_EU_Regulation}. The implementation of this approach is addressed in \ref{sec:ISDA SIMM implementation}.
     
     \subsection{The ISDA-SIMM model}\label{sec:The ISDA-SIMM model}
     In December of 2013 the International Swap and Derivatives Association (ISDA) published a motivation and basic methodological outline of a common internal initial margin model called Standard Initial Margin Model (SIMM\texttrademark)\cite{ISDADec2013}. The goal of the model is to meet the model requirements to an internal model of all regulators, while being, among others, easy to replicate, quick to calculate and relatively cheap to operate, implement and validate.

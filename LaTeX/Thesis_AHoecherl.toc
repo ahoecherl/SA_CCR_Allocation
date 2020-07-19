@@ -20,7 +20,7 @@
 \contentsline {section}{\numberline {2.2}Margining}{6}{section.2.2}
 \contentsline {subsection}{\numberline {2.2.1}Market structure and associated margining approaches}{9}{subsection.2.2.1}
 \contentsline {section}{\numberline {2.3}Bilateral initial margin}{11}{section.2.3}
-\contentsline {subsection}{\numberline {2.3.1}The standard approach}{11}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.1}The standardised approach}{11}{subsection.2.3.1}
 \contentsline {subsection}{\numberline {2.3.2}The ISDA-SIMM model}{11}{subsection.2.3.2}
 \contentsline {subsubsection}{\numberline {2.3.2.1}Implementation}{12}{subsubsection.2.3.2.1}
 \contentsline {subsubsection}{\numberline {2.3.2.2}Calculation of compliant sensitivities}{12}{subsubsection.2.3.2.2}
@@ -31,15 +31,15 @@
 \contentsline {subsection}{\numberline {2.5.2}Euler allocation}{22}{subsection.2.5.2}
 \contentsline {chapter}{\numberline {3}Results}{24}{chapter.3}
 \contentsline {section}{\numberline {3.1}Exemplary Euler allocation of SA-CCR under consideration of margining}{24}{section.3.1}
-\contentsline {subsection}{\numberline {3.1.1}Exemplary allocation of SA-CCR for a small portfolio of equity options}{24}{subsection.3.1.1}
+\contentsline {subsection}{\numberline {3.1.1}Exemplary allocation of SA-CCR for a small portfolio of equity options}{25}{subsection.3.1.1}
 \contentsline {subsection}{\numberline {3.1.2}Exemplary allocation of SA-CCR for a small portfolio of interest rate derivatives}{27}{subsection.3.1.2}
 \contentsline {subsection}{\numberline {3.1.3}Exemplary allocation of SA-CCR on subportfolios}{30}{subsection.3.1.3}
 \contentsline {section}{\numberline {3.2}Consideration of edge cases}{31}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Allocation when an ISDA-SIMM liquidity threshold is exceeded}{31}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Incorporation of a minimum transfer amount and threshold}{33}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.1}Allocation when an ISDA-SIMM liquidity threshold is exceeded}{32}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Incorporation of a minimum transfer amount and threshold}{34}{subsection.3.2.2}
 \contentsline {subsubsection}{\numberline {3.2.2.1}Incorporation of a minimum transfer amount}{35}{subsubsection.3.2.2.1}
 \contentsline {subsubsection}{\numberline {3.2.2.2}Incorporation of a VM threshold}{36}{subsubsection.3.2.2.2}
-\contentsline {subsubsection}{\numberline {3.2.2.3}Incorporation of an IM threshold}{37}{subsubsection.3.2.2.3}
+\contentsline {subsubsection}{\numberline {3.2.2.3}Incorporation of an IM threshold}{36}{subsubsection.3.2.2.3}
 \contentsline {subsection}{\numberline {3.2.3}Allocation of hedged portfolios}{38}{subsection.3.2.3}
 \contentsline {chapter}{\numberline {4}Discussion of results}{41}{chapter.4}
 \contentsline {section}{\numberline {4.1}Evaluation of the numerical allocation approach}{42}{section.4.1}
@@ -58,5 +58,5 @@
 \contentsline {subsection}{\numberline {A.6.1}Impact of the minimum transfer amount on RC}{69}{subsection.a.A.6.1}
 \contentsline {section}{\numberline {A.7}EAD impact of a variation margin threshold}{71}{section.a.A.7}
 \contentsline {section}{\numberline {A.8}Exemplary SA-CCR allocation under consideration of an initial margin threshold}{72}{section.a.A.8}
-\contentsline {chapter}{Glossary}{75}{section*.47}
+\contentsline {chapter}{Glossary}{75}{section*.28}
 \contentsline {chapter}{Bibliography}{76}{table.5.1}

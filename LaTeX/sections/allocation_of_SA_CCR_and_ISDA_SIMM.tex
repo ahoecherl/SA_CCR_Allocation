@@ -10,11 +10,11 @@
 
     In this section we assume, that the minimum transfer amount, variation margin threshold and initial margin threshold as defined in section \ref{Margining} are all zero. This means, that the margin calculated by the used variation margin and initial margin model is entirely incorporated in the SA-CCR model for EAD calculation.
 
-    The reason for this is, that assumptions other than zero for the thresholds and MTA generally violate the homogeneity prerequisite for Euler allocation. In practice, this is a strong and somewhat unrealistic assumption as for example an initial margin threshold of 50Mn is usual for bilateral portfolios as it is the highest amount allowed by the regulator \todo{Reference to where this is stated}. Due to the high practical relevance, the impact of thresholds and MTA on Euler allocation is analyzed in detail in section \ref{sec:Consideration of edge cases}.   
+    The reason for this is, that assumptions other than zero for the thresholds and MTA generally violate the homogeneity prerequisite for Euler allocation. In practice, this is a strong and somewhat unrealistic assumption as for example an initial margin threshold of 50Mn is usual for bilateral portfolios as it is the highest amount allowed by the regulator \cite[Requirement 2.2]{BCBS_MarginRequirements}. Due to the high practical relevance, the impact of thresholds and MTA on Euler allocation is analyzed in detail in section \ref{sec:Consideration of edge cases}.   
 
     \subsection{Exemplary allocation of SA-CCR for a small portfolio of equity options\label{sec:Exemplary allocation of SA-CCR for a small portoflio of equity options}}
 
-    \todo{Ensure that there are no issues with the currencies. EAD should actually be EUR and needs to be converted to USD}
+    % \todo{Ensure that there are no issues with the currencies. EAD should actually be EUR and needs to be converted to USD}
 
     In this section we analyze an Euler allocation of a small portfolio of equity options. The detailed computation steps are demonstrated in appendix \ref{sa-ccr-euler-allocation-of-exemplary-equity-portfolio}. 
     First, we consider a portfolio consisting of two million call options and three million put option on Adidas. All options are struck at the current stock price and long. Obviously, the two positions are in a hedge relation and being at the money long options, both positions do have a significant, positive present value.
@@ -359,7 +359,7 @@
     
     \subsubsection{Incorporation of a VM threshold\label{sec:Incorporation of a VM threshold}}
     
-    Generally, a variation margin threshold can not be in place when bilateral initial margin is being exchanged. The reason for this is, that the regulator poses a VM threshold of zero as a prerequisite for bilateral initial margining \todo{Reference the according article}.
+    Generally, a variation margin threshold can not be in place when bilateral initial margin is being exchanged. The reason for this is, that the regulator poses a VM threshold of zero as a prerequisite for bilateral initial margining \cite[Requirement 2.1]{BCBS_MarginRequirements}.
 
     No exchange of IM implies that no overcollateralization can be available and therefore margining has no impact on the $PFE$ as defined in formula \ref{eq:PFE}. Instead the VM threshold solely impacts the $RC$ which, based on formula \ref{eq:RC}, under VM but in absence of IM simplifies to $RC = \text{VM Threshold}$ independent of the portfolio constellation. 
     Consequently, a VM threshold will always increase the portfolio EAD by $1.4*\text{VM threshold}$. Even if the portfolio is empty, the EAD will be $1.4 * \text{VM threshold}$.
@@ -374,7 +374,7 @@
     In comparison with recognizing a minimum transfer amount or a variation margin threshold adjusting for the inclusion of IM threshold is the most challenging.
     As we can see in figures \ref{fig:C for ATM IRS} and \ref{fig:C for ITM IRS}, inclusion of an initial margin threshold does reduce the received IM to zero until the threshold is reached and afterwards reduces the exchanged IM amount by the IM threshold.
     Theoretically, this behavior is determined by the bilateral collateral agreement and the two parties could also agree to exchange the full calculated IM amount once the threshold is exceeded.
-    However, subsequent deduction of the IM threshold once the threshold itself is exceeded is explicitly allowed by the regulator \todo{reference to the according article} and allows the counterparties to exchange as little IM as possible while still being regulatory compliant.
+    However, subsequent deduction of the IM threshold once the threshold itself is exceeded is explicitly allowed by the regulator \cite[Background discussion 2(h)]{BCBS_MarginRequirements} and allows the counterparties to exchange as little IM as possible while still being regulatory compliant.
     This setup should therefore be the most common in practice which is why it is the only one considered in this section.
 
     We investigate the impact of an initial margin threshold by means of an exemplary portfolio consisting of an equity option and an interest rate swap.
