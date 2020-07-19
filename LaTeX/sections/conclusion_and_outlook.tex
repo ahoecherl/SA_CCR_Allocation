@@ -1,13 +1,42 @@
 \documentclass[../Thesis_AHoecherl.tex]{subfiles}
 
 \begin{document}
-    \chapter{Outlook and conclusion}\label{sec:Outlook and Conclusion}
-    \section{Outlook\label{sec:Outlook}}
-    \begin{itemize}
-        \item Perform under CCP margining
-        \item Try analytical solution or with adjoint algorithmic differentiation
-        \item Investigate further into risk sensitive solutions for the described edge cases in section \ref{sec:Consideration of edge cases} to find solutions that maintain risk sensitive character
-        \item Investigate if in some cases Shapley allocation might be of help and discuss possibilities to counter its prohibitively expensive computational requirements
-    \end{itemize}
-    \section{Conclusion}\label{Conclusion}
+\chapter{Conclusion and Outlook}\label{sec:Outlook and Conclusion}
+\section{Conclusion}\label{sec:Conclusion}
+The goal of this thesis was to identify a suitable allocation approach for the \gls{SA-CCR} own capital requirements for bilateral portfolios while accurately recognizing collateralization.
+
+Through literature review, a combination of an incremental and Euler allocation was identified as the most promising as both approaches are risk sensitive and exhibit native additivity. 
+The incremental approach is applicable to any risk measure and as such is also applicable to the \gls{SA-CCR} model with proper recognition of collateralization. Especially in the front office questions regarding to pre-trade analysis, calculating the regulatory capital consumption or the incremental margin requirement of a newly arranged derivative are commonplace.
+If such or similar tasks rise in the context of \gls{SA-CCR} or \gls{ISDA SIMM} the incremental allocation approach can and should be used.
+
+On the other hand, tasks such as identifying risk drivers within a portfolio or identifying possibilities to reduce the regulatory capital or initial margin consumed by a portfolio can not be tackled with an incremental allocation.
+For such tasks which tend to rather take rise in the middle office of a bank the incremental allocation is not suited and the Euler allocation should be used instead.
+Unfortunately, the calculation of the Euler allocation and the prerequisites for it are much more demanding than those for the incremental allocation.
+
+In this thesis we have chosen a numerical approach to calculate the Euler allocation as it is easier to implement in practice and less prone to error due to the complexity of the \gls{SA-CCR} model with a nested initial margin model such as \gls{ISDA SIMM}.
+The analysis conducted for this thesis has established that a numerical Euler allocation of \gls{SA-CCR} under recognition of bilateral margining is generally possible and can provide valuable insight. There are however a couple of circumstances under which the prerequisites to perform an Euler allocation are violated.
+The most important of these limitations is probably the recognition of an initial margin threshold. If an initial margin threshold is in place and exceeded, the prerequisites for an Euler allocation are violated. 
+For this case upper and lower bounds for the margin allocated to each trade could be established but no unambiguous risk sensitive overall allocation could be identified.
+
+Disregarding the issue with initial margin thresholds, Euler allocation could still be used in practice despite not working in some edge cases. 
+Conveniently, it is very easy to identify if the numerical Euler allocation is not working and, consequently, the portfolio in question is violating the prerequisites for an Euler allocation.
+In such cases the result looses its native additivity, i.e. the sum of the trade allocations will be far off the portfolio risk measure which can be easily identified and trigger an investigation of the portfolio or the use of a fall-back allocation approach.
+
+If any margin is exchanged, an Euler allocation of \gls{SA-CCR} is not possible when the margin is assumed to be an external constant value that does not have partial derivatives against the trade notionals in the portfolio.
+If an Euler allocation is calculated under such an assumption the prerequisites for the allocation are violated. Additionally, exemplary portfolios analyzed for this thesis have also shown that a relative, risk sensitive allocation of \gls{SA-CCR} without margining can differ tremendously from a risk sensitive allocation of \gls{SA-CCR} with margining.
+Therefore, no shortcut exists when trying to calculate a risk sensitive allocation of the \gls{SA-CCR} of a bilateral margined portfolio. 
+Both margin components, variation margin and received initial margin have to be treated as a function of the trade notionals in the portfolio. Their partial derivatives against the notional of a trade are required to calculate the respective partial derivative and consequently the Euler allocation of the \gls{SA-CCR} own capital requirements.
+
+Finally, when numerically calculating the Euler allocation of \gls{SA-CCR} one should use a central difference approach. The increased precision of the central difference approach makes it easier to identify cases in which the Euler allocation is not working due to violated prerequisites. Additionally, the central difference approach is also more robust against undifferentiability w.r.t the trade notional that appears if the analyzed portfolio exhibits certain hedge constellations.
+
+\section{Outlook\label{sec:Outlook}}
+
+
+
+\begin{itemize}
+    \item Perform under CCP margining
+    \item Try analytical solution or with adjoint algorithmic differentiation
+    \item Investigate further into risk sensitive solutions for the described edge cases in section \ref{sec:Consideration of edge cases} to find solutions that maintain risk sensitive character
+    \item Investigate if in some cases Shapley allocation might be of help and discuss possibilities to counter its prohibitively expensive computational requirements
+\end{itemize}
 \end{document}
