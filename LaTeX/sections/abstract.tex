@@ -3,7 +3,20 @@
 \begin{document}
     
     \begin{abstract}
-        This will be the abstract.
+        The SA-CCR model has replaced the current exposure method (CEM) as the standard approach for counterparty credit risk capital requirement calculations.
+        SA-CCR is a more risk sensitive model that, unlike its predecessor, takes portfolio effects and available collateral into account. 
+        Therefore, the SA-CCR more accurately estimates the counterparty credit risk taken by the bank but it is also more necessary and challenging to analyze the SA-CCR risk metric and allocate it on single trades of a portfolio than was the case for the CEM model. 
+        This thesis investigates, how the SA-CCR exposure at default of a bilateral derivative portfolio should be allocated to the individual trades of said portfolio. The incremental allocation approach and the marginal allocation (also known as Euler allocation) were identified as the most promising approaches that also complement each other well.
+        The incremental allocation approach can and should be applied for the SA-CCR for use cases such as pre-trade analysis or PnL allocation among trading desks.
+        Whether the Euler allocation which should be utilized for tasks such as portfolio analysis or optimization can also be calculated for SA-CCR was analyzed.
+        
+        It has been found that calculation of an Euler allocation for bilateral portfolios is generally possible and a numerical calculation approach appears to be most suitable.
+        If the portfolio is margined with only variation margin or variation margin and initial margin, an Euler allocation of these margin models has to be part of the Euler allocation of SA-CCR.
+
+        However, circumstances have been identified under which an Euler allocation of SA-CCR is not possible since SA-CCR does not exhibit the properties of a positive homogeneous function under these circumstances.
+        The most notable of those circumstances is if an initial margin threshold is present and is exceeded.
+        For this case, which has high practical relevance, no unambiguous, risk sensitive allocation could be established but just upper and lower bounds for the amount allocated to each trade could be established.
+
     \end{abstract}
 
 \end{document}

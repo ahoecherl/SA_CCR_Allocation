@@ -466,9 +466,10 @@ EAD:  582940242
 C:   9039060887
     \end{Verbatim}
 
-    Calculating the forward difference in line with equation
-\todo{reference forward dif eq} with and without consideration of the
-MTA yields
+    Calculating the forward difference
+\todo{Replace with central difference to reduce the slight delta between EAD and result without MTA}
+in line with equation \todo{reference forward dif eq} with and without
+consideration of the MTA yields
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{8}{\boxspacing}
@@ -482,6 +483,10 @@ MTA yields
 With MTA:    1425289375
 Without MTA:  582887602
     \end{Verbatim}
+
+    As can be seen, only when the allocation is performed without
+recognition of the MTA the allocated amount corresponds to the actual
+EAD of this single trade portfolio.
 
     \hypertarget{impact-of-the-minimum-transfer-amount-on-rc}{%
 \subsection{Impact of the minimum transfer amount on
