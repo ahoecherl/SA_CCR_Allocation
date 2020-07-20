@@ -2,7 +2,7 @@
 
 \begin{document}
     \section{Instruments, pricing and market data}\label{Instruments, pricing and market data}
-    For the analysis whose results are presented in chapter \ref{sec:Results} a small but diverse set of financial instruments is required. Due to the structure of the \gls{ISDA SIMM} and the \gls{SA-CCR} model the set of financial instruments should meet the following criteria:
+    For the analysis whose results are presented in chapter \ref{sec:Results}, a small but diverse set of financial instruments is required. Due to the structure of the \gls{ISDA SIMM} and the \gls{SA-CCR} model the set of financial instruments should meet the following criteria:
 
     \begin{enumerate}
         \item The instruments should range across multiple asset classes
@@ -15,30 +15,70 @@
     
     Items \ref{uncleared} and \ref{easy_to_price} of the above list are slightly conflicting. Bilaterally traded derivatives are usually more complex than cleared derivatives. Due to this increased complexity many of them have to be priced with a Monte Carlo simulation since an analytical solution is not possible.
 
-    Item \ref{link_to_market_quotes} rises from the requirement of the \gls{ISDA SIMM} model to calculate all sensitivities against market quotes. This means for example, that interest rate sensitivities mustn't be calculated with regard to a movement of the interest rate curve used as a pricing input but with regard to the price of the traded instrument that is used to build the interest rate curve in the first place. In the case of interest rate curves the process to build an interest rate curve is commonly referred to as \emph{bootstrapping} and has to be performed again whenever a sensitivity is calculated to be compliant with \gls{ISDA SIMM}. Designing a pricing framework that can handle this required interdependence of market quotes, market data objects such as curves and priced instruments is a steep task even for deceptively simple instruments such as plain vanilla interest rate swaps. For this reason the implementation is based on QuantLib \cite{QuantLib} which offers an excellent and proven framework to monitor these interdepencies with ease. Calculation of \gls{ISDA SIMM} compliant sensitivities of the instruments introduced in this section is the topic of section \ref{Calculation of ISDA SIMM compliant sensitivities}.
+    Item \ref{link_to_market_quotes} rises from the requirement of the \gls{ISDA SIMM} model to calculate all sensitivities against market quotes. This means for example, that interest rate sensitivities mustn't be calculated with regard to a movement of the interest rate curve used as a pricing input but with regard to the price of the traded instrument that is used to build the interest rate curve in the first place. In the case of interest rate curves the process to build an interest rate curve is commonly referred to as \emph{bootstrapping} and has to be performed again whenever a sensitivity is calculated to be compliant with \gls{ISDA SIMM}. Designing a pricing framework that can handle this required interdependence of market quotes, market data objects such as curves and priced instruments is a steep task even for deceptively simple instruments such as plain vanilla interest rate swaps. For this reason the implementation is based on QuantLib \cite{QuantLib} which offers an excellent and proven framework to monitor these interdepencies with ease.
 
     Careful consideration of the criteria listed above and the available market data lead to the following set of financial instruments that will be used for analysis:
 
     \begin{itemize}
-        \item European equity options
         \item Overnight indexed swaps
         \item Fixed-float interest rate swaps
+        \item European equity options
         \item Swaptions
     \end{itemize}
 
-    \subsection{European Equity Option}
+    In the following, we will outline how these instruments are priced, what market data is used for this and how \gls{ISDA SIMM} compliant sensitivities are calculated for each instrument.
+
+    The instruments just serve as a means to perform the analysis of the topics on which the thesis is focused which are the SA-CCR model, margining and risk measure allocation.
+    Accordingly, pricing algorithms and required market data have been chosen rather pragmatically and do not claim to represent the currently established state-of-the-art in pricing these derivatives.
+    In line with the focus of the thesis the following explanations on derivative pricing, market data and sensitivity calculation are kept brief.  
+
+    A basic familiarity of the reader with interest rate derivative markets and equity derivative markets is assumed. 
+    A basic introduction to both may be found in \cite{hull2009options}. A comprehensive approach to interest rate derivative markets may be found in \cite{brigo2007interest} or \cite{andersen2010interest}.
+
+    \subsection{Overnight indexed swaps}
+
+    An overnight indexed swap (\gls{OIS}) is a fixed-float swap whose floating leg underlying are the daily fixings of an overnight index.
+    It can be priced using the so called \gls{OIS}-curve, whose construction will be discussed below.
+    Usually, only a single \gls{OIS} curve exists per currency which is used both as a forward curve for estimating future cashflows on the floating leg of an OIS swap and as a \emph{'risk free'} discounting curve for all cash flows of the given currency.
+
+    The net present value (\gls{NPV}) of an \gls{OIS} may be calculated like that of any other swap by estimating future cashflows of the floating leg with the appropriate interest rate curve and discounting all cashflows of the swap with the currencies' discount curve.
+    Accordingly, an OIS Swap may be priced using only the OIS curve of the swaps currency.
+
+    Since the OIS curve also serves as the discount curve it does not require any other interest rate curve to be constructed. 
+    For the purpose of this thesis, EUR and USD OIS curves were built from the par rates of OIS swaps as they were quoted on the 10th of May 2019.\footnote{To build an arbitrage free OIS curve especially the short end should be based on more than just OIS quotes as is for example pointed out in \cite{ametrano2013everything} or \cite{brugger2018valuation}. However, for this thesis higher accuracy in curve construction was not required.}
+    Conveniently, QuantLib does offer a built in functionality to infer an OIS curve from quoted OIS par rates, namely ''OISRateHelper''. Essentially, the OIS par curve is built by interpolating between the quotes.
+    This par curve may then be transformed into other interest curve representations such as a zero curve, forward curve or a discount curve under the assumptions of a single curve universe. How this can be done is e.g. pointed out in \cite[Chapter 4]{hull2009options}.
+
+    An OIS changes its \gls{NPV}, if the OIS curve that it used to price it moves.
+    This delta sensitivity against points on the OIS curve is the basis for the \gls{ISDA SIMM} calculation of an OIS.
+    \gls{ISDA SIMM} requires interest rate delta sensitivities of an OIS to be calculated as a finite difference against movements of the quoted market par rates used to build the OIS-curve in the first place. 
+    This means that delta sensitivities of an OIS are calculated by raising a market quote that was used to build the OIS-curve by one basis point, rebuilding the OIS-curve as described above and repricing the OIS for which the delta is being calculated.
+    A definition of \gls{ISDA SIMM} compliant interest rate deltas may be found in \cite[Point 22]{SIMM} and \cite[Section 2.2]{RiskDataStandard}.
+    
+    Additionally, an FX delta needs to be calculated if the trade currency does not coincide with the \gls{ISDA SIMM} calculation currency that was agreed upon in the \gls{CSA}. This delta may be approximated as $0.01 * NPV$ if the trades underlying is not an exchange rate \cite[Section 2.7]{RiskDataStandard}. 
+
+    \subsection{Interest rate swaps}
+
+    In a narrow definition, interest rate swaps or \gls{IRS} are swaps of a single currency, which have a floating and a fixed leg and whose floating leg references not an OIS index but rather an index of a larger tenor such as the six month EURIBOR index.
+
+    For this thesis, IRS on the six months EURIBOR and three month USD LIBOR index are set up for analysis.
+    These tenors have been chosen as they are the reference tenors for their respective currencies. 
+    This indicates that IRS on this tenor are very liquid whereas other tenors are rather traded through float-float basis swaps between the reference tenor and another tenor of the same currency.
+
+    As for an OIS, an IRS is priced by estimating future payments of the floating leg through the tenor curve and then discounting all cash flows whether they are estimated or fixed.
+    However, unlike the OIS the curve used for forecasting future payments and discounting generally does not coincide.
+
+    The presence of multiple interest rate curves per currency, i.e. a multi-curve universe has become widely accepted since the financial crisis of 2008 raised awareness for the credit risks associated with interbank lending.
+    This has complicated interest rate curve construction and made a bootstrapping approach in which the interest rate curves of a currency are built up incrementally starting with the OIS curve necessary.
+    The bootstrapping of a multi curve environment is a rather intricate process and is described in detail for example in \cite{ametrano2013everything} and \cite{brugger2018valuation}.
+    However, for the purpose of this thesis, it is sufficient to know that under bootstrapping, the zero rate curve of a reference Libor curve such as the 6M EURIBOR curve is dependent on both, the par rates quoted for 6M EURIBOR IRS as well as the par rates quoted for OIS-curve of the same currency.
 
     
 
-    \subsubsection{Market data}
-    \subsubsection{Pricing}
-    \subsection{Overnight indexed swap}
-    \subsubsection{Market data}
-    \subsubsection{Pricing}
-    \subsection{Interest rate swap}
-    \subsubsection{Market data}
-    \subsubsection{Pricing} 
-    \subsection{Swaption}
-    \subsubsection{Market data}
-    \subsubsection{Pricing}
+    
+
+    \subsection{European Equity Options}
+
+    \subsection{Swaptions}
+
 \end{document}
