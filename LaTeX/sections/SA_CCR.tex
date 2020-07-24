@@ -3,15 +3,15 @@
 \begin{document}
 \section{SA-CCR}\label{SA-CCR}
 
-Counterparty credit risk is considered to be a part of credit risk by the regulator. Risk weighted assets have to be calculated and need to be backed by own capital. The three main inputs for calculating credit risk are the probability of default (PD) the loss given default (LGD) and the exposure at default (EAD). Assuming the default of a counterparty over the course of the next year, the EAD is the current estimation of money indebted by the counterparty to the bank at the time of default. Estimating EAD for traditional credit instruments s.a. loans, credit cards, mortgages or bonds is relatively simple. Such instruments do often times have deterministic payment schedules making it easy to predict the exposure in one years time. Credit lines or credit cards behave less deterministic but it is still simple to determine an upper bound to the future exposure by assuming that the entire credit line is exhausted.
-The counterparty credit risk incurred by derivatives has first been regarded in regulatory capital calculation in Basel II \cite{basel2}. Due to the stochastic nature of derivatives, EAD calculation for counterparty credit risk has always been regulated separately ever since. Consideration of \gls{CCR} in regulatory capital was overhauled as part of Basel III \cite{CRE}. The regulation for the internal margin model (\gls{IMM}) approach was adjusted and the current exposure model (\gls{CEM}) that was introduced with Basel II as the standard approach for \gls{CCR} \gls{EAD} calculation was replaced with the \gls{SA-CCR} model and the simplified \gls{SA-CCR} model.
+Counterparty credit risk is considered to be a part of credit risk by the regulator. Risk weighted assets have to be calculated and need to be backed by own capital. The three main inputs for calculating credit risk are the probability of default (PD) the loss given default (LGD) and the exposure at default (EAD). Assuming the default of a counterparty over the course of the next year, the \gls{EAD} is the current estimation of money indebted by the counterparty to the bank at the time of default. Estimating \gls{EAD} for traditional credit instruments s.a. loans, credit cards, mortgages or bonds is relatively simple. Such instruments do often times have deterministic payment schedules making it easy to predict the exposure in one years time. Credit lines or credit cards behave less deterministic but it is still simple to determine an upper bound to the future exposure by assuming that the entire credit line is exhausted.
+The counterparty credit risk incurred by derivatives has first been regarded in regulatory capital calculation in Basel II \cite{basel2}. Due to the stochastic nature of derivatives, \gls{EAD} calculation for counterparty credit risk has always been regulated separately ever since. Consideration of \gls{CCR} in regulatory capital was overhauled as part of Basel III \cite{CRE}. The regulation for the internal margin model (\gls{IMM}) approach was adjusted and the current exposure model (\gls{CEM}) that was introduced with Basel II as the standard approach for \gls{CCR} \gls{EAD} calculation was replaced with the \gls{SA-CCR} model and the simplified \gls{SA-CCR} model.
 
 The \gls{SA-CCR} model was implemented to yield the results presented in chapter \ref{sec:Results} of this thesis but the structure of the \gls{SA-CCR} model will not be presented in a comprehensive fashion here. Instead the reader may refer to the latest regulatory documents \cite[Article 274 and following]{CRRII} and \cite{EBA_2019} or the library developed for this thesis \cite{Hoecherl2020}.
-This section will highlight the aspects of the SA-CCR model that are of special interest within the scope of this thesis such as the consideration of margin. 
+This section will highlight the aspects of the \gls{SA-CCR} model that are of special interest within the scope of this thesis such as the consideration of margin. 
 
 \subsection{Consideration of margining in SA-CCR}
 
-When using SA-CCR the exposure at default has to be
+When using \gls{SA-CCR} the exposure at default has to be
 calculated as:
 
 \begin{align}
@@ -26,7 +26,7 @@ calculated as:
 \end{align}
 
 The purpose of the RC is to assess the immediate loss suffered by the
-default of a counterparty. It is based on the current MtM of the
+default of a counterparty. It is based on the current \gls{MtM} of the
 derivative less the accessible collateral. If a bank has posted
 collateral to non-segregated accounts of a counterparty this collateral
 is also assumed to be lost in case of a default which increases the
@@ -34,7 +34,7 @@ replacement cost.
 The potential future exposure (PFE) on the other hand assesses how the
 RC might develop in the future. The future being defined as during the
 next year. If the RC today is zero but is likely to be larger than zero in the
-near future the estimated EAD should take this expected increase in RC
+near future the estimated \gls{EAD} should take this expected increase in RC
 into account.
 
 See also Paragraph 130 and 131 of \cite{SACCR}
@@ -118,16 +118,16 @@ Under assumption \ref{as:Collateral assumptions}, the calculation of \(NICA\) an
 	\end{split}
 \end{align}
 
-Regarding the incorporation of a variation margin and initial margin threshold and a MTA we will assume that the mechanics are the following:
+Regarding the incorporation of a variation margin and initial margin threshold and a \gls{MTA} we will assume that the mechanics are the following:
 \begin{enumerate}
-	\item A threshold TH\textsubscript{VM} may exist if only VM is exchanged but no IM
-	\item No threshold for the exchange of variation margin TH\textsubscript{VM} can be in place if initial margin is exchanged
-	\item A threshold TH\textsubscript{IM} for initial margin may exist 
+	\item A threshold \gls{TH}\textsubscript{VM} may exist if only \gls{VM} is exchanged but no IM
+	\item No threshold for the exchange of variation margin \gls{TH}\textsubscript{VM} can be in place if initial margin is exchanged
+	\item A threshold \gls{TH}\textsubscript{IM} for initial margin may exist 
 	\item If $ IM_{calc} > \text{TH\textsubscript{IM}} + \text{MTA} $ then $IM_{calc} - \text{TH\textsubscript{IM}} $ is posted as collateral to cover the initial margin
-	\item A possible MTA applies for the combined change of VM and IM
+	\item A possible \gls{MTA} applies for the combined change of \gls{VM} and IM
 \end{enumerate}
 
-These are the usual rules in place in margin agreements applicable for the case of bilateral derivatives collateralized with VM and IM and are in line with the minimum requirements by the regulators \cite{BCBS_MarginRequirements}.
+These are the usual rules in place in margin agreements applicable for the case of bilateral derivatives collateralized with \gls{VM} and \gls{IM} and are in line with the minimum requirements by the regulators \cite{BCBS_MarginRequirements}.
 In line with these rules the received collateral C can be calculated as follows:
 
 \begin{align}
@@ -164,19 +164,19 @@ Considering thresholds and a possible minimum transfer amount we yield the formu
 	  \midrule
 	  Uncollateralized\newline{}bilateral derivatives & 0     & 0     & $\sum_t{P(t)}$ \\
 	  \midrule
-	  Bilateral derivatives\newline{}collateralized with VM & 0     & VM    & TH\textsubscript{VM}+MTA \\
+	  Bilateral derivatives\newline{}collateralized with VM & 0     & VM    & \gls{TH}\textsubscript{VM}+MTA \\
 	  \midrule
-	  Bilateral derivatives\newline{}collateralized with VM\newline{}and IM & IM\textsubscript{rec} & VM+IM\textsubscript{rec} & $\max{\left(0, \text{MTA} - \text{IM\textsubscript{rec}}\right)}$ \\
+	  Bilateral derivatives\newline{}collateralized with VM\newline{}and \gls{IM} & IM\textsubscript{rec} & VM+IM\textsubscript{rec} & $\max{\left(0, \text{MTA} - \text{IM\textsubscript{rec}}\right)}$ \\
 	  \end{tabular}%
 	\caption{Calculation of NICA, C and RC under different, uncleared margining approaches}\label{tab:Margin in SA-CCR}%
   \end{table}%
 
-The case that is analyzed the most in this thesis is \ref{itm:Bilateral derivatives collateralized with VM and IM}. It is important to note that assuming the absence of a minimum transfer amount, the \(RC\) is always floored at zero in this case and a change in VM or IM then only impacts the \gls{SA-CCR} \gls{EAD} through the use of \(C\) in the multiplier calculation of equation \ref{eq:multiplier}.
+The case that is analyzed the most in this thesis is \ref{itm:Bilateral derivatives collateralized with VM and IM}. It is important to note that assuming the absence of a minimum transfer amount, the \(RC\) is always floored at zero in this case and a change in \gls{VM} or \gls{IM} then only impacts the \gls{SA-CCR} \gls{EAD} through the use of \(C\) in the multiplier calculation of equation \ref{eq:multiplier}.
 
-The multiplier is therefore the central point of focus when analyzing the interaction between SA-CCR and margin. The multiplier function is plotted in figure \ref{fig:multiplier}.
+The multiplier is therefore the central point of focus when analyzing the interaction between \gls{SA-CCR} and margin. The multiplier function is plotted in figure \ref{fig:multiplier}.
 The multiplier is ceiled at one if \(C>V\), i.e.~if the portfolio is overcollateralized which under assumption \ref{as:Collateral assumptions} is the case when the bank receives \gls{IM}. With increasing overcollateralization the multiplier drops and approaches its floor of 5\%. The other factor that drives the multiplier is the portfolios \(AddOn\). 
 
-The $AddOn$ is a portfolio metric that is supposed to represent how quickly the value of the portfolio can rise within the \gls{MPoR}. The underlying idea is similar to a value at risk and the $AddOn$ is designed to be easy to compute while still being portfolio based and taking optionalities into account. Margining does not impact the calculated $AddOn$. Therefore, $AddOn$ calculation for SA-CCR is not presented in great detail at this point. The reader is referred to \cite[Article 280]{CRRII} and the library that was implemented for the purpose of this thesis \cite{Hoecherl2020}.
+The $AddOn$ is a portfolio metric that is supposed to represent how quickly the value of the portfolio can rise within the \gls{MPoR}. The underlying idea is similar to a value at risk and the $AddOn$ is designed to be easy to compute while still being portfolio based and taking optionalities into account. Margining does not impact the calculated $AddOn$. Therefore, $AddOn$ calculation for \gls{SA-CCR} is not presented in great detail at this point. The reader is referred to \cite[Article 280]{CRRII} and the library that was implemented for the purpose of this thesis \cite{Hoecherl2020}.
 
 % It is important to note that the multiplier can only be below 1 if
 % \(C>V\), i.e.~if the portfolio is overcollateralized. If the portfolio
@@ -190,7 +190,7 @@ The $AddOn$ is a portfolio metric that is supposed to represent how quickly the 
 \begin{figure}
 	\centering
 	\includegraphics[scale=0.9]{Graphics/SACCR_Multiplier_Function.pdf}
-	\caption{}
+	\caption[Multiplier of the \gls{SA-CCR} model]{The multiplier function of the SA-CCR model that is part of the potential future calculation (PFE) calculation. Overcollateralization, i.e. posted IM reduces SA-CCR through reducing the multiplier.}
 	\label{fig:multiplier}
 \end{figure}
 

@@ -5,7 +5,7 @@
 
 \section{Allocation of Risk Measures}\label{sec:Allocation of Risk Measures}
 
-With increasing sophistication of risk, own capital and margining models the need for equally sophisticated tools for attributing these measures rises as well. Allocating the variation margin or models that disregard portfolio effect entirely such as the current exposure method (CEM) to individual trades is trivial as these measures may just be calculated for an individual trade and then added up across all trades to obtain the correct aggregate value. 
+With increasing sophistication of risk, own capital and margining models the need for equally sophisticated tools for attributing these measures rises as well. Allocating the variation margin or models that disregard portfolio effect entirely such as the current exposure method (\gls{CEM}) to individual trades is trivial as these measures may just be calculated for an individual trade and then added up across all trades to obtain the correct aggregate value. 
 For measures which take portfolio effects into account such as a \gls{VaR} model, \gls{ISDA SIMM} or \gls{SA-CCR} however, this approach is not possible. The advent of portfolio based models for internal risk measurement in the late 1990s and for regulatory risk measurement in the late 2000s sparked research into how such measures should be reallocated. Gregory \cite[Chapter~10.7]{gregory2015xva} states that three approaches are used in practice: 
 \begin{enumerate}
 \item Incremental allocation
@@ -135,7 +135,7 @@ Koyluoglu and Stoker \cite{koyluoglu2002risk} note that "it could be argued that
 Finally, the Shapley method introduced in \cite{shapley1951} exhibits native additivity and risk sensitivity.
 However, its computation is much more time consuming than any other allocation presented. 
 Therefore it can realistically only be used for very small portfolios or to calculate allocations of subportfolios, e.g. the subportfolios of certain departments.
-Koyluoglu and Stoker \cite{koyluoglu2002risk} compare Euler and Shapley allocation and find that Shapley allocation is a more robust measure as it does not require differentiability of $\rho$. The relatively rigorous requirements against $\rho$ to use Euler allocation are introduced in detail in section \ref{sec:Euler allocation} and chapter \ref{sec:Results} investigates under which circumstances the \gls{ISDA SIMM} and SA-CCR model comply with these requirements.
+Koyluoglu and Stoker \cite{koyluoglu2002risk} compare Euler and Shapley allocation and find that Shapley allocation is a more robust measure as it does not require differentiability of $\rho$. The relatively rigorous requirements against $\rho$ to use Euler allocation are introduced in detail in section \ref{sec:Euler allocation} and chapter \ref{sec:Results} investigates under which circumstances the \gls{ISDA SIMM} and \gls{SA-CCR} model comply with these requirements.
 Overall, Koyluoglu and Stoker suggest to only use Shapley allocation over the Euler allocation for calculating the contribution of few subportfolios.
 Due to the poor computational performance and the resulting small practical relevance, Shapley allocation is not investigated further in this thesis.
 % Due to this limited use case, Shapley allocation is not investigated further in this thesis. Nevertheless, it is worth mentioning that the only paper that as of the time of writing has been published on SA-CCR allocation \cite{}
@@ -171,7 +171,7 @@ The incremental allocation can be calculated as or before a new trade is added t
 If the trade is mitigating risk at the time of its inception according to $M$ its incremental allocation $M_{inc}$ is negative. If it increases the risk its $M_{inc}$ is positive. However, $M_{inc}$ does not adapt over time and is likely to loose its accurate risk depiction as additional trades are added to the portfolio. 
 As a portfolio develops it may well be possible, that a trade for which a negative $M_{inc}$ was calculated at its inception may loose its risk mitigation. 
 Due to this property $M_{inc}$ of a given trade should ideally only be used at or before trade inception. 
-One such use case is the PnL calculation of a new trade to determine the performance of the trading desk or trader which initiated the trade. 
+One such use case is the \gls{PnL} calculation of a new trade to determine the performance of the trading desk or trader which initiated the trade. 
 Another would be to use it prior to an investment decision \cite{tibiletti2001incremental}. 
 It can however not be used to analyze an existing portfolio to e.g. identify trades which drive risk or determine how increases or decreases in a given position would impact the portfolio measure. 
 It also cant be calculated deterministically a posteriori for a portfolio without knowing its composition through time.

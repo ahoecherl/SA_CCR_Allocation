@@ -11,11 +11,11 @@
         \item Pro rata allocation if trade contributions must not be negative, if risk sensitivity is not required or if the allocated risk measure does not take portfolio effects into account
     \end{itemize}
 
-    These allocation approaches and their advantages and disadvantages are analyzed in further detail in section \ref{sec:Allocation of Risk Measures}. Calculation of pro rata and incremental allocation is fairly straightforward and can generally be performed under any circumstances. Marginal allocation on the other hand is more challenging. This thesis will investigate if and how a marginal allocation of the SA-CCR model is possible.
+    These allocation approaches and their advantages and disadvantages are analyzed in further detail in section \ref{sec:Allocation of Risk Measures}. Calculation of pro rata and incremental allocation is fairly straightforward and can generally be performed under any circumstances. Marginal allocation on the other hand is more challenging. This thesis will investigate if and how a marginal allocation of the \gls{SA-CCR} model is possible.
 
-    Schulze \cite{schulze2018capital} has analytically calculated the marginal allocation for the FRTB-SA. However, an approach to marginal allocation of SA-CCR has not been published yet. This thesis intends to close this gap by showcasing a numerical marginal allocation approach for SA-CCR. A particular challenge in the allocation of SA-CCR is its consideration of margining. This makes the allocation of SA-CCR dependent on margin models which can themselves be significantly more complex than the SA-CCR model itself.
+    Schulze \cite{schulze2018capital} has analytically calculated the marginal allocation for the FRTB-SA. However, an approach to marginal allocation of \gls{SA-CCR} has not been published yet. This thesis intends to close this gap by showcasing a numerical marginal allocation approach for \gls{SA-CCR}. A particular challenge in the allocation of \gls{SA-CCR} is its consideration of margining. This makes the allocation of \gls{SA-CCR} dependent on margin models which can themselves be significantly more complex than the \gls{SA-CCR} model itself.
 
-    The goal of this thesis is to find an approach for allocating SA-CCR while considering margining. Particular focus is put on the allocation of SA-CCR under consideration of variation margin an an internal initial margin model.
+    The goal of this thesis is to find an approach for allocating \gls{SA-CCR} while considering margining. Particular focus is put on the allocation of \gls{SA-CCR} under consideration of variation margin an an internal initial margin model.
 
     Unlike the analytical approach of Schulze \cite{schulze2018capital} this thesis will instead apply a numerical approach to calculating a marginal allocation.
     
@@ -28,7 +28,7 @@
     The rest of the thesis is segmented in four chapters. Chapter \ref{sec:Applied models and methods} introduced applied methods and models.
     This includes used financial instruments, risk models, an introduction of the concept of margining and approaches to risk measure allocation.
     Next, chapter \ref{sec:Results} proposes a numerical approach to Euler allocation of the \gls{SA-CCR} model and highlights some of the strengths and weaknesses of this approach by means of small exemplary portfolios.
-    These results are discussed in chapter \ref{sec:Discussion of results} where the results of chapter \ref{sec:Results} are summarized and the theoretical and practical usefulness of the numerical allocation of SA-CCR is assessed.
+    These results are discussed in chapter \ref{sec:Discussion of results} where the results of chapter \ref{sec:Results} are summarized and the theoretical and practical usefulness of the numerical allocation of \gls{SA-CCR} is assessed.
     Finally, chapter \ref{sec:Outlook and Conclusion} provides an outlook to adjacent topics and concludes the thesis.
 
     Due to the scope of chapter \ref{sec:Applied models and methods} and \ref{sec:Results} their structure is presented in additional detail below.
@@ -39,9 +39,9 @@
     
     Since margining is an integral part of the \gls{SA-CCR} model, section \ref{Margining} will afterwards introduce different margin types and typical counterparty relations and margin models observed in the market. Section \ref{Margining} will also establish why out of the different margin models, the \gls{ISDA SIMM} model is investigated the closest for the purpose of this thesis.
 
-    Section \ref{Bilateral initial margin} introduces the ISDA SIMM which is the most commonly used model for initial margin calculation of uncleared derivatives. As the ISDA SIMM is based on first order sensitivities, section \ref{Bilateral initial margin} also describes how to calculate \gls{ISDA SIMM} compliant sensitivities for the financial instruments introduced in section \ref{Instruments, pricing and market data}.
+    Section \ref{Bilateral initial margin} introduces the \gls{ISDA SIMM} which is the most commonly used model for initial margin calculation of uncleared derivatives. As the \gls{ISDA SIMM} is based on first order sensitivities, section \ref{Bilateral initial margin} also describes how to calculate \gls{ISDA SIMM} compliant sensitivities for the financial instruments introduced in section \ref{Instruments, pricing and market data}.
 
-    After the different margin components have been introduced, section \ref{SA-CCR} presents the SA-CCR model that is used for the calculation of the \gls{EAD} of derivatives. Special emphasis will be put on the inclusion of margining.
+    After the different margin components have been introduced, section \ref{SA-CCR} presents the \gls{SA-CCR} model that is used for the calculation of the \gls{EAD} of derivatives. Special emphasis will be put on the inclusion of margining.
 
     Section \ref{sec:Allocation of Risk Measures} presents literature results regarding the allocation of risk measures. Additionally, the theoretical foundation for the Euler allocation is laid out as the investigation if and when an Euler allocation is possible is the main subject for the analysis section of the thesis.
 
@@ -49,13 +49,13 @@
     
     \subsection{Structure of chapter \ref{sec:Results}}
     
-    The main goal of the thesis is to establish a numerical allocation approach for SA-CCR.
+    The main goal of the thesis is to establish a numerical allocation approach for \gls{SA-CCR}.
 
-    An approach to numerical allocation of SA-CCR is introduced with the aid of two exemplary portfolios in chapters \ref{sec:Exemplary allocation of SA-CCR for a small portoflio of equity options} and \ref{sec:Exemplary allocation of SA-CCR for a small portfolio of interst rate derivatives}. 
-    In these chapters both, ISDA-SIMM and SA-CCR are allocated and the portfolios are used to showcase analytical insights that an Euler allocation may provide. Finally, \ref{sec:Exemplary allocation of SA-CCR on subportfolios} showcases the value of an Euler allocation not only for an analysis on trade level but also on subportfolios.
+    An approach to numerical allocation of \gls{SA-CCR} is introduced with the aid of two exemplary portfolios in chapters \ref{sec:Exemplary allocation of SA-CCR for a small portoflio of equity options} and \ref{sec:Exemplary allocation of SA-CCR for a small portfolio of interst rate derivatives}. 
+    In these chapters both, \gls{ISDA SIMM} and \gls{SA-CCR} are allocated and the portfolios are used to showcase analytical insights that an Euler allocation may provide. Finally, \ref{sec:Exemplary allocation of SA-CCR on subportfolios} showcases the value of an Euler allocation not only for an analysis on trade level but also on subportfolios.
 
-    In contrast to the encouraging results of section \ref{sec:Exemplary Euler allocation of SA-CCR under consideration of margining}, section \ref{sec:Consideration of edge cases} analyzes when and why Euler allocation of SA-CCR is not possible in certain edge cases.
-    A property of the ISDA-SIMM model that may prevent risk-sensitive allocation is discussed in section \ref{sec:Allocation when an ISDA-SIMM liquidity threshold is exceeded}. 
+    In contrast to the encouraging results of section \ref{sec:Exemplary Euler allocation of SA-CCR under consideration of margining}, section \ref{sec:Consideration of edge cases} analyzes when and why Euler allocation of \gls{SA-CCR} is not possible in certain edge cases.
+    A property of the \gls{ISDA SIMM} model that may prevent risk-sensitive allocation is discussed in section \ref{sec:Allocation when an ISDA-SIMM liquidity threshold is exceeded}. 
     On the other hand, contractual agreements governing the exchange of margin may interfere with the allocability of the SA-CCR model which is discussed in section \ref{sec:Incorporation of a minimum transfer amount and threshold}.
     Finally, section \ref{sec:Allocation of hedged portfolios} discusses a possible, specific hedge constellation that infringes a necessary precondition for an Euler allocation.
 

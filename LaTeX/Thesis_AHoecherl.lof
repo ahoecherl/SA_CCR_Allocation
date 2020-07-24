@@ -1,13 +1,13 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces }}{15}{figure.2.1}
-\contentsline {figure}{\numberline {2.2}{\ignorespaces }}{26}{figure.2.2}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Multiplier of the \gls {SA-CCR} model}}{15}{figure.2.1}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces EURIBOR 6M and USD LIBOR 3M zero curve}}{26}{figure.2.2}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces }}{36}{figure.3.1}
-\contentsline {figure}{\numberline {3.2}{\ignorespaces VM, IM, C and C under consideration of TH and MTA for a portfolio consisting of a single at the money interest rate swap. Values are calculated based on different notionals invested in the IRS with $a=1$ referring to a notional of 200Bn USD. More details on creation can be found in Appendix \ref {homogeneity-of-c-for-a-single-trade-portfolio}.}}{38}{figure.3.2}
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Same as figure \ref {fig:C for ATM IRS} but for an in the money trade with an payer interest rate at 2\% which is below par.}}{39}{figure.3.3}
-\contentsline {figure}{\numberline {3.4}{\ignorespaces }}{45}{figure.3.4}
-\contentsline {figure}{\numberline {3.5}{\ignorespaces }}{45}{figure.3.5}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Homogeneity of ISDA SIMM}}{36}{figure.3.1}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Homogeneity of \gls {SA-CCR} for an at the money \gls {IRS}}}{38}{figure.3.2}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Homogeneity of \gls {SA-CCR} for an in the money \gls {IRS}}}{39}{figure.3.3}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Non-differentiability of \gls {SA-CCR} \gls {EAD}}}{45}{figure.3.4}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Non-differentiability of \gls {ISDA SIMM}}}{46}{figure.3.5}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
