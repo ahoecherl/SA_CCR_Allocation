@@ -119,11 +119,11 @@
         \label{tab:2TradeRatesResults}%
     \end{table}%
 
-    Interest rate risks across different currencies are handled differently between the SA-CCR and the ISDA SIMM model.
+    Interest rate risks across different currencies are handled differently between the \gls{SA-CCR} and the \gls{ISDA SIMM} model.
     In the SA-CCR model each interest rate currency forms a separate so called \emph{hedging set}. SA-CCR does not allow for any hedge effects across the borders of a hedging set.
     We can observe this in the 'EAD VM only' column of table \ref{tab:2TradeRatesResults}, since the EAD of the portfolio containing both trades is simply the sum of the two standalone portfolios.
-    The ISDA SIMM risk measure on the other hand does allow hedge effects across currencies within the interest rate asset class. When aggregating sensitivities across multiple currency buckets, ISDA SIMM assumes a correlation of 22\% \cite[Section D.2]{SIMM}.
-    This does show in the ISDA SIMM column of table \ref{tab:2TradeRatesResults} with the ISDA SIMM charged for the portfolio containing both trades being smaller than the sum of the two standalone portfolios.
+    The \gls{ISDA SIMM} risk measure on the other hand does allow hedge effects across currencies within the interest rate asset class. When aggregating sensitivities across multiple currency buckets, \gls{ISDA SIMM} assumes a correlation of 22\% \cite[Section D.2]{SIMM}.
+    This does show in the \gls{ISDA SIMM} column of table \ref{tab:2TradeRatesResults} with the \gls{ISDA SIMM} charged for the portfolio containing both trades being smaller than the sum of the two standalone portfolios.
     
     This difference in models leads to the phenomenon that can be observed in the EAD under VM and IM column. The calculated EAD for the portfolio of both IRS is significantly higher than the sum of the EAD of the two standalone portfolios.
     We have found a counterexample showing that SA-CCR under consideration of VM and IM is not a sub-additive risk measure.
@@ -146,10 +146,10 @@
     \end{table}%
     
     The results are related to those observed in table \ref{tab:2TradeEquityResults}. As $15.25\% * 12.83Mn = 1.96Mn$ the Euler allocation results coincide with the standalone results when allocating the EAD under consideration of VM only. 
-    For the allocation of ISDA SIMM on the other hand the EUR trade is considered a hedge trade and almost none of the risk measure is allocated to it. 
+    For the allocation of \gls{ISDA SIMM} on the other hand the EUR trade is considered a hedge trade and almost none of the risk measure is allocated to it. 
     The fact that the EUR trade reduces overcollateralization then also leads to the overproportionate fraction of the risk measure that is allocated to it under consideration of VM and IM.
     
-    Considering the larger USD swap as the baseline trade the EUR swap contribution to the portfolio EAD under IM and VM is overproportionate since it is considered to be a risk mitigating trade by the ISDA SIMM model while the SA-CCR model considers it to increase the risk. The opposite phenomenon can be observed when we add a USD receiver swaption as a third trade to the portfolio.
+    Considering the larger USD swap as the baseline trade the EUR swap contribution to the portfolio EAD under IM and VM is overproportionate since it is considered to be a risk mitigating trade by the \gls{ISDA SIMM} model while the SA-CCR model considers it to increase the risk. The opposite phenomenon can be observed when we add a USD receiver swaption as a third trade to the portfolio.
 
     For this we add a one year swaption on a five year 500Mn USD receiver swap to the portfolio. The risk measures of the resulting portfolio are allocated and the result displayed in table \ref{tab:3TradeRatesAllocation}.
 
@@ -165,7 +165,7 @@
         \caption{}
         \label{tab:3TradeRatesAllocation}%
     \end{table}%
-    As can be seen, the swaption is considered to be marginally risk decreasing by the EAD risk measure with only VM while it is considered to be a risk increasing trade by the ISDA SIMM risk measure. Consequently, the swaption reduces the EAD under consideration of VM and IM by an overproportionate amount as it decreases risk while increasing overcollateralization which is indicated by the large negative Euler allocation.
+    As can be seen, the swaption is considered to be marginally risk decreasing by the EAD risk measure with only VM while it is considered to be a risk increasing trade by the \gls{ISDA SIMM} risk measure. Consequently, the swaption reduces the EAD under consideration of VM and IM by an overproportionate amount as it decreases risk while increasing overcollateralization which is indicated by the large negative Euler allocation.
 
     In line with the results of the Euler allocation we can see in table \ref{tab:3TradeRatesResults} that inclusion of the swaption increases portfolio ISDA-SIMM by 24\%, while decreasing portfolio EAD under VM by -14\% and portfolio EAD und VM and IM by -48\%. This is exactly the opposite effect as observed for the EUR swap beforehand.
 
@@ -181,7 +181,7 @@
     \end{table}%
 
     For the swaption it is more difficult to pinpoint where the difference between the \gls{ISDA SIMM} and \gls{SA-CCR} model that results in the very different risk assessment of the swaption in relation to the rest of the portfolio is originating.
-    Sensitivities of the swaps and swaption are calculated very differently between the two models with the ISDA SIMM model being based on current market data whilst the SA-CCR makes much more simplifying assumptions.
+    Sensitivities of the swaps and swaption are calculated very differently between the two models with the \gls{ISDA SIMM} model being based on current market data whilst the SA-CCR makes much more simplifying assumptions.
 
     \subsection{Exemplary allocation of SA-CCR on subportfolios\label{sec:Exemplary allocation of SA-CCR on subportfolios}}
 
@@ -193,7 +193,7 @@
     \begin{table}[htbp]
         \centering
         \begin{tabular}{l||r|r|r}
-                & EAD VM only &ISDA SIMM & EAD VM + IM \\
+                & EAD VM only &\gls{ISDA SIMM} & \gls{EAD} \gls{VM} + \gls{IM} \\
                 \toprule
         Equity Portfolio & 3,519,458 USD & 14,231,564 USD & 345,874 USD \\
         Rates Portfolio & 11,058,114 USD & 34,796,088 USD & 1,586,748 USD \\
@@ -204,8 +204,8 @@
         \label{tab:multiAssetResult}%
     \end{table}%
 
-    As we can see, for EAD under VM and ISDA SIMM the multi asset class portfolio is simply the sum of the risk measures of the portfolios containing only trades of the individual asset class.
-    The reason for this is, that for both models, SA-CCR and ISDA SIMM no hedge effects are recognized between different asset classes.
+    As we can see, for EAD under \gls{VM} and \gls{ISDA SIMM} the multi asset class portfolio is simply the sum of the risk measures of the portfolios containing only trades of the individual asset class.
+    The reason for this is, that for both models, \gls{SA-CCR} and \gls{ISDA SIMM} no hedge effects are recognized between different asset classes.
     Nevertheless, for EAD under VM and IM we can observe in table \ref{tab:multiAssetResult} that the EAD of the multi asset class portfolio is slightly lower than the sum of the equity and the rates portfolio. 
     The reason for this is that initial margin pledged for interest rates trades may also be used to mitigate losses caused by equity trades and vice versa. This slightly increases the overcollateralization of the joint portfolio leading to a lower EAD under VM and IM.
 
@@ -214,7 +214,7 @@
     \begin{table}[htbp]
         \centering
         \begin{tabular}{l||r|r|r}
-                & \makecell{Allocated \\ EAD VM only} &\makecell{Allocated \\ ISDA SIMM} & \makecell{Allocated \\EAD VM + IM} \\
+                & \makecell{Allocated \\ EAD VM only} &\makecell{Allocated \\ \gls{ISDA SIMM}} & \makecell{Allocated \\\gls{EAD} \gls{VM} + \gls{IM}} \\
                 \toprule
         2Mn ADS Call & 8,181,543 USD & -4,802,460 USD & 2,959,180 USD \\
         3Mn ADS Put & -4,662,085 USD & 19,034,023 USD & -2,643,342 USD \\
@@ -244,20 +244,20 @@
 
     \section{Consideration of edge cases\label{sec:Consideration of edge cases}}
 
-    While numerical Euler allocation of SA-CCR and ISDA SIMM is generally possible as shown in section \ref{sec:Exemplary Euler allocation of SA-CCR under consideration of margining}, a couple of cases can be identified, in which Euler allocation fails since its prerequisites of homogeneity and differentiability are violated.
-    Both, ISDA SIMM and SA-CCR are complex, convoluted formulas, making general observations on differentiability and homogeneity difficult.
-    In fact, we will see that depending on the portfolio and parametrization of the collateral agreement, both ISDA SIMM and SA-CCR are not homogeneous risk measures, and that they are both occasionally not partially differentiable w.r.t. position size.
+    While numerical Euler allocation of \gls{SA-CCR} and \gls{ISDA SIMM} is generally possible as shown in section \ref{sec:Exemplary Euler allocation of SA-CCR under consideration of margining}, a couple of cases can be identified, in which Euler allocation fails since its prerequisites of homogeneity and differentiability are violated.
+    Both, \gls{ISDA SIMM} and \gls{SA-CCR} are complex, convoluted formulas, making general observations on differentiability and homogeneity difficult.
+    In fact, we will see that depending on the portfolio and parametrization of the collateral agreement, both \gls{ISDA SIMM} and \gls{SA-CCR} are not homogeneous risk measures, and that they are both occasionally not partially differentiable w.r.t. position size.
     
     In this section, all identified cases under which prerequisites for Euler allocation are violated are presented and for some a workaround is presented to allow nevertheless for risk sensitive and naturally additive allocation.
     
     \subsection{Allocation when an ISDA-SIMM liquidity threshold is exceeded\label{sec:Allocation when an ISDA-SIMM liquidity threshold is exceeded}}
     
     As pointed out in section \ref{sec:Euler allocation} a risk measure needs to exhibit positive homogeneity of degree 1 to be able to perform an Euler allocation.
-    This precondition is violated if a liquidity threshold of the ISDA SIMM model is exceeded.
+    This precondition is violated if a liquidity threshold of the \gls{ISDA SIMM} model is exceeded.
 
-    We can show this by exploring whether ISDA SIMM does exhibit positive homogeneity for a minimal example.
+    We can show this by exploring whether \gls{ISDA SIMM} does exhibit positive homogeneity for a minimal example.
     
-    For this we set up an USD Libor IRS with ten years time to maturity and a notional of 200 billion USD. This is our initial portfolio $\mathbf{u}$. ISDA SIMM would fulfill the required positive homogeneity condition if $a \rho(\mathbf{u}) = \rho(a \mathbf{u})$ for $a>0$. In figure \ref{fig:homogeneity of ISDA SIMM} $\rho(a\mathbf{u})$ is plotted for $0<a\leq 2$ in blue. 
+    For this we set up an USD Libor IRS with ten years time to maturity and a notional of 200 billion USD. This is our initial portfolio $\mathbf{u}$. \gls{ISDA SIMM} would fulfill the required positive homogeneity condition if $a \rho(\mathbf{u}) = \rho(a \mathbf{u})$ for $a>0$. In figure \ref{fig:homogeneity of ISDA SIMM} $\rho(a\mathbf{u})$ is plotted for $0<a\leq 2$ in blue. 
     \begin{figure}
         \centering
         \includegraphics{Graphics/ISDA_SIMM_homogenity.pdf}
@@ -265,7 +265,7 @@
         \label{fig:homogeneity of ISDA SIMM}
     \end{figure}
     The function exhibits homogeneity for $0<a<1.3$ but not for higher $a$. 
-    The reason for this is, that at this point the concentration risk charge of ISDA SIMM does kick in.
+    The reason for this is, that at this point the concentration risk charge of \gls{ISDA SIMM} does kick in.
     The concentration risk for interest rate risks for our minimal example is defined as \cite[Article 7.b]{SIMM}
     \begin{align*}
         CR = \max\left(1,\left(\frac{\lvert\sum{s}\rvert}{T}\right)^{1/2}\right)
@@ -277,13 +277,13 @@
     This causes the change in slope and implied loss of homogeneity visible in figure \ref{fig:homogeneity of ISDA SIMM}. If the portfolio would consist of a more diverse set of risk factors than the minimal example displayed in figure \ref{fig:homogeneity of ISDA SIMM} the associated concentration risk would kick in at different levels of $a$.
     The slope of the function would increase with each additional concentration risk not being floored at one any more. 
     
-    It is important to note that as soon as the sensitivity against a single risk factor in the portfolio is above the concentration threshold the ISDA SIMM risk measure does not exhibit homogeneity anymore.
+    It is important to note that as soon as the sensitivity against a single risk factor in the portfolio is above the concentration threshold the \gls{ISDA SIMM} risk measure does not exhibit homogeneity anymore.
     
-    Even a trivial example with just one trade is sufficient to show that Euler allocation does not work in the inhomogeneous part of the ISDA SIMM equation.
+    Even a trivial example with just one trade is sufficient to show that Euler allocation does not work in the inhomogeneous part of the \gls{ISDA SIMM} equation.
     For this, we compare two sample portfolios one consisting of one USD IRS with 200 bn notional and one consisting of one USD IRS with 400 bn notional.
     Critically, the second portfolio is penalized by the model since its USD IRS risk is too large. We calculate the Euler calculation with a forward finite difference approach as displayed in equation \ref{eq:forward difference}.
     
-    Assuming that we calculate the finite difference with an $\epsilon = 0.0001$ this means that we calculate the ISDA SIMM of an IRS with 200Bn notional ($SIMM_{200Bn}$) and the ISDA SIMM of an equivalent IRS with 200.02 Bn notional ($SIMM_{200.02Bn}$) and this yields an Euler allocation to this trade as
+    Assuming that we calculate the finite difference with an $\epsilon = 0.0001$ this means that we calculate the \gls{ISDA SIMM} of an IRS with 200Bn notional ($SIMM_{200Bn}$) and the \gls{ISDA SIMM} of an equivalent IRS with 200.02 Bn notional ($SIMM_{200.02Bn}$) and this yields an Euler allocation to this trade as
     \begin{align*}
         \frac{SIMM_{200.02Bn} - SIMM_{200Bn}}{0.0001} = 9.04Bn
     \end{align*}
@@ -293,7 +293,7 @@
     \begin{align*}
         \frac{SIMM_{400.04Bn} - SIMM_{400Bn}}{0.0001} = 33.67Bn
     \end{align*}
-    again, we can refer to figure \ref{fig:homogeneity of ISDA SIMM} to check if this is a reasonable allocation result. As $a=1$ represents the IM charge for investing 200Bn of notional in the IRS, $a=2$ represents an investment of 400Bn notional. The associated IM is just 22.44Bn - allocating 33.67Bn of the risk measure to the only trade in the portfolio is therefore clearly wrong. The Euler allocation of 33.67Bn can also be read off figure \ref{fig:homogeneity of ISDA SIMM} - it is the slope at $a=2$ times two.
+    again, we can refer to figure \ref{fig:homogeneity of ISDA SIMM} to check if this is a reasonable allocation result. As $a=1$ represents the IM charge for investing 200Bn of notional in the \gls{IRS}, $a=2$ represents an investment of 400Bn notional. The associated IM is just 22.44Bn - allocating 33.67Bn of the risk measure to the only trade in the portfolio is therefore clearly wrong. The Euler allocation of 33.67Bn can also be read off figure \ref{fig:homogeneity of ISDA SIMM} - it is the slope at $a=2$ times two.
 
     This result extends to the Euler allocation of the SA-CCR. When allocation of the IM is not possible any more, allocation of the SA-CCR is neither if initial margin is taken into consideration during SA-CCR calculation.
 
@@ -323,7 +323,7 @@
         \label{fig:C for ITM IRS}
     \end{figure}
     
-    This can exemplary seen in figures \ref{fig:C for ATM IRS} and \ref{fig:C for ITM IRS}. These figures display $C$ for an at the money 10Y USD interest swap and the same swap with a lower fixed rate making it an in the money swap. Again, a very high notional of 200 Bn is chosen to showcase the concentration risk charge of ISDA SIMM and the threshold and minimum transfer amount have also been chosen to be very high at 2Bn and 1Bn USD.
+    This can exemplary seen in figures \ref{fig:C for ATM IRS} and \ref{fig:C for ITM IRS}. These figures display $C$ for an at the money 10Y USD interest swap and the same swap with a lower fixed rate making it an in the money swap. Again, a very high notional of 200 Bn is chosen to showcase the concentration risk charge of \gls{ISDA SIMM} and the threshold and minimum transfer amount have also been chosen to be very high at 2Bn and 1Bn USD.
 
     \subsubsection{Incorporation of a VM threshold\label{sec:Incorporation of a VM threshold}}
     
@@ -407,7 +407,7 @@
         \caption{All values are in USD}
         \label{tab:IM threshold example standalone}
     \end{table}
-    As we can see the IRS has a lower EAD under VM and IM than the equity option which is due to the fact that the ISDA SIMM model charges considerably more IM for the IRS which is then recognized as overcollateralization for the subsequent EAD calculation.
+    As we can see the IRS has a lower EAD under VM and IM than the equity option which is due to the fact that the \gls{ISDA SIMM} model charges considerably more IM for the IRS which is then recognized as overcollateralization for the subsequent EAD calculation.
 
     When we now assume an IM threshold of zero, five million and ten million USD and perform a numerical Euler allocation with a central difference approach we yield the results displayed in \ref{tab:IM threshold example allocated}.
     \begin{table}[htbp]
