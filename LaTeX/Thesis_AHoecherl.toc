@@ -43,7 +43,7 @@
 \contentsline {section}{\numberline {A.2}SA-CCR Euler allocation of an exemplary equity portfolio}{57}{section.a.A.2}
 \contentsline {section}{\numberline {A.3}Euler allocation of an exemplary rates portfolio}{61}{section.a.A.3}
 \contentsline {section}{\numberline {A.4}SA-CCR Euler allocation of an exemplary multi asset class portfolio}{64}{section.a.A.4}
-\contentsline {section}{\numberline {A.5}ISDA SIMM homogeneity for portfolio of a single trade}{67}{section.a.A.5}
+\contentsline {section}{\numberline {A.5}ISDA SIMM homogeneity for portfolio of a single trade}{68}{section.a.A.5}
 \contentsline {section}{\numberline {A.6}SA-CCR and ISDA SIMM Euler allocation under a perfect hedge}{71}{section.a.A.6}
 \contentsline {section}{\numberline {A.7}Homogeneity of C for a single trade portfolio}{76}{section.a.A.7}
 \contentsline {section}{\numberline {A.8}Exemplary SA-CCR allocation under consideration of a minimum transfer amount.}{80}{section.a.A.8}

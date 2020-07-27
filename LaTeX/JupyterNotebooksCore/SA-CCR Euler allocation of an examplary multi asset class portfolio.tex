@@ -56,46 +56,20 @@ joint portfolio.
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
 \prompt{Out}{outcolor}{Out}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-                                             Allocated EAD VM only  \textbackslash{}
-2Mn ADS Call 1Y                                      8,181,543 USD
-3Mn ADS Put 1Y                                      -4,662,085 USD
-180Mn EURIBOR6M RECEIVER IRS 6Y                      1,957,315 USD
-1000Mn USDLIBOR3M PAYER IRS 6Y                      10,873,970 USD
-500Mn USDLIBOR3M RECEIVER Swaption 1Y to 6Y         -1,773,170 USD
-Overall Portfolio                                   14,577,571 USD
-
-                                              Allocated IM  \textbackslash{}
-2Mn ADS Call 1Y                             -4,802,460 USD
-3Mn ADS Put 1Y                              19,034,023 USD
-180Mn EURIBOR6M RECEIVER IRS 6Y                172,265 USD
-1000Mn USDLIBOR3M PAYER IRS 6Y              27,859,887 USD
-500Mn USDLIBOR3M RECEIVER Swaption 1Y to 6Y  6,763,936 USD
-Overall Portfolio                           49,027,652 USD
-
-                                             Allocated EAD VM + IM
-2Mn ADS Call 1Y                                      2,959,180 USD
-3Mn ADS Put 1Y                                      -2,643,342 USD
-180Mn EURIBOR6M RECEIVER IRS 6Y                        630,350 USD
-1000Mn USDLIBOR3M PAYER IRS 6Y                       1,921,998 USD
-500Mn USDLIBOR3M RECEIVER Swaption 1Y to 6Y           -977,443 USD
-Overall Portfolio                                    1,890,742 USD
-\end{Verbatim}
+\begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Graphics/HTML_tables/MultiAssetPF_table1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
 \end{tcolorbox}
         
     We can aggregate the results across the asset classes.
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
 \prompt{Out}{outcolor}{Out}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-                     Allocated EAD VM only   Allocated IM  \textbackslash{}
-Equity Subportfolio          3,519,458 USD 14,231,564 USD
-Rates Subportfolio          11,058,114 USD 34,796,088 USD
-
-                     Allocated EAD VM + IM
-Equity Subportfolio            315,837 USD
-Rates Subportfolio           1,574,905 USD
-\end{Verbatim}
+\begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Graphics/HTML_tables/MultiAssetPF_table2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
 \end{tcolorbox}
         
     This result is discussed further in section
