@@ -97,10 +97,8 @@ EAD:  582940242
 C:   9039060887
     \end{Verbatim}
 
-    Calculating the forward difference
-\todo{Replace with central difference to reduce the slight delta between EAD and result without MTA}
-in line with equation \todo{reference forward dif eq} with and without
-consideration of the MTA yields
+    Calculating the forward difference with and without consideration of the
+MTA yields
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{In}{\boxspacing}
@@ -196,9 +194,9 @@ Below, we allocate the ead assuming a mta of 0.
     As we can see the result equals \(PFE*1.4\) of the entire portfolio but
 the RC has not been allocated.
 
-The RC is also \(>0\), if \(TH < IM_{calc} < MTA\). Based on the
-available marketdata this is e.g.~the case for an IRS with a notional of
-1130Mn USD.
+The RC is also \(>0\), if \(TH_{IM} < IM_{calc} < MTA\). Based on the
+available marketdata, chosen MTA and chosen threshold this is e.g.~the
+case for an IRS with a notional of 1130Mn USD.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{In}{\boxspacing}
@@ -225,7 +223,7 @@ EAD/1.4: 14263607 USD
 EAD:     19969050 USD
     \end{Verbatim}
 
-    This observation is discussed further in
-\todo{Reference appropriate section in Results}.
+    These observations are discussed further in
+\ref{sec:Incorporation of a minimum transfer amount}.
 
 

@@ -181,11 +181,11 @@
     \end{table}%
 
     For the swaption it is more difficult to pinpoint where the difference between the \gls{ISDA SIMM} and \gls{SA-CCR} model that results in the very different risk assessment of the swaption in relation to the rest of the portfolio is originating.
-    Sensitivities of the swaps and swaption are calculated very differently between the two models with the \gls{ISDA SIMM} model being based on current market data whilst the \gls{SA-CCR} makes much more simplifying assumptions.
+    Sensitivities of the swaps and swaption are calculated very differently between the two models with the \gls{ISDA SIMM} model being based on current market data whilst the \gls{SA-CCR} makes much more simplifying assumptions. 
 
     \subsection{Exemplary allocation of SA-CCR on subportfolios\label{sec:Exemplary allocation of SA-CCR on subportfolios}}
 
-    One of the advantages of the Euler allocation is, that once allocated, values on trade level can be aggregated to also produce risk sensitive results for subportfolios. It is also possible to directly allocate risk metrics on subportfolios if no further granularity is required and thereby saving computation time. The detailed computation steps for the results of this section are demonstrated in appendix \ref{sa-ccr-euler-allocation-of-an-exemplary-multi-asset-class-portfolio}.
+    One of the advantages of the Euler allocation is, that once allocated, values on trade level can be aggregated to also produce risk sensitive results for subportfolios. It is also possible to directly allocate risk metrics on subportfolios if no further granularity is required and thereby saving computation time. The detailed computation steps for the results of this section are demonstrated in appendix \ref{sa-ccr-euler-allocation-of-an-exemplary-multi-asset-class-portfolio}. 
 
     For this we put the five exemplary derivatives of the two previous sections in a joint portfolio, i.e. the EUR \gls{IRS}, the USD \gls{IRS}, the USD swaption and the position in Adidas put and call options.
     The resulting portfolio risk measures are displayed in the last row of table \ref{tab:multiAssetResult} with the portfolio results of the standalone portfolios from the previous section displayed as reference.
@@ -305,7 +305,7 @@
 
     \subsection{Incorporation of a minimum transfer amount and threshold}\label{sec:Incorporation of a minimum transfer amount and threshold}
 
-    To allocate \gls{SA-CCR} under consideration of margining, the available collateral $C$ is of special interest. As pointed out in table \ref{tab:Margin in SA-CCR} depending on the margining approach, C can be calculated as $C = \text{VM}$ or $C = \text{VM} + \text{IM}_{\text{received}}$.
+    To allocate \gls{SA-CCR} under consideration of margining, the available collateral $C$ is of special interest. As pointed out in table \ref{tab:Margin in SA-CCR} depending on the margining approach, C can be calculated as $C = \text{VM}$ or $C = \text{VM} + \text{IM}_{\text{received}}$. 
     
     The actually exchanged collateral, however has to be calculated under consideration of the threshold and minimum transfer amount as displayed in equation \ref{eq:C}. With this consideration of threshold and minimum transfer amount $C$ is not a homogeneous function. 
 
@@ -337,13 +337,13 @@
 
     Some exemplary calculations exploring the effects of a \gls{VM} threshold can be found in appendix \ref{ead-impact-of-a-variation-margin-threshold}.
     
-    \subsubsection{Incorporation of a minimum transfer amount}
+    \subsubsection{Incorporation of a minimum transfer amount}\label{sec:Incorporation of a minimum transfer amount}
 
     Again, similar to the exemplary calculation in section \ref{sec:Allocation when an ISDA-SIMM liquidity threshold is exceeded} it can be shown with a trivial example, that Euler allocation of \gls{SA-CCR} is not possible under recognition of a \gls{MTA}. Detailed documentation of this exemplary calculation may be found in appendix \ref{exemplary-sa-ccr-allocation-under-consideration-of-a-minimum-transfer-amount.}.
     
     We consider the same 200Bn \gls{IRS} as in section \ref{sec:Allocation when an ISDA-SIMM liquidity threshold is exceeded}. We assume that the currently posted margin is 9.04Bn which is the calculated \gls{ISDA SIMM} margin. 
     Setting $C$ at 9.04Bn in the \gls{SA-CCR} equation \ref{eq:multiplier} and then calculating the \gls{SA-CCR} \gls{EAD} for this single \gls{IRS} yields an regulatory \gls{EAD} of 582.8Mn USD. Any natively additive allocation should allocate this full amount to the \gls{IRS}.
-    The \gls{VM} is zero as the \gls{IRS} is struck at par.
+    The \gls{VM} is zero as the \gls{IRS} is struck at par. 
     \begin{table}[htbp]
         \centering
         \begin{tabular}{c|c|c}

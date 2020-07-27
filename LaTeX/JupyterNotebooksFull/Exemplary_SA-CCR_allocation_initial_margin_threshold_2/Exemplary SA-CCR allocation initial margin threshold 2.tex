@@ -411,7 +411,7 @@ We consider a portfolio of two trades, an IRS and an equity option.
 \end{Verbatim}
 \end{tcolorbox}
 
-    These two trades happen to have the same EAD under VM only
+    These two trades happen to have the same EAD under VM only.
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
 \prompt{Out}{outcolor}{6}{\boxspacing}
@@ -427,7 +427,7 @@ We consider a portfolio of two trades, an IRS and an equity option.
 \end{Verbatim}
 \end{tcolorbox}
         
-    If they are put into a common portfolio under VM only this common
+    If they are put into a common portfolio under VM only, this common
 portfolio just has the sum as EAD as no hedge effects take place.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -514,6 +514,8 @@ respective sum.
     We can compare the allocation of EAD with and without IM to see that
 with IM, less is attributed to the IRS as it commands a higher margin.
 
+    Without initial margin:
+
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{18}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -532,8 +534,10 @@ with IM, less is attributed to the IRS as it commands a higher margin.
 \end{Verbatim}
 \end{tcolorbox}
         
+    With initial margin:
+
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{19}{\boxspacing}
+\prompt{In}{incolor}{ }{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{ca\PYZus{}common}\PY{o}{.}\PY{n}{initialMargining} \PY{o}{=} \PY{n}{InitialMargining}\PY{o}{.}\PY{n}{SIMM}
 \PY{p}{\PYZob{}}\PY{n}{k}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}class\PYZus{}\PYZus{}}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{:} \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{v}\PY{l+s+si}{:}\PY{l+s+s1}{,.0f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{ USD}\PY{l+s+s1}{\PYZsq{}}
@@ -541,13 +545,6 @@ with IM, less is attributed to the IRS as it commands a higher margin.
 \end{Verbatim}
 \end{tcolorbox}
 
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{19}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\{'EquityOption': '505,528 USD', 'IRS': '271,701 USD'\}
-\end{Verbatim}
-\end{tcolorbox}
-        
     We introduce an initial margin threshold that is higher than the
 calculated IM and see that the resulting allocation is subadditive and
 the same as in the case without initial margin.

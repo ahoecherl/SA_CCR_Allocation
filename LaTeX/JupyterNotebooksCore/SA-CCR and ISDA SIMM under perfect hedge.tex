@@ -47,7 +47,7 @@ equity option into the portfolio.
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-1319277.1719911932
+1315355.6739375147
 6952717.387110085
     \end{Verbatim}
 
@@ -55,7 +55,7 @@ equity option into the portfolio.
 numerical Euler allocation of the ISDA-SIMM IM or the SA-CCR EAD risk
 measure. The allocator can be set to use forward, backward or central
 differentiation. We will see that the differentiation approach makes a
-big difference for this perfectly hedged portfolio.h
+big difference for this perfectly hedged portfolio.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{In}{\boxspacing}
@@ -76,7 +76,7 @@ big difference for this perfectly hedged portfolio.h
 
     Below the resulting allocation for the IM is displayed. The allocation
 only exhibits nativ additivity when using the central difference
-appraoch since then the allocated values sum up to the IM value of
+approach since then the allocated values sum up to the IM value of
 6952717.39 USD.
 
     
@@ -100,8 +100,8 @@ Sum               -2.085253e+06  6.952654e+06  1.599062e+07
         
     Below the resulting allocation for the EAD is displayed. The allocation
 only exhibits nativ additivity when using the central difference
-appraoch since then the allocated values sum up to the IM value of
-1319277.17 USD.
+approach since then the allocated values sum up to the IM value of
+1315355.67 USD.
 
     
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -115,10 +115,10 @@ appraoch since then the allocated values sum up to the IM value of
 \prompt{Out}{outcolor}{Out}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
                        Backward       Central       Forward
-IRS\_Long          -1.877916e+05  4.854053e-02  1.877916e+05
-IRS\_Short         -1.877853e+05  1.267496e+01  1.877979e+05
-EquityOption\_Long  1.319277e+06  1.319277e+06  1.319277e+06
-Sum                9.437004e+05  1.319290e+06  1.694867e+06
+IRS\_Long          -1.884133e+05  4.845671e-02  1.884134e+05
+IRS\_Short         -1.884070e+05  1.265202e+01  1.884196e+05
+EquityOption\_Long  1.315356e+06  1.315356e+06  1.315356e+06
+Sum                9.385354e+05  1.315368e+06  1.692189e+06
 \end{Verbatim}
 \end{tcolorbox}
         
@@ -156,9 +156,17 @@ trades.
 
 \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{ca}\PY{o}{.}\PY{n}{trades}\PY{p}{:}
     \PY{k}{for} \PY{n}{bump} \PY{o+ow}{in} \PY{n}{bumps}\PY{p}{:}
-        \PY{n}{record} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Relative change in position size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{bump}\PY{p}{,}
-                  \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Change in EAD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{bump\PYZus{}one\PYZus{}trade\PYZus{}and\PYZus{}return\PYZus{}diff}\PY{p}{(}\PY{n}{bump}\PY{p}{,} \PY{n}{t}\PY{p}{,} \PY{n}{ca}\PY{p}{,} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{)}\PY{p}{,}
-                  \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Legend}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{ast}\PY{o}{.}\PY{n}{literal\PYZus{}eval}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Instrument}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZus{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{ast}\PY{o}{.}\PY{n}{literal\PYZus{}eval}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TradeDirection}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{\PYZcb{}}
+        \PY{n}{record} \PY{o}{=} \PYZbs{}
+            \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Relative change in position size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{bump}\PY{p}{,}
+             \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Change in EAD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                 \PY{n}{bump\PYZus{}one\PYZus{}trade\PYZus{}and\PYZus{}return\PYZus{}diff}\PY{p}{(}
+                     \PY{n}{bump}\PY{p}{,} \PY{n}{t}\PY{p}{,} \PY{n}{ca}\PY{p}{,}
+                     \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{)}\PY{p}{,}
+             \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Legend}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                 \PY{n}{ast}\PY{o}{.}\PY{n}{literal\PYZus{}eval}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Instrument}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZus{}}\PY{l+s+s1}{\PYZsq{}}
+                 \PY{o}{+} \PY{n}{ast}\PY{o}{.}\PY{n}{literal\PYZus{}eval}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TradeDirection}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+             \PY{p}{\PYZcb{}}
+
         \PY{n}{result\PYZus{}df} \PY{o}{=} \PY{n}{result\PYZus{}df}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{record}\PY{p}{,} \PY{n}{ignore\PYZus{}index}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
@@ -184,9 +192,16 @@ trades.
 
 \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{ca}\PY{o}{.}\PY{n}{trades}\PY{p}{:}
     \PY{k}{for} \PY{n}{bump} \PY{o+ow}{in} \PY{n}{bumps}\PY{p}{:}
-        \PY{n}{record} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Relative change in position size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{bump}\PY{p}{,}
-                  \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Change in calculated IM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{bump\PYZus{}one\PYZus{}trade\PYZus{}and\PYZus{}return\PYZus{}diff}\PY{p}{(}\PY{n}{bump}\PY{p}{,} \PY{n}{t}\PY{p}{,} \PY{n}{ca}\PY{p}{,} \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}im\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{)}\PY{p}{,}
-                  \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Legend}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{ast}\PY{o}{.}\PY{n}{literal\PYZus{}eval}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Instrument}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZus{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{ast}\PY{o}{.}\PY{n}{literal\PYZus{}eval}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TradeDirection}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{\PYZcb{}}
+        \PY{n}{record} \PY{o}{=} \PYZbs{}
+            \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Relative change in position size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{bump}\PY{p}{,}
+             \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Change in calculated IM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{bump\PYZus{}one\PYZus{}trade\PYZus{}and\PYZus{}return\PYZus{}diff}\PY{p}{(}
+                 \PY{n}{bump}\PY{p}{,} \PY{n}{t}\PY{p}{,} \PY{n}{ca}\PY{p}{,}
+                 \PY{n}{ca}\PY{o}{.}\PY{n}{get\PYZus{}im\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}risk\PYZus{}measure}\PY{p}{)}\PY{p}{,}
+             \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Legend}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                 \PY{n}{ast}\PY{o}{.}\PY{n}{literal\PYZus{}eval}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Instrument}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZus{}}\PY{l+s+s1}{\PYZsq{}}
+                 \PY{o}{+} \PY{n}{ast}\PY{o}{.}\PY{n}{literal\PYZus{}eval}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TradeDirection}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+             \PY{p}{\PYZcb{}}
+
         \PY{n}{result\PYZus{}df} \PY{o}{=} \PY{n}{result\PYZus{}df}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{record}\PY{p}{,} \PY{n}{ignore\PYZus{}index}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
@@ -226,7 +241,7 @@ metric.
 \end{Verbatim}
 \end{tcolorbox}
 
-    The IM for this portfolio is 11471795.91 USD and the EAD is 1542260.63
+    The IM for this portfolio is 11471795.91 USD and the EAD is 1538770.53
 USD.
 
     
@@ -249,10 +264,10 @@ Sum                1.147180e+07  1.147180e+07  1.147180e+07
 \prompt{Out}{outcolor}{Out}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
                        Backward       Central       Forward
-IRS\_Short         -2.463114e+05 -2.463099e+05 -2.463083e+05
-IRS\_Long           4.926136e+05  4.926198e+05  4.926259e+05
-EquityOption\_Long  1.295949e+06  1.295951e+06  1.295952e+06
-Sum                1.542251e+06  1.542261e+06  1.542270e+06
+IRS\_Short         -2.466093e+05 -2.466078e+05 -2.466063e+05
+IRS\_Long           4.932094e+05  4.932156e+05  4.932217e+05
+EquityOption\_Long  1.292161e+06  1.292163e+06  1.292164e+06
+Sum                1.538761e+06  1.538771e+06  1.538780e+06
 \end{Verbatim}
 \end{tcolorbox}
         

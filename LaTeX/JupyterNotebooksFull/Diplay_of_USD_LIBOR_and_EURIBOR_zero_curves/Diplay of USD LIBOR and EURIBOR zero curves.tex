@@ -379,7 +379,7 @@ and EURIBOR zero curve for the effective date 10th of May 2019 which is
 used for pricing throughout this thesis.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{2}{\boxspacing}
+\prompt{In}{incolor}{18}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{today} \PY{o}{=} \PY{n}{ql}\PY{o}{.}\PY{n}{Date}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{May}\PY{p}{,} \PY{l+m+mi}{2019}\PY{p}{)}
 \PY{n}{ql}\PY{o}{.}\PY{n}{Settings}\PY{o}{.}\PY{n}{instance}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{evaluationDate} \PY{o}{=} \PY{n}{today}
@@ -390,7 +390,7 @@ used for pricing throughout this thesis.
 the market data package of the library developed for this thesis.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{3}{\boxspacing}
+\prompt{In}{incolor}{19}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{k+kn}{from} \PY{n+nn}{marketdata}\PY{n+nn}{.}\PY{n+nn}{interestRateCurves} \PY{k+kn}{import} \PY{n}{LiborCurve}
 \PY{n}{euribor6m} \PY{o}{=} \PY{n}{LiborCurve}\PY{o}{.}\PY{n}{EURIBOR6M}\PY{o}{.}\PY{n}{value}
@@ -401,7 +401,7 @@ the market data package of the library developed for this thesis.
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{3}{\boxspacing}
+\prompt{Out}{outcolor}{19}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 QuantLib.QuantLib.YieldTermStructureHandle
 \end{Verbatim}
@@ -411,7 +411,7 @@ QuantLib.QuantLib.YieldTermStructureHandle
 functionality to infer zero rates.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{4}{\boxspacing}
+\prompt{In}{incolor}{20}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{end} \PY{o}{=} \PY{n}{today} \PY{o}{+} \PY{n}{ql}\PY{o}{.}\PY{n}{Period}\PY{p}{(}\PY{l+m+mi}{30}\PY{p}{,} \PY{n}{ql}\PY{o}{.}\PY{n}{Years}\PY{p}{)}
 \PY{c+c1}{\PYZsh{} dates is just a list of all days until 30 years in the future}
@@ -424,7 +424,7 @@ functionality to infer zero rates.
     When plotting these zero rates we do yield
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{5}{\boxspacing}
+\prompt{In}{incolor}{21}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{k}{def} \PY{n+nf}{plotdf}\PY{p}{(}\PY{n}{y}\PY{p}{,} \PY{n}{x}\PY{p}{,} \PY{n}{legend}\PY{p}{)}\PY{p}{:}
     \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{)}
@@ -439,14 +439,14 @@ functionality to infer zero rates.
 \end{tcolorbox}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{6}{\boxspacing}
+\prompt{In}{incolor}{22}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{fig} \PY{o}{=} \PY{n}{px}\PY{o}{.}\PY{n}{line}\PY{p}{(}\PY{n}{plot\PYZus{}data}\PY{p}{,} \PY{n}{x} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Zero Rate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Legend}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
  
             
-\prompt{Out}{outcolor}{7}{}
+\prompt{Out}{outcolor}{23}{}
     
     \begin{center}
     \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_9_0.jpg}

@@ -396,7 +396,10 @@ concentration threshold.
           \PY{n}{index} \PY{o}{=} \PY{n}{InterestRateIndex}\PY{o}{.}\PY{n}{USDLIBOR3M}\PY{p}{)}
 
 \PY{n}{simm\PYZus{}sensis} \PY{o}{=} \PY{n}{irs}\PY{o}{.}\PY{n}{get\PYZus{}simm\PYZus{}sensis}\PY{p}{(}\PY{p}{)}
-\PY{n}{ir\PYZus{}delta} \PY{o}{=} \PY{n+nb}{sum}\PY{p}{(}\PY{p}{[}\PY{n+nb}{float}\PY{p}{(}\PY{n}{entry}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{amountUSD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)} \PY{k}{for} \PY{n}{entry} \PY{o+ow}{in} \PY{n}{simm\PYZus{}sensis} \PY{k}{if} \PY{n}{entry}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{riskType}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Risk\PYZus{}IRCurve}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{ir\PYZus{}delta} \PY{o}{=} \PY{n+nb}{sum}\PY{p}{(}\PY{p}{[}\PY{n+nb}{float}\PY{p}{(}\PY{n}{entry}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{amountUSD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+                \PY{k}{for} \PY{n}{entry}
+                \PY{o+ow}{in} \PY{n}{simm\PYZus{}sensis}
+                \PY{k}{if} \PY{n}{entry}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{riskType}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Risk\PYZus{}IRCurve}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
 \PY{n}{ir\PYZus{}delta}
 \end{Verbatim}
 \end{tcolorbox}
@@ -414,7 +417,7 @@ delta of the IRS appears to be slightly lower than one.
 
     
     We create a collateral agreement with associated ISDA SIMM and SA CCR
-model and load the irs in the portfolio. The collateral agreement uses
+model and load the IRS in the portfolio. The collateral agreement uses
 ISDA SIMM for IM calculation.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -498,7 +501,7 @@ although we are just exploring IM right now.
     
 
     As can be seen, ISDA SIMM does not exhibit homogeneity. We can find the
-notional at which the IR delta of the trade exceed 230Mn USD.
+notional at which the IR delta of the trade exceeds 230Mn USD.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{9}{\boxspacing}
@@ -543,7 +546,7 @@ notional at which the IR delta of the trade exceed 230Mn USD.
 \end{tcolorbox}
         
     Further discussion of this in section
-\ref{Allocation of initial margin}.
+\ref{sec:Allocation when an ISDA-SIMM liquidity threshold is exceeded}.
 
 
     % Add a bibliography block to the postdoc

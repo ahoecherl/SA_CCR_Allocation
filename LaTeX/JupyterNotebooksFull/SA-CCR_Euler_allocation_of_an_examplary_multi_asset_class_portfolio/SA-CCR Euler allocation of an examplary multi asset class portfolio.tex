@@ -378,26 +378,28 @@ We want to show at an example, how the Euler allocation of trades can be
 summed up to subportfolios to still accurately represent the risk
 dynamics of the allocated risk measure.
 
-We combine the exemplary equity portfolio with the exemplary rates
-portfolio set up in the previous sections within a joint portfolio.
+We combine the exemplary equity portfolio (just the ADS options) with
+the exemplary rates portfolio set up in the previous sections within a
+joint portfolio.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{3}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{trades} \PY{o}{=} \PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call}\PY{p}{,}
           \PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{p}{,}
-          \PY{n}{eq\PYZus{}opt\PYZus{}dbk\PYZus{}call}\PY{p}{,}
           \PY{n}{payer\PYZus{}usd\PYZus{}6Y}\PY{p}{,}
           \PY{n}{receiver\PYZus{}eur\PYZus{}6Y}\PY{p}{,}
           \PY{n}{rec\PYZus{}swaption\PYZus{}1\PYZus{}6}\PY{p}{]}
 
-\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}only} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{margining}\PY{o}{=}\PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}\PY{p}{,}
-                                       \PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{NO\PYZus{}IM}\PY{p}{)}
+\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}only} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}
+    \PY{n}{margining}\PY{o}{=}\PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}\PY{p}{,}
+    \PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{NO\PYZus{}IM}\PY{p}{)}
 \PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}only}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}only}\PY{p}{)}\PY{p}{)}
 \PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}only}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{trades}\PY{p}{)}
 
-\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}\PY{n}{margining}\PY{o}{=}\PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}\PY{p}{,}
-                                         \PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{SIMM}\PY{p}{)}
+\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im} \PY{o}{=} \PY{n}{CollateralAgreement}\PY{p}{(}
+    \PY{n}{margining}\PY{o}{=}\PY{n}{Margining}\PY{o}{.}\PY{n}{MARGINED}\PY{p}{,}
+    \PY{n}{initialMargining}\PY{o}{=}\PY{n}{InitialMargining}\PY{o}{.}\PY{n}{SIMM}\PY{p}{)}
 \PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{o}{.}\PY{n}{link\PYZus{}sa\PYZus{}ccr\PYZus{}instance}\PY{p}{(}\PY{n}{SA\PYZus{}CCR}\PY{p}{(}\PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{p}{)}\PY{p}{)}
 \PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{trades}\PY{p}{)}
 \end{Verbatim}
@@ -425,31 +427,28 @@ portfolio set up in the previous sections within a joint portfolio.
 \prompt{Out}{outcolor}{6}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
                                              Allocated EAD VM only  \textbackslash{}
-2Mn ADS Call 1Y                                      4,567,360 USD
-3Mn ADS Put 1Y                                      -2,602,617 USD
-10Mn DBK Call 1Y                                     8,265,308 USD
+2Mn ADS Call 1Y                                      8,181,543 USD
+3Mn ADS Put 1Y                                      -4,662,085 USD
 180Mn EURIBOR6M RECEIVER IRS 6Y                      1,957,315 USD
 1000Mn USDLIBOR3M PAYER IRS 6Y                      10,873,970 USD
 500Mn USDLIBOR3M RECEIVER Swaption 1Y to 6Y         -1,773,170 USD
-Overall Portfolio                                   21,288,165 USD
+Overall Portfolio                                   14,577,571 USD
 
                                               Allocated IM  \textbackslash{}
-2Mn ADS Call 1Y                              4,197,013 USD
-3Mn ADS Put 1Y                               5,969,992 USD
-10Mn DBK Call 1Y                            17,384,508 USD
+2Mn ADS Call 1Y                             -4,802,460 USD
+3Mn ADS Put 1Y                              19,034,023 USD
 180Mn EURIBOR6M RECEIVER IRS 6Y                172,265 USD
 1000Mn USDLIBOR3M PAYER IRS 6Y              27,859,887 USD
 500Mn USDLIBOR3M RECEIVER Swaption 1Y to 6Y  6,763,936 USD
-Overall Portfolio                           62,347,602 USD
+Overall Portfolio                           49,027,652 USD
 
                                              Allocated EAD VM + IM
-2Mn ADS Call 1Y                                      1,472,268 USD
-3Mn ADS Put 1Y                                      -1,515,288 USD
-10Mn DBK Call 1Y                                     1,872,447 USD
-180Mn EURIBOR6M RECEIVER IRS 6Y                        762,482 USD
-1000Mn USDLIBOR3M PAYER IRS 6Y                       2,059,910 USD
-500Mn USDLIBOR3M RECEIVER Swaption 1Y to 6Y         -1,250,488 USD
-Overall Portfolio                                    3,401,332 USD
+2Mn ADS Call 1Y                                      2,959,180 USD
+3Mn ADS Put 1Y                                      -2,643,342 USD
+180Mn EURIBOR6M RECEIVER IRS 6Y                        630,350 USD
+1000Mn USDLIBOR3M PAYER IRS 6Y                       1,921,998 USD
+500Mn USDLIBOR3M RECEIVER Swaption 1Y to 6Y           -977,443 USD
+Overall Portfolio                                    1,890,742 USD
 \end{Verbatim}
 \end{tcolorbox}
         
@@ -459,16 +458,17 @@ Overall Portfolio                                    3,401,332 USD
 \prompt{Out}{outcolor}{8}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
                      Allocated EAD VM only   Allocated IM  \textbackslash{}
-Equity Subportfolio         10,230,051 USD 27,551,513 USD
+Equity Subportfolio          3,519,458 USD 14,231,564 USD
 Rates Subportfolio          11,058,114 USD 34,796,088 USD
 
                      Allocated EAD VM + IM
-Equity Subportfolio          1,829,428 USD
-Rates Subportfolio           1,571,904 USD
+Equity Subportfolio            315,837 USD
+Rates Subportfolio           1,574,905 USD
 \end{Verbatim}
 \end{tcolorbox}
         
-    This result is discussed further in section \todo{Reference required}.
+    This result is discussed further in section
+\ref{sec:Exemplary allocation of SA-CCR on subportfolios}.
 
     Subportfolio allocations can also be calculated directly by calculating
 partial derivatives against an entire subportfolio instead of a single
@@ -483,11 +483,9 @@ derivative of the EAD under VM and IM of the equity subportfolio:
 \PY{n}{bump} \PY{o}{=} \PY{l+m+mf}{0.00005}
 
 \PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{o}{.}\PY{n}{replace\PYZus{}trade}\PY{p}{(}
-    \PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}dbk\PYZus{}call}\PY{p}{,}
-     \PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{p}{,}
+    \PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{p}{,}
      \PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call}\PY{p}{]}\PY{p}{,}
-    \PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}dbk\PYZus{}call}\PY{o}{.}\PY{n}{get\PYZus{}bumped\PYZus{}copy}\PY{p}{(}\PY{n}{rel\PYZus{}bump\PYZus{}size}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{n}{bump}\PY{p}{)}\PY{p}{,}
-     \PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{o}{.}\PY{n}{get\PYZus{}bumped\PYZus{}copy}\PY{p}{(}\PY{n}{rel\PYZus{}bump\PYZus{}size}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{n}{bump}\PY{p}{)}\PY{p}{,}
+    \PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{o}{.}\PY{n}{get\PYZus{}bumped\PYZus{}copy}\PY{p}{(}\PY{n}{rel\PYZus{}bump\PYZus{}size}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{n}{bump}\PY{p}{)}\PY{p}{,}
      \PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call}\PY{o}{.}\PY{n}{get\PYZus{}bumped\PYZus{}copy}\PY{p}{(}\PY{n}{rel\PYZus{}bump\PYZus{}size}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{n}{bump}\PY{p}{)}\PY{p}{,}\PY{p}{]}\PY{p}{)}
 
 \PY{n}{bump\PYZus{}down\PYZus{}ead} \PY{o}{=} \PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}ead}\PY{p}{(}\PY{p}{)}
@@ -495,11 +493,9 @@ derivative of the EAD under VM and IM of the equity subportfolio:
 \PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{o}{.}\PY{n}{remove\PYZus{}all\PYZus{}trades}\PY{p}{(}\PY{p}{)}
 \PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{o}{.}\PY{n}{add\PYZus{}trades}\PY{p}{(}\PY{n}{trades}\PY{p}{)}
 \PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{o}{.}\PY{n}{replace\PYZus{}trade}\PY{p}{(}
-    \PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}dbk\PYZus{}call}\PY{p}{,}
-     \PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{p}{,}
+    \PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{p}{,}
      \PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call}\PY{p}{]}\PY{p}{,}
-    \PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}dbk\PYZus{}call}\PY{o}{.}\PY{n}{get\PYZus{}bumped\PYZus{}copy}\PY{p}{(}\PY{n}{rel\PYZus{}bump\PYZus{}size}\PY{o}{=}\PY{n}{bump}\PY{p}{)}\PY{p}{,}
-     \PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{o}{.}\PY{n}{get\PYZus{}bumped\PYZus{}copy}\PY{p}{(}\PY{n}{rel\PYZus{}bump\PYZus{}size}\PY{o}{=}\PY{n}{bump}\PY{p}{)}\PY{p}{,}
+    \PY{p}{[}\PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}put}\PY{o}{.}\PY{n}{get\PYZus{}bumped\PYZus{}copy}\PY{p}{(}\PY{n}{rel\PYZus{}bump\PYZus{}size}\PY{o}{=}\PY{n}{bump}\PY{p}{)}\PY{p}{,}
      \PY{n}{eq\PYZus{}opt\PYZus{}ads\PYZus{}call}\PY{o}{.}\PY{n}{get\PYZus{}bumped\PYZus{}copy}\PY{p}{(}\PY{n}{rel\PYZus{}bump\PYZus{}size}\PY{o}{=}\PY{n}{bump}\PY{p}{)}\PY{p}{,}\PY{p}{]}\PY{p}{)}
 
 \PY{n}{bump\PYZus{}up\PYZus{}ead} \PY{o}{=} \PY{n}{joint\PYZus{}ca\PYZus{}vm\PYZus{}and\PYZus{}im}\PY{o}{.}\PY{n}{get\PYZus{}sa\PYZus{}ccr\PYZus{}model}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}ead}\PY{p}{(}\PY{p}{)}
@@ -509,9 +505,9 @@ derivative of the EAD under VM and IM of the equity subportfolio:
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{17}{\boxspacing}
+\prompt{Out}{outcolor}{10}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-'1,829,428 USD'
+'315,837 USD'
 \end{Verbatim}
 \end{tcolorbox}
         
@@ -547,14 +543,14 @@ derivative of the EAD under VM and IM of the equity subportfolio:
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{16}{\boxspacing}
+\prompt{Out}{outcolor}{12}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-'1,571,904 USD'
+'1,574,904 USD'
 \end{Verbatim}
 \end{tcolorbox}
         
     When bumping all trades of a subportfolio simultaneously we yield the
-same results of 1,829,428 USD for the equity subportfolio and 1,571,904
+same results of 315,837 USD for the equity subportfolio and 1,574,904
 USD for the rates subportfolio whilst performing less recalculations of
 the portfolio.
 
