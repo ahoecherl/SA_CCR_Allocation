@@ -127,7 +127,7 @@
     
     This difference in models leads to the phenomenon that can be observed in the \gls{EAD} under \gls{VM} and \gls{IM} column. The calculated \gls{EAD} for the portfolio of both \gls{IRS} is significantly higher than the sum of the \gls{EAD} of the two standalone portfolios.
     We have found a counterexample showing that \gls{SA-CCR} under consideration of \gls{VM} and \gls{IM} is not a sub-additive risk measure.
-    Subadditivity is one of the properties of a coherent risk measure \todo{Reference to coherent risk measure} and counterexamples showing that a risk measure does not exhibit subadditivity can for example be constructed for all \gls{VaR}-based risk measures \todo{Reference to this}. However, for \gls{EAD} under \gls{IM} and \gls{VM} it appears to be especially simple to construct a counterexample.
+    Subadditivity is one of the properties of a coherent risk measure and counterexamples showing that a risk measure does not exhibit subadditivity can for example be constructed for all \gls{VaR}-based risk measures. However, for \gls{EAD} under \gls{IM} and \gls{VM} it appears to be especially simple to construct a counterexample.
 
     The \gls{SA-CCR} model considers the portfolio of both trades to be just as risky as the two trades independently. However, the available overcollateralization of the portfolio with both trades is relatively lower than the overcollateralization of the two standalone portfolios since the \gls{ISDA SIMM} model does recognize hedge effect trades. This constellation leads to the observed effect that the \gls{EAD} of the joint portfolio is higher than the sum of the standalone \gls{EAD} of the trades.
 
@@ -365,7 +365,7 @@
         \label{tab:Allocate SA-CCR with MTA calculation}
     \end{table}
     In table \ref{tab:Allocate SA-CCR with MTA calculation} we assume that the initially received collateral is the currently calculated collateral. 
-    When calculating the Euler allocation with a forward difference \todo{to be replaced with a central difference} in line with equation \ref{eq:forward difference}, the received collateral when rising the notional to 200.02Bn increases when no \gls{MTA} is assumed while it remains unchanged with consideration of an MTA. 
+    When calculating the Euler allocation with a forward difference in line with equation \ref{eq:forward difference}, the received collateral when rising the notional to 200.02Bn increases when no \gls{MTA} is assumed while it remains unchanged with consideration of an MTA. 
     Ultimately, this difference leads to a correct allocation of the entire \gls{EAD} to the single \gls{IRS} with the \emph{No MTA} approach while the \emph{MTA} approach obviously yields a wrong result by allocating 244\% of the portfolios \gls{EAD} to its only trade.
 
     In the above example any adverse impact that the \gls{MTA} may have on the Euler allocation can be mitigated by simply assuming an \gls{MTA} of zero during the calculation of the Euler allocation.
