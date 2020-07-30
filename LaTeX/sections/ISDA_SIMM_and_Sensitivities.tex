@@ -3,7 +3,7 @@
 \begin{document}
     \section{Bilateral initial margin}\label{Bilateral initial margin}
     
-    After the 2008 financial crisis the G20 agreed to reduce systematic, counterparty and operational risk and as a result of this commitment has been put into effect by regulators worldwide. In Europe, the European Market Infrastructure Regulation (EMIR) came into force in August 2012 and focused on promoting or mandating central clearing as the primary measure to reduce counterparty risk.
+    After the 2008 financial crisis the G20 agreed to reduce systematic, counterparty and operational risk and as a result of this commitment regulations have been put into effect by regulators worldwide. In Europe, the European Market Infrastructure Regulation (EMIR) came into force in August 2012 and focused on promoting or mandating central clearing as the primary measure to reduce counterparty risk.
 
     \subsection{The standardized approach}\label{The standard approach}
 
@@ -19,13 +19,13 @@
     The core idea of the model is to multiply sensitivities with risk weights and aggregate them with nested variance-covariance computations. For a detailed introduction to the structure, requirements against input data and underlying mathematical concepts of \gls{ISDA SIMM} the reader may please refer to sources \cite{SIMM}, \cite{RiskDataStandard} and \cite{SIMM_technical_paper}.
 
     \subsubsection{Implementation}\label{sec:ISDA SIMM implementation}
-    As already pointed out, \gls{ISDA SIMM} is standardized despite being an internal model. Therefore, all market participants using an internal model for bilateral initial margin calculation are forced to calculate \gls{ISDA SIMM} compliant sensitivities, convert them into the \gls{CRIF} format and to aggregate them to an initial margin figure using the \gls{ISDA SIMM} aggregation.
+    As already pointed out, \gls{ISDA SIMM} is standardized despite being an internal model. Therefore, all market participants using an internal model for bilateral initial margin calculation are forced to calculate \gls{ISDA SIMM} compliant sensitivities, convert them into the so-called \gls{CRIF} format and to aggregate them to an initial margin figure using the \gls{ISDA SIMM} aggregation.
     The process to create \gls{ISDA SIMM} compliant sensitivities is individual to each bank. Many vendor solutions for trading and risk have incorporated the creation of \gls{ISDA SIMM} compliant sensitivities and a \gls{CRIF} into their products but the most suitable way to produce a \gls{CRIF} still needs to be established on a bank to bank basis.
     
     Aggregation on the other hand is absolutely standardized. It uses a single file, the \gls{CRIF}, as input, does not need any auxiliary market data and returns a single value, the IM. 
     Considering this, Acadiasoft\footnote{\url{https://acadiasoft.com/}} decided to provide an open source implementation of the \gls{ISDA SIMM} aggregation \cite{simm-lib}. Acadiasoft is an \gls{ISDA}-affiliated company who also offers a dispute resolution platform for bilateral initial margin that has become the market standard.
     For the analysis shown in chapter \ref{sec:Results}, this open source library was used for aggregation of \gls{ISDA SIMM}. 
-    Therefore, only the \gls{ISDA SIMM} compliant sensitivities needed to be calculated and parsed into a \gls{CRIF} entry minimizing potential sources of error and necessary testing effort. The open source library by Acadiasoft also offers functionality to calculate bilateral initial margin according to the standard approach presented in section \ref{The standard approach} using an extended \gls{CRIF} standard.
+    Therefore, only the \gls{ISDA SIMM} compliant sensitivities needed to be calculated and parsed into a \gls{CRIF} entry minimizing potential sources of error and necessary testing effort. The open source library by Acadiasoft also offers functionality to calculate bilateral initial margin according to the standardized approach presented in section \ref{The standard approach} using an extended \gls{CRIF} standard.
 
 
 \end{document}

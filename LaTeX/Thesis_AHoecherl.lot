@@ -2,20 +2,20 @@
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {2.1}{\ignorespaces Calculation of NICA, C and RC under different, uncleared margining approaches}}{14}{table.2.1}
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Risk measure results for exemplary equity portfolio}}{29}{table.3.1}
+\contentsline {table}{\numberline {3.1}{\ignorespaces Risk measure results for an exemplary equity portfolio}}{29}{table.3.1}
 \contentsline {table}{\numberline {3.2}{\ignorespaces Allocation amount under ten day maturity}}{30}{table.3.2}
 \contentsline {table}{\numberline {3.3}{\ignorespaces Risk measures for exemplary rates portfolio}}{32}{table.3.3}
-\contentsline {table}{\numberline {3.4}{\ignorespaces Risk measure allocation of exemplary rates portfolio}}{33}{table.3.4}
+\contentsline {table}{\numberline {3.4}{\ignorespaces Risk measure allocation of an exemplary rates portfolio}}{33}{table.3.4}
 \contentsline {table}{\numberline {3.5}{\ignorespaces Allocation results after addition of a swaption}}{33}{table.3.5}
 \contentsline {table}{\numberline {3.6}{\ignorespaces Impact of the swaption on the portfolio risk measure}}{33}{table.3.6}
 \contentsline {table}{\numberline {3.7}{\ignorespaces Risk measure results of a mixed equity and rates portfolio}}{34}{table.3.7}
 \contentsline {table}{\numberline {3.8}{\ignorespaces Allocation result of the mixed portfolio}}{35}{table.3.8}
 \contentsline {table}{\numberline {3.9}{\ignorespaces Impact of an \gls {MTA} on an allocation}}{40}{table.3.9}
-\contentsline {table}{\numberline {3.10}{\ignorespaces Allocation to subportfolios}}{42}{table.3.10}
-\contentsline {table}{\numberline {3.11}{\ignorespaces All values are in USD}}{42}{table.3.11}
+\contentsline {table}{\numberline {3.10}{\ignorespaces Risk measures for exemplary standalone trades}}{42}{table.3.10}
+\contentsline {table}{\numberline {3.11}{\ignorespaces EAD allocation under different IM thresholds}}{42}{table.3.11}
 \contentsline {table}{\numberline {3.12}{\ignorespaces Allocation of a hedged portfolio without a perfect hedge}}{43}{table.3.12}
-\contentsline {table}{\numberline {3.13}{\ignorespaces Allocation of \gls {SA-CCR} for perfectly hedged portfolio}}{43}{table.3.13}
-\contentsline {table}{\numberline {3.14}{\ignorespaces Allocation of \gls {ISDA SIMM} for perfectly hedged portfolio}}{44}{table.3.14}
+\contentsline {table}{\numberline {3.13}{\ignorespaces Allocation of \gls {SA-CCR} for a perfectly hedged portfolio}}{43}{table.3.13}
+\contentsline {table}{\numberline {3.14}{\ignorespaces Allocation of \gls {ISDA SIMM} for a perfectly hedged portfolio}}{44}{table.3.14}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

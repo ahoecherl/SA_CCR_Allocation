@@ -15,7 +15,7 @@
     
     Items \ref{uncleared} and \ref{easy_to_price} of the above list are slightly conflicting. Bilaterally traded derivatives are usually more complex than cleared derivatives. Due to this increased complexity many of them have to be priced with a Monte Carlo simulation since an analytical solution is not possible.
 
-    Item \ref{link_to_market_quotes} rises from the requirement of the \gls{ISDA SIMM} model to calculate all sensitivities against market quotes. This means for example, that interest rate sensitivities mustn't be calculated with regard to a movement of the interest rate curve used as a pricing input but with regard to the price of the traded instrument that is used to build the interest rate curve in the first place. In the case of interest rate curves the process to build an interest rate curve is commonly referred to as \emph{bootstrapping} and has to be performed again whenever a sensitivity is calculated to be compliant with \gls{ISDA SIMM}. Designing a pricing framework that can handle this required interdependence of market quotes, market data objects such as curves and priced instruments is a steep task even for deceptively simple instruments such as plain vanilla interest rate swaps. For this reason the implementation is based on QuantLib \cite{QuantLib} which offers an excellent and proven framework to monitor these interdepencies with ease.
+    Item \ref{link_to_market_quotes} rises from the requirement of the \gls{ISDA SIMM} model to calculate all sensitivities against market quotes. This means for example, that interest rate sensitivities must not be calculated with regard to a movement of the interest rate curve used as a pricing input but with regard to the price of the traded instrument that is used to build the interest rate curve in the first place. In the case of interest rate curves the process to build an interest rate curve is commonly referred to as \emph{bootstrapping} and has to be performed again whenever a sensitivity is calculated to be compliant with \gls{ISDA SIMM}. Designing a pricing framework that can handle this required interdependence of market quotes, market data objects such as curves and priced instruments is a steep task even for deceptively simple instruments such as plain vanilla interest rate swaps. For this reason the implementation is based on QuantLib \cite{QuantLib} which offers an excellent and proven framework to monitor these interdepencies with ease.
 
     Careful consideration of the criteria listed above and the available market data lead to the following set of financial instruments that will be used for analysis:
 
@@ -46,7 +46,7 @@
 
     Since the \gls{OIS} curve also serves as the discount curve it does not require any other interest rate curve to be constructed. 
     For the purpose of this thesis, EUR and USD \gls{OIS} curves were built from the par rates of \gls{OIS} swaps as they were quoted on the 10th of May 2019.\footnote{To build an arbitrage free \gls{OIS} curve especially the short end should be based on more than just \gls{OIS} quotes as is for example pointed out in \cite{ametrano2013everything} or \cite{brugger2018valuation}. However, for this thesis higher accuracy in curve construction was not required.}
-    Conveniently, QuantLib does offer a built in functionality to infer an \gls{OIS} curve from quoted \gls{OIS} par rates, namely ''OISRateHelper''. Essentially, the \gls{OIS} par curve is built by interpolating between the quotes.
+    Conveniently, QuantLib does offer a built in functionality to infer an \gls{OIS} curve from quoted \gls{OIS} par rates, namely \emph{OISRateHelper}. Essentially, the \gls{OIS} par curve is built by interpolating between the quotes.
     This par curve may then be transformed into other interest curve representations such as a zero curve, forward curve or a discount curve under the assumptions of a single curve universe. How this can be done is e.g. pointed out in \cite[Chapter 4]{hull2009options}.
 
     An \gls{OIS} changes its \gls{NPV}, if the \gls{OIS} curve that it used to price it moves.
@@ -83,7 +83,7 @@
 
     To do so, QuantLib offers the \emph{BlackScholesProcess} class which can be constructed from the current spot value of an equity, a discount curve of the relevant currency and a volatility surface of implied volatilities with option maturities in one dimension and option strikes in the other.
 
-    As a discount curve the \gls{OIS} curve introduced in \ref{sec:Overnight indexed swap} is used.
+    As a discount curve, the \gls{OIS} curve introduced in section \ref{sec:Overnight indexed swap} is used.
     On the other hand, equity spot and volatility surface dummy data was fabricated for two equities with the volatility surfaces being flat.
     This fabricated data is sufficient for the purpose of this thesis as its structure allows for an easy calculation of \gls{ISDA SIMM} compliant sensitivities\footnote{The used constructed volatility surface has for example exactly the maturity vertices that \gls{ISDA SIMM} expects without further interpolation being necessary.} and for the analysis conducted for section \ref{sec:Results} it is irrelevant whether the used market data has actually been observed or has been fabricated.
 
@@ -96,7 +96,8 @@
     These two values can then be used as the risk free rate and equity volatility in the call or put Black Scholes formula to price the option.
 
     According to \gls{ISDA SIMM}, an equity option has equity delta, equity vega, interest rate delta and FX delta risk. The FX delta risk is calculated in the same way as described for an \gls{OIS} in section \ref{sec:Overnight indexed swap}.
-    An interest rate delta sensitivity is calculated by shifting an \gls{OIS}\gls{OIS} par rate, rebuilding the \gls{OIS} curve as pointed out in section \ref{sec:Overnight indexed swap} and afterwards inferring a new risk free rate from this rebuilt \gls{OIS} curve for a new valuation under the Black Scholes model.
+    An interest rate delta sensitivity is calculated by shifting an \gls{OIS} par rate, rebuilding the \gls{OIS} curve as pointed out in section \ref{sec:Overnight indexed swap} and afterwards inferring a new risk free rate from this rebuilt \gls{OIS} curve for a new valuation under the Black Scholes model.
+
     An \gls{ISDA SIMM} compliant equity delta is calculated by increasing the spot price of the underlying equity by one percent and repricing the option under the Black Scholes model.
     Finally, \gls{ISDA SIMM} compliant equity volatility sensitivities, i.e. vegas, are calculated by increasing all quoted implied volatilities that share a common option maturity by $0.01$, interpolating again to retrieve a new volatility surface and proceed with repricing the option as described above.
 
@@ -104,13 +105,13 @@
 
     \subsection{Swaptions}
 
-    For the purpose of this thesis the primary approach to pricing swaptions is use of the Black model \cite{black1976pricing}. This model was originally developed for European options on commodity or equity future contracts and is very similar to the Black-Scholes model but models the development of a forward price instead of spot prices.
-    Both, the Black-Scholes model and Black model models assume that return follow a log-normal distribution.
+    For the purpose of this thesis, the primary approach to pricing swaptions is use of the Black model \cite{black1976pricing}. This model was originally developed for European options on commodity or equity future contracts and is very similar to the Black-Scholes model but models the development of a forward price instead of spot prices.
+    Both, the Black-Scholes model and Black model assume that returns follow a log-normal distribution.
     If forward rates of interest rates become negative, the Black model can therefore not be used since log return of negative values can't be calculated.
     In these cases, an alternative model by Bachelier \cite{bachelier1990theorie} which assumes the forward rate to follow a normal process can be used.
     The application of the Bachelier model for swaption pricing is e.g. presented in \cite{floc2016fast}.
 
-    Both the Black model and the Bachelier model require the volatility of the underlying as in input. Similar to what was described for the Black-Scholes model in \ref{sec:European Equity Options} these can be captured in a volatility surface or, depending of the granularity of used input instruments, a structure of even higher dimension.
+    Both, the Black model and the Bachelier model require the volatility of the underlying as in input. Similar to what was described for the Black-Scholes model in section \ref{sec:European Equity Options} these can be captured in a volatility surface or, depending of the granularity of used input instruments, a structure of even higher dimension.
     It is important to note that the implied volatilities used for either the Bachelier or the Black model need to be inferred from option prices using the respective model.
     One cannot, for example, calculate the implied volatility of a swaption with a Black model and use the resulting number afterwards in the Bachelier formula.
     The Chicago Mercantile Exchange publishes both the implied volatilities under the normal and under the log-normal model of swaptions on their website

@@ -6,17 +6,17 @@
 The goal of this thesis was to identify a suitable allocation approach for the \gls{SA-CCR} own capital requirements for bilateral portfolios while accurately recognizing collateralization.
 
 Through literature review, a combination of an incremental and Euler allocation was identified as the most promising as both approaches are risk sensitive and exhibit native additivity. 
-The incremental approach is applicable to any risk measure and as such is also applicable to the \gls{SA-CCR} model with proper recognition of collateralization. Especially in the front office questions regarding to pre-trade analysis, calculating the regulatory capital consumption or the incremental margin requirement of a newly arranged derivative are commonplace.
+The incremental approach is applicable to any risk measure and as such is also applicable to the \gls{SA-CCR} model with proper recognition of collateralization. Especially in the front office, questions relating to pre-trade analysis, calculating the regulatory capital consumption or the incremental margin requirement of a newly arranged derivative are commonplace.
 If such or similar tasks rise in the context of \gls{SA-CCR} or \gls{ISDA SIMM} the incremental allocation approach can and should be used.
 
 On the other hand, tasks such as identifying risk drivers within a portfolio or identifying possibilities to reduce the regulatory capital or initial margin consumed by a portfolio can not be tackled with an incremental allocation.
-For such tasks which tend to rather take rise in the middle office of a bank the incremental allocation is not suited and the Euler allocation should be used instead.
+For such tasks, which tend to rather take rise in the middle office of a bank, the incremental allocation is not suited and the Euler allocation should be used instead.
 Unfortunately, the calculation of the Euler allocation and the prerequisites for it are much more demanding than those for the incremental allocation.
 
 In this thesis we have chosen a numerical approach to calculate the Euler allocation as it is easier to implement in practice and less prone to error due to the complexity of the \gls{SA-CCR} model with a nested initial margin model such as \gls{ISDA SIMM}.
 The analysis conducted for this thesis has established that a numerical Euler allocation of \gls{SA-CCR} under recognition of bilateral margining is generally possible and can provide valuable insight. There are however a couple of circumstances under which the prerequisites to perform an Euler allocation are violated.
 The most important of these limitations is probably the recognition of an initial margin threshold. If an initial margin threshold is in place and exceeded, the prerequisites for an Euler allocation are violated. 
-For this case upper and lower bounds for the margin allocated to each trade could be established but no unambiguous risk sensitive overall allocation could be identified.
+For this case, upper and lower bounds for the margin allocated to each trade could be established but no unambiguous risk sensitive overall allocation could be identified.
 
 Disregarding the issue with initial margin thresholds, Euler allocation could still be used in practice despite not working in some edge cases. 
 Conveniently, it is very easy to identify if the numerical Euler allocation is not working and, consequently, the portfolio in question is violating the prerequisites for an Euler allocation.
@@ -39,18 +39,18 @@ When extending on the results of this thesis three areas come to mind.
     \item Establishing a risk sensitive allocation for the cases  identified in section \ref{sec:Consideration of edge cases} for which no satisfactory Euler allocation could be established.
 \end{enumerate}
 
-When considering alternative \gls{CCR} models for \gls{RWA} and \gls{IM} models of higher or lower complexity than those analyzed in this thesis may be explored. 
+When considering alternative \gls{CCR} models for \gls{RWA} and \gls{IM}, models of higher or lower complexity than those analyzed in this thesis may be explored. 
 Less complex alternatives are the simplified \gls{SA-CCR} model \cite[Article 281 and following]{CRRII} and the standardized initial margin model briefly discussed in section \ref{The standard approach}. 
 More complex alternatives are internal \gls{CCR} models \cite[CRE 53]{CRE} and internal initial margin models of \glspl{CCP}.
 
-If additional models were to be explored it is likely that similar restrictions are uncovered as those listed in section \ref{sec:Consideration of edge cases} for the interplay of the \gls{SA-CCR} and \gls{ISDA SIMM} model.
+If more complex models were to be explored it is likely that similar restrictions are uncovered as those listed in section \ref{sec:Consideration of edge cases} for the interplay of the \gls{SA-CCR} and \gls{ISDA SIMM} model.
 Just as the \gls{ISDA SIMM} model, internal initial margin models such as the PRISMA model of Eurex Clearing contain a liquidity risk component that increases disproportionately with the position size \cite[Section 3.5]{EurexDec2012} which results in a risk measure that may not exhibit homogeneity.
 Similarly, observations made in section \ref{sec:Consideration of edge cases} considering \gls{CSA} parameters such as the initial margin threshold or \gls{MTA} should be transferable to internal \gls{CCR} \gls{RWA} models as these \gls{CSA} parameters are also taken into account in these internal models.
 It should be noted that \gls{CCP} \gls{IM} models should be less interwoven with \gls{CCR} \gls{RWA} models than it is the case for bilateral initial margin models such as the \gls{ISDA SIMM}. 
 The reason for this is that for cleared derivatives initial margin is only deposited by the bank at the \gls{CCP} while the bank does not receive any initial margin from the \gls{CCP}.
 As no initial margin is received it can consequently also not mitigate any risk in subsequent \gls{CCR} \gls{RWA} calculations.
 
-Although the chosen numerical approach chosen worked well for the analysis conducted for this thesis it comes with the usual high computational requirements of any finite difference approach - especially when a central difference approach is used due to its advantages discussed in section \ref{Evaluation of the numerical allocation approach}.
+Although the chosen numerical approach worked well for the analysis conducted for this thesis, it comes with the usual high computational requirements of any finite difference approach - especially when a central difference approach is used due to its advantages discussed in section \ref{Evaluation of the numerical allocation approach}.
 Alternatively, one might consider to establish an analytical solution for the Euler allocation of \gls{SA-CCR} and \gls{ISDA SIMM} similar to what Schulze has established for the \gls{FRTB-SA} \cite{schulze2018capital}.
 However, as already discussed due to the high complexity of the \gls{SA-CCR} model with a nested \gls{ISDA SIMM} model this approach might not be practical.
 
@@ -58,7 +58,7 @@ A more promising approach might be to perform the Euler allocation using adjoint
 While \gls{AAD} is somewhat established in finance for the calculation of sensitivities, i.e. partial derivatives of the price w.r.t. market data \cite{giles2006smoking} it should generally also be applicable to calculate a partial derivative of a risk measure w.r.t. a trade notional as required for the Euler allocation.
 The performance gain over the numerical approach should be large for any portfolio containing at least a double-digit trade count.
 Allocating a portfolio of $n$ trades with a numerical central difference allocation takes $2n$ times as long as just calculating the portfolio risk measure\footnote{Not taking into consideration any parallelization that could generally be applied without any restrictions for this use case.}.
-The computation time of an allocation through \gls{AAD} on the other hand should be independent of the trade count and take less then ten times as long as the calculation of the portfolio risk measure \cite{AdaptivAAD}.
+The computation time of an allocation through \gls{AAD} on the other hand should be independent of the trade count and take less than ten times as long as the calculation of the portfolio risk measure \cite{AdaptivAAD}.
 
 As pointed out in the conclusion, especially the inability to perform an Euler allocation when an initial margin threshold exists and is exceeded may prohibit numerical Euler allocation of \gls{SA-CCR} from being applied in practice.
 Accordingly, it would be important to establish an unambiguous risk sensitive allocation for this case. One possible approach might be to revisit the Shapley allocation and explore whether it could yield a risk sensitive and natively additive result in those edge cases in which the prerequisites for an Euler allocation are violated.
