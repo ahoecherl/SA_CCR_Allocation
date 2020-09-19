@@ -39,7 +39,7 @@
 
     An overnight indexed swap (\gls{OIS}) is a fixed-float swap whose floating leg underlying are the daily fixings of an overnight index.
     It can be priced using the so called \gls{OIS}-curve, whose construction will be discussed below.
-    Usually, only a single \gls{OIS} curve exists per currency which is used both as a forward curve for estimating future cashflows on the floating leg of an OIS swap and as a \emph{'risk free'} discounting curve for all cash flows of the given currency.
+    Usually, only a single \gls{OIS} curve exists per currency which is used both as a forward curve for estimating future cashflows on the floating leg of an OIS swap and as a \emph{'risk free'} discounting curve for all cash flows of collateralized derivatives of the given currency.
 
     The net present value (\gls{NPV}) of an \gls{OIS} may be calculated like that of any other swap by estimating future cashflows of the floating leg with the appropriate interest rate curve and discounting all cashflows of the swap with the currencies' discount curve.
     Accordingly, an \gls{OIS} Swap may be priced using only the \gls{OIS} curve of the swaps currency.
@@ -55,9 +55,9 @@
     This means that delta sensitivities of an \gls{OIS} are calculated by raising a market quote that was used to build the \gls{OIS}-curve by one basis point, rebuilding the \gls{OIS}-curve as described above and repricing the \gls{OIS} for which the delta is being calculated.
     A definition of \gls{ISDA SIMM} compliant interest rate deltas may be found in \cite[Point 22]{SIMM} and \cite[Section 2.2]{RiskDataStandard}.
     
-    Additionally, an FX delta needs to be calculated which is used if the trade currency does not coincide with the \gls{ISDA SIMM} calculation currency that was agreed upon in the \gls{CSA}. This delta may be approximated as $0.01 * NPV$ if the trades underlying is not an exchange rate \cite[Section 2.7]{RiskDataStandard}.
+    Additionally, an FX delta needs to be calculated which is used if the trade currency does not coincide with the \gls{ISDA SIMM} calculation currency that was agreed upon in the \gls{CSA}. This delta may be approximated as $0.01 * NPV$ if the trades underlying is not an exchange rate \cite[Section 2.7]{RiskDataStandard}. This \gls{ISDA SIMM} definition of delta does not approximate a mathematical difference quotient as it refers to a change of one percent instead of a change by one. The same approximation for a difference quotient would result in $1 * NPV$ 
 
-    In fact, such an FX delta is required for all of the following derivatives and as none of them are FX derivatives can always be calculated as $0.01 * NPV$.
+    Such an \gls{ISDA SIMM} compliant FX delta is required for all of the following derivatives and as none of them are FX derivatives can always be calculated as $0.01 * NPV$.
 
     \subsection{Interest rate swaps}
 

@@ -3,7 +3,9 @@
 \begin{document}
     \section{Bilateral initial margin}\label{Bilateral initial margin}
     
-    After the 2008 financial crisis the G20 agreed to reduce systematic, counterparty and operational risk and as a result of this commitment regulations have been put into effect by regulators worldwide. In Europe, the European Market Infrastructure Regulation (EMIR) came into force in August 2012 and focused on promoting or mandating central clearing as the primary measure to reduce counterparty risk.
+    After the 2008 financial crisis the G20 agreed to reduce systematic, counterparty and operational risk and as a result of this commitment regulations have been put into effect by regulators worldwide. In Europe, the European Market Infrastructure Regulation (EMIR) came into force in August 2012 and focused on promoting or mandating central clearing as the primary measure to reduce counterparty risk. An important part of this regulation was the introduction of an obligation to collateralize bilateral uncleared derivatives with initial margin.
+
+    The regulator has given banks the option of using the standardized approach or to develop an internal model to calculate this bilateral initial margin. Models for these two approaches are introduced in this section with the \gls{ISDA SIMM} model having emerged as the only internal margin model that is used in the field.
 
     \subsection{The standardized approach}\label{The standard approach}
 
@@ -14,12 +16,12 @@
     \subsection{The ISDA SIMM model}\label{sec:The ISDA-SIMM model}
     In December of 2013 the International Swap and Derivatives Association (ISDA) published a motivation and basic methodological outline of a common internal initial margin model called Standard Initial Margin Model (SIMM\texttrademark)\cite{ISDADec2013}. The goal of the model is to meet the model requirements to an internal model of all regulators, while being, among others, easy to replicate, quick to calculate and relatively cheap to operate, implement and validate.
 
-    SIMM is a Delta-Gamma \gls{VaR} model using Delta and Vega sensitivities calculated by the banks themselves and risk weights and correlations provided and recalibrated annually by \gls{ISDA}. \gls{ISDA} provides member with a methodological paper \cite{SIMM} and a paper describing the input format of sensitivities \cite{RiskDataStandard}.
+    SIMM is a Delta-Gamma like \gls{VaR} model using Delta and Vega sensitivities calculated by the banks themselves and risk weights and correlations provided and recalibrated annually by \gls{ISDA}. \gls{ISDA} provides member with a methodological paper \cite{SIMM} and a paper describing the input format of sensitivities \cite{RiskDataStandard}.
     Additionally, the authors of \gls{ISDA SIMM} have provided a technical paper \cite{SIMM_technical_paper} that lays out the mathematical foundation of the model. 
     The core idea of the model is to multiply sensitivities with risk weights and aggregate them with nested variance-covariance computations. For a detailed introduction to the structure, requirements against input data and underlying mathematical concepts of \gls{ISDA SIMM} the reader may please refer to sources \cite{SIMM}, \cite{RiskDataStandard} and \cite{SIMM_technical_paper}.
 
     \subsubsection{Implementation}\label{sec:ISDA SIMM implementation}
-    As already pointed out, \gls{ISDA SIMM} is standardized despite being an internal model. Therefore, all market participants using an internal model for bilateral initial margin calculation are forced to calculate \gls{ISDA SIMM} compliant sensitivities, convert them into the so-called \gls{CRIF} format and to aggregate them to an initial margin figure using the \gls{ISDA SIMM} aggregation.
+    Since \gls{ISDA SIMM} has emerged as the only internal model that is currently in use by banks, all market participants using an internal model for bilateral initial margin calculation need to calculate \gls{ISDA SIMM} compliant sensitivities, convert them into the so-called \gls{CRIF} format and to aggregate them to an initial margin figure using the \gls{ISDA SIMM} aggregation.
     The process to create \gls{ISDA SIMM} compliant sensitivities is individual to each bank. Many vendor solutions for trading and risk have incorporated the creation of \gls{ISDA SIMM} compliant sensitivities and a \gls{CRIF} into their products but the most suitable way to produce a \gls{CRIF} still needs to be established on a bank to bank basis.
     
     Aggregation on the other hand is absolutely standardized. It uses a single file, the \gls{CRIF}, as input, does not need any auxiliary market data and returns a single value, the IM. 

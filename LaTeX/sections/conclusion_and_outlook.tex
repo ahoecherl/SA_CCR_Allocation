@@ -20,7 +20,7 @@ For this case, upper and lower bounds for the margin allocated to each trade cou
 
 Disregarding the issue with initial margin thresholds, Euler allocation could still be used in practice despite not working in some edge cases. 
 Conveniently, it is very easy to identify if the numerical Euler allocation is not working and, consequently, the portfolio in question is violating the prerequisites for an Euler allocation.
-In such cases the result looses its native additivity, i.e. the sum of the trade allocations will be far off the portfolio risk measure which can be easily identified and trigger an investigation of the portfolio or the use of a fall-back allocation approach.
+In such cases the result looses its native additivity, i.e. the sum of the trade allocations might be far off the portfolio risk measure which can be easily identified and trigger an investigation of the portfolio or the use of a fall-back allocation approach.
 
 If any margin is exchanged, an Euler allocation of \gls{SA-CCR} is not possible when the margin is assumed to be an external constant value that does not have partial derivatives against the trade notionals in the portfolio.
 If an Euler allocation is calculated under such an assumption the prerequisites for the allocation are violated. Additionally, exemplary portfolios analyzed for this thesis have also shown that a relative, risk sensitive allocation of \gls{SA-CCR} without margining can differ tremendously from a risk sensitive allocation of \gls{SA-CCR} with margining.

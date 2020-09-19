@@ -39,7 +39,7 @@ The allocation or contribution of trade $i$ to risk measure $\rho(X)$ is denoted
 To make it more convenient to analyze changes to $\mathbf{u}$ we also introduce the function
 
 \begin{align}
-    f_{\rho,X}\left(\mathbf{u}\right)
+    f_{\rho,X}\left(\mathbf{u}\right) = \rho\left(\sum_{i=1}^{n}{u_iX_i}\right)
 \end{align}
 
 Then, with $\mathbf{1}$ being a vector of ones, $\rho\left(X\left(\mathbf{1}\right)\right) = \rho\left(X\right)$. $\mathbf{u} = \mathbf{1}$ indicates the initial state of the portfolio when calculating an allocation - it does not imply that the notional of each position is 1.
@@ -52,7 +52,7 @@ Then, with $\mathbf{1}$ being a vector of ones, $\rho\left(X\left(\mathbf{1}\rig
             \rho_{inc}\left(X_n|X\right) = \rho\left(X\right) - \rho\left(X\left(\mathbf{u}\right)\right)\; \text{.}
         \end{split}
     \end{gather}
-    The incremental allocation can only be calculated for trade $n$.
+    The incremental allocation can only be calculated for trade $n$, i.e. an incremental allocation can only be calculated for the last trade added to the portfolio but for no other trade.
 \end{definition}
 
 \begin{definition}[Euler allocation\label{def:Euler allocation}]
@@ -83,6 +83,8 @@ Then, with $\mathbf{1}$ being a vector of ones, $\rho\left(X\left(\mathbf{1}\rig
     \end{gather}
 \end{definition}
 
+Note that the discrete marginal allocation is the same formula as the incremental allocation but applied to all trades in the portfolio while the incremental allocation may only be calculated for the last trade added.
+
 \begin{definition}[Shapley allocation]
 To calculate the Shapley allocation of a portfolio one needs to iterate through all permutations how the trades in the portfolio could be ordered.
 For a given trade $i$ the Shapley allocation is the average of the amount by which the risk measure changes when adding trade $i$ to the portfolio in each of the permutations.
@@ -95,7 +97,7 @@ The usefulness of any of the five allocation approaches listed above is dependen
 \end{enumerate}
 are usually regarded to be the most important ones. They are for example the criteria by which Koyluoglu and Stoker \cite{koyluoglu2002risk} compare the different allocation approaches.
 
-A allocation algorithm $alloc$ exhibits \textbf{native additivity} if equation \ref{eq:native additivity} holds.
+An allocation algorithm $alloc$ exhibits \textbf{native additivity} if equation \ref{eq:native additivity} holds.
 
 \begin{align}
     \sum_{i=1}^n{\rho_{alloc}\left(X|X_i\right)} = \rho\left(X\right)
@@ -111,7 +113,7 @@ Depending on the application of the allocation other criteria might be important
     \item The value allocated to a trade must not change through time
     \item The allocated value needs to be independent from the order in which trades are entered 
 \end{itemize}
-Generally, such auxiliary requirements raise through operational or technical limitations. Some of the allocation algorithms presented above comply with them, while others do not. 
+Generally, such auxiliary requirements arise through operational or technical limitations. Some of the allocation algorithms presented above comply with them, while others do not. 
 Such requirements might be the reason that allocation algorithms that are dismissed as inappropriate in this thesis still find application in the field.
 
 The incremental allocation excels for use at the trading desk. It is well suited as an input when making investment decisions or for calculating the remuneration of traders and trading desks after entering a new trade.
@@ -125,7 +127,7 @@ It is, however, very inexpensive to compute and suitable for models that are bas
 Usage of a pro rata allocation may circumvent some operational or technical issues as trade contributions are always positive.
 Due to its simplicity and lacking risk sensitivity for the models analyzed in this thesis, pro rata allocation will not be analyzed in further detail in this thesis.
 
-While being a very intuitive approach, performance of discrete marginal allocation is relatively poor. The approach does not exhibit native additivity as Tasche \cite{tasche2007} shows that 
+While being a very intuitive approach, performance of discrete marginal allocation is relatively poor. The approach does generally not exhibit native additivity as Tasche \cite{tasche2007} shows that 
 \begin{align*}
     \rho_{discrete}\left(X_i|X\right) \leq \rho_{Euler}\left(X_i|X\right)
 \end{align*}
@@ -215,7 +217,7 @@ Euler's homogeneous functions theorem states
 
 If we assume that $k=1$ and use the risk measure $\rho(\mathbf{u})$ as a function of invested position size with $\mathbf{u} = \mathbf{1}$ being the current position equation \ref{eq:Euler theorem of positive homogeneous functions} transforms to
 \begin{align}
-    \mathbf{1}\frac{\partial \rho(\mathbf{u})}{\partial u_i} = \rho(\mathbf{u})
+    \mathbf{1}\frac{\partial \rho(\mathbf{u_i})}{\partial u_i} = \rho(\mathbf{u})
     \label{eq:relative bump euler allocation}
 \end{align}
 which is what is stated in as the definition of Euler allocation in definition \ref{def:Euler allocation}.
@@ -224,7 +226,7 @@ While $u = \mathbf{1}$ is defined as the current position size we can also defin
 
 The Euler allocation w.r.t trade $i$ would then be calculated as
 \begin{align}
-    \mathbf{n}\frac{\partial \rho(\mathbf{n})}{\partial \text{notional}_i} = \rho(\mathbf{n})
+    \mathbf{n}\frac{\partial \rho(\mathbf{n_i})}{\partial \text{notional}_i} = \rho(\mathbf{n})
     \label{eq:notional based euler allocation}
 \end{align}
 

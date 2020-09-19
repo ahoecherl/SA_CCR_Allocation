@@ -38,14 +38,14 @@
     
     Despite the increased computational cost, a central difference approach for numerical finite difference calculation is generally advisable.
     The increased accuracy of the central difference approach makes it easier to evaluate whether equation \ref{eq:Euler theorem of positive homogeneous functions} holds and the allocated results are trustworthy or whether the theorem of homogeneous functions is violated inferring, that the prerequisites for Euler allocation are violated which should generally trigger an investigation into the processed portfolio.
-    Additionally, the case of a perfectly hedged portfolio that is investigated in \ref{sec:Allocation of hedged portfolios} showcases a scenario that could have sufficient practical relevance in which the central difference approach unlike a forward difference, backward difference or even an analytic partial derivative yields a result that does not break the native additivity of the Euler allocation.
+    Additionally, the case of a perfectly hedged portfolio that is investigated in \ref{sec:Allocation of hedged portfolios} showcases a scenario that could have sufficient practical relevance in which the central difference approach unlike a forward difference, backward difference yields a result that does not break the native additivity of the Euler allocation or is undefined as might be the case for an analytic partial derivative.
 
     The numerical approach also lends itself to direct allocation on subportfolios as illustrated in section \ref{sec:Exemplary allocation of SA-CCR on subportfolios}.
     If subportfolio results rather then trade results are required, simultaneously bumping multiple trades may significantly improve runtimes.
 
     \section{Limitations of an Euler allocation of SA-CCR\label{Limitations of an Euler allocation of SA-CCR}}
 
-    In practice, the incorporation of parameters of the collateral agreement such as thresholds or the minimum transfer amount is a challenge.
+    In practice, the incorporation of parameters of the collateral agreement such as thresholds or minimum transfer amounts is a challenge.
 
     The issues caused by the minimal transfer amount are relatively minor.
     If the received initial margin is high enough to cap the $RC$ at zero, the \gls{MTA} can be ignored for the allocation calculation and still yield risk sensitive results that exhibit native additivity. If the initial margin is too low or when the \gls{MTA} is taken into account for margin recalculations on the other hand, the \gls{SA-CCR} risk measure does not exhibit homogeneity anymore and an Euler allocation is not possible.
@@ -56,8 +56,8 @@
     A variation margin threshold increases the \gls{EAD} of a portfolio by a flat amount under all circumstances and this amount is not really attributable to the trades.
 
     Out of the collateral agreements parameters the initial margin threshold is the hardest to handle. As long as the threshold is not exceeded, i.e. no initial margin is exchanged the allocation works fine but when the threshold is exceeded and is subtracted from the calculated initial margin, the \gls{SA-CCR} model does not exhibit homogeneity anymore.
-    It is possible to identify relative bounds how much should allocated to each trade within these bounds \emph{some} metric can be use to find an allocation that adds up to the portfolio risk measure but an undisputable risk sensitive way of doing so could not be identified in this thesis.
-    In practice, allocating the impact on \gls{EAD} of the \gls{IM} threshold could turn out to be the biggest issue when performing and Euler allocation of \gls{SA-CCR} EAD.
+    It is possible to identify relative bounds how much should be allocated to each trade within these bounds \emph{some} metric can be used to find an allocation that adds up to the portfolio risk measure but an undisputable risk sensitive way of doing so could not be identified in this thesis.
+    In practice, allocating the impact on \gls{EAD} of the \gls{IM} threshold could turn out to be the biggest issue when performing an Euler allocation of \gls{SA-CCR} EAD.
 
     Finally, whether the inability to perform an Euler allocation when an \gls{ISDA SIMM} threshold is exceeded as described in section \ref{sec:Allocation when an ISDA-SIMM liquidity threshold is exceeded} prohibits a bank from using Euler allocation entirely or is rather just a theoretical observation depends on the structure and size of the portfolios that should be allocated.
     While the USD interest rate concentration threshold chosen as an example in section\ref{sec:Allocation when an ISDA-SIMM liquidity threshold is exceeded} is extremely high due to the high liquidity, other threshold might be easier to exceed. If a threshold is exceeded the calculated allocation will not fulfill equation \ref{eq:positive homogeneous function} anymore and it should therefore be relatively easy for a risk department to identify such a case. However, there is no simple workaround to adjust for such a case and Euler allocation appears to be generally not possible anymore once the portfolio exceeds any \gls{ISDA SIMM} thresholds.

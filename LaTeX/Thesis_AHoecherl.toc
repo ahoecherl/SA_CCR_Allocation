@@ -12,26 +12,26 @@
 \contentsline {subsubsection}{\numberline {2.2.2.1}Implementation}{10}{subsubsection.2.2.2.1}
 \contentsline {section}{\numberline {2.3}SA-CCR}{10}{section.2.3}
 \contentsline {subsection}{\numberline {2.3.1}Consideration of margining in SA-CCR}{11}{subsection.2.3.1}
-\contentsline {section}{\numberline {2.4}Allocation of Risk Measures}{14}{section.2.4}
+\contentsline {section}{\numberline {2.4}Allocation of Risk Measures}{15}{section.2.4}
 \contentsline {subsection}{\numberline {2.4.1}Incremental allocation}{19}{subsection.2.4.1}
 \contentsline {subsection}{\numberline {2.4.2}Euler allocation}{20}{subsection.2.4.2}
-\contentsline {section}{\numberline {2.5}Instruments, pricing and market data}{21}{section.2.5}
-\contentsline {subsection}{\numberline {2.5.1}Overnight indexed swaps}{22}{subsection.2.5.1}
-\contentsline {subsection}{\numberline {2.5.2}Interest rate swaps}{23}{subsection.2.5.2}
-\contentsline {subsection}{\numberline {2.5.3}European Equity Options}{24}{subsection.2.5.3}
-\contentsline {subsection}{\numberline {2.5.4}Swaptions}{25}{subsection.2.5.4}
-\contentsline {chapter}{\numberline {3}Results}{28}{chapter.3}
-\contentsline {section}{\numberline {3.1}Exemplary Euler allocation of SA-CCR under consideration of margining}{28}{section.3.1}
-\contentsline {subsection}{\numberline {3.1.1}Exemplary allocation of SA-CCR for a small portfolio of equity options}{29}{subsection.3.1.1}
-\contentsline {subsection}{\numberline {3.1.2}Exemplary allocation of SA-CCR for a small portfolio of interest rate derivatives}{31}{subsection.3.1.2}
-\contentsline {subsection}{\numberline {3.1.3}Exemplary allocation of SA-CCR on subportfolios}{34}{subsection.3.1.3}
-\contentsline {section}{\numberline {3.2}Consideration of edge cases}{35}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Allocation when an ISDA SIMM liquidity threshold is exceeded}{36}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Incorporation of a minimum transfer amount and threshold}{38}{subsection.3.2.2}
-\contentsline {subsubsection}{\numberline {3.2.2.1}Incorporation of a VM threshold}{39}{subsubsection.3.2.2.1}
-\contentsline {subsubsection}{\numberline {3.2.2.2}Incorporation of a minimum transfer amount}{40}{subsubsection.3.2.2.2}
-\contentsline {subsubsection}{\numberline {3.2.2.3}Incorporation of an IM threshold}{41}{subsubsection.3.2.2.3}
-\contentsline {subsection}{\numberline {3.2.3}Allocation of hedged portfolios}{43}{subsection.3.2.3}
+\contentsline {section}{\numberline {2.5}Instruments, pricing and market data}{22}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}Overnight indexed swaps}{23}{subsection.2.5.1}
+\contentsline {subsection}{\numberline {2.5.2}Interest rate swaps}{24}{subsection.2.5.2}
+\contentsline {subsection}{\numberline {2.5.3}European Equity Options}{25}{subsection.2.5.3}
+\contentsline {subsection}{\numberline {2.5.4}Swaptions}{26}{subsection.2.5.4}
+\contentsline {chapter}{\numberline {3}Results}{29}{chapter.3}
+\contentsline {section}{\numberline {3.1}Exemplary Euler allocation of SA-CCR under consideration of margining}{29}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Exemplary allocation of SA-CCR for a small portfolio of equity options}{30}{subsection.3.1.1}
+\contentsline {subsection}{\numberline {3.1.2}Exemplary allocation of SA-CCR for a small portfolio of interest rate derivatives}{32}{subsection.3.1.2}
+\contentsline {subsection}{\numberline {3.1.3}Exemplary allocation of SA-CCR on subportfolios}{35}{subsection.3.1.3}
+\contentsline {section}{\numberline {3.2}Consideration of edge cases}{36}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Allocation when an ISDA SIMM liquidity threshold is exceeded}{37}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Incorporation of a minimum transfer amount and threshold}{39}{subsection.3.2.2}
+\contentsline {subsubsection}{\numberline {3.2.2.1}Incorporation of a VM threshold}{40}{subsubsection.3.2.2.1}
+\contentsline {subsubsection}{\numberline {3.2.2.2}Incorporation of a minimum transfer amount}{41}{subsubsection.3.2.2.2}
+\contentsline {subsubsection}{\numberline {3.2.2.3}Incorporation of an IM threshold}{42}{subsubsection.3.2.2.3}
+\contentsline {subsection}{\numberline {3.2.3}Allocation of hedged portfolios}{44}{subsection.3.2.3}
 \contentsline {chapter}{\numberline {4}Discussion of results}{47}{chapter.4}
 \contentsline {section}{\numberline {4.1}Evaluation of the numerical allocation approach}{48}{section.4.1}
 \contentsline {section}{\numberline {4.2}Limitations of an Euler allocation of SA-CCR}{49}{section.4.2}
